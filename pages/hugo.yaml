@@ -1,0 +1,16 @@
+baseURL: 'https://bharat-varsh.github.io/awesome-bharat/'
+languageCode: 'en-in'
+title: 'Awesome Bharat'
+theme: 'awesome-bharat'
+
+menus:
+  main:
+    - name: 'Home'
+      pageRef: '/'
+      weight: 1
+    - name: 'Open Source'
+      pageRef: '/categories/open-source'
+      weight: 2
+    - name: 'Closed Source'
+      pageRef: '/categories/closed-source'
+      weight: 3

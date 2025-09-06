@@ -1,0 +1,21 @@
+baseURL: 'https://bharat-varsh.github.io/awesome-bharat/'
+languageCode: 'en-in'
+title: 'Awesome Bharat'
+
+taxonomies:
+  category: 'categories'
+  feature: 'features'
+
+menus:
+  main:
+    - name: 'Home'
+      pageRef: '/'
+      weight: 1
+
+module:
+  hugoVersion:
+    extended: false
+    min: '0.146.0'
+
+enableEmoji: true
+sectionPagesMenu: main
