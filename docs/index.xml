@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Awesome Bharat</title>
-    <link>https://awesomebharat.com/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content on Awesome Bharat</description>
     <generator>Hugo</generator>
     <language>en-in</language>
     <lastBuildDate>Thu, 04 Sep 2025 19:55:45 +0530</lastBuildDate>
-    <atom:link href="https://awesomebharat.com/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Linkora</title>
-      <link>https://awesomebharat.com/android/linkora/</link>
+      <link>http://localhost:1313/android/linkora/</link>
       <pubDate>Thu, 04 Sep 2025 19:55:45 +0530</pubDate>
-      <guid>https://awesomebharat.com/android/linkora/</guid>
+      <guid>http://localhost:1313/android/linkora/</guid>
       <description></description>
     </item>
   </channel>
