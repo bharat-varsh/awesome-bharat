@@ -1,0 +1,28 @@
+---
+/**
+ * Responsive YouTube video embed
+ * Usage: <YouTubeEmbed id="youtube-video-id" title="Video Title" />
+ */
+
+export interface Props {
+    id: string;
+    title?: string;
+    startTime?: number;
+}
+
+const { id, title='YouTube video', startTime } = Astro.props;
+const src = startTime
+    ? `https://www.youtube-nocookie.com/embed/${id}?start=${startTime}`
+    : `https://www.youtube-nocookie.com/embed/${id}`;
+---
+
+<div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg my-8">
+    <iframe
+        src={src}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-meedia; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy"
+        class="absolute top-0 left-0 w-full h-full"
+    ></iframe>
+</div>
