@@ -1,6 +1,80 @@
 ---
+const navItems = [
+    { label: 'Tags', href: '/tags' },
+    { label: 'Apps', href: '/apps' },
+    { label: 'Companies', href: '/companies' },
+    { label: 'Artists', href: '/artists' },
+];
+
+const currentPath = Astro.url.pathname;
 ---
-<div id="main-menu" class="nav-links">
-    <a href="/">Home</a>
-    <a href="/apps/">Apps</a>
+
+<nav class="hidden md:flex items-center space-x-8">
+    {navItems.map((item) => {
+        const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+
+        return (
+            <a
+                href={item.href}
+                class:list={[
+                    'text-s, font-medium transition-colors',
+                    isActive
+                        ? 'text-primary-600 dark:text-primary-400'
+                        : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
+                ]}
+            >
+                {item.label}
+            </a>
+        );
+    })}
+</nav>
+
+<!-- Mobile Menu button -->
+ <div class="md:hidden">
+    <button
+        id="mobile-menu-button"
+        type="button"
+        class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400"
+        aria-label="Toggle mobile menu"
+    >
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+            />
+        </svg>
+    </button>
+ </div>
+
+ <!-- Mobile Menu -->
+<div
+    id="mobile-menu"
+    class="hidden md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800"
+>
+    <div class="px-4 py-3 space-y-3">
+        {navItems.map((item) => (
+            <a
+                href={item.href}
+                class="block text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400"
+            >
+                {item.label}
+            </a>
+        ))}
+    </div>
 </div>
+
+<script>
+    // Mobile menu toggle
+    const button = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+
+    button?.addEventListener('click', () => {
+        menu?.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!button?.contains(e.target as Node) && !menu?.contains(e.target as Node)) {
+            menu?.classList.add('hidden');
+        }
+    });
+</script>

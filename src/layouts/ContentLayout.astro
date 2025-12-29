@@ -1,0 +1,112 @@
+---
+/** Layout for individual content pages (apps, products, companies, people, channels, etc) */
+
+import BaseLayout from "./BaseLayout.astro";
+import { formatDate } from '../utils/dateUtils.ts';
+
+export interface Props {
+    title: string;
+    description: string;
+    image?: string;
+    date: Date;
+    tags?: string[];
+    youtubeLinks?: string[];
+    externalLinks?: { label: string; url: string }[];
+}
+
+const { title, description, image, date, tags, youtubeLinks, externalLinks } = Astro.props;
+---
+
+<BaseLayout
+    title={title}
+    description={description}
+    image={image}
+    article={true}
+    publishedTime={date.toISOString()}
+    tags={tags}
+>
+    <article class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <header class="mb-8 space-y-4">
+            <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                {title}
+            </h1>
+
+            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                <time datetime={date.toISOString()}>
+                    {formatDate(date)}
+                </time>
+
+                {tags && tags.length > 0 && (
+                    <div class="flex flex-wrap gap-2">
+                        {tags.map((tag) => (
+                            <a
+                                href={`/tags/${tag}`}
+                                class="px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors"
+                            >
+                                #{tag}
+                            </a>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {image && (
+                <img
+                    src={image}
+                    alt={title}
+                    class="w-full rounded-lg shadow-lg aspect-video object-cover"
+                    loading="eager"
+                />
+            )}
+        </header>
+
+        <div class="prose prose-lg dark:prose-dark max-w-none">
+            <slot />
+        </div>
+
+        <!-- Article footer with additional links -->
+         {(youtubeLinks || externalLinks) && (
+            <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+                {youtubeLinks && youtubeLinks.length > 0 && (
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3">Related Videos</h3>
+                        <ul class="space-y-2">
+                            {youtubeLinks.map((link) => (
+                                <li>
+                                    <a
+                                        href={link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="text-primary-600 dark:text-primary-400 hover:underline"
+                                    >
+                                        {link}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                {externalLinks && externalLinks.length > 0 && (
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3">External Resources</h3>
+                        <ul class="space-y-2">
+                            {externalLinks.map((link) => (
+                                <li>
+                                    <a
+                                        href={link.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="text-primary-600 dark:text-primary-400 hover:underline"
+                                    >
+                                        {link.label}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </footer>
+         )}
+    </article>
+</BaseLayout>

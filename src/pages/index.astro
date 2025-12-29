@@ -1,7 +1,104 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-const pageTitle = "Awesome Bharat";
+/**
+ * Homepage - Main landing page
+ */
+
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContentCard from '@components/ContentCard.astro';
+
+const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
+
+const latestApps = apps
+    .filter(app => !app.data.draft)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .slice(0, 6);
+
+const artists = (await getCollection('artists')) as Array<CollectionEntry<'artists'>>;
+const featuredArtists = artists.filter(artist => artist.data.featured).slice(0, 3);
 ---
-<BaseLayout pageTitle={pageTitle}>
-  <h2>My awesome blog title</h2>
+
+<BaseLayout
+    title="Home | Awesome Bharat"
+    description="A curated collection of awesome made by Indians! Discover your inspiration and the great people who made that possible!"
+>
+    <!-- Hero section -->
+    <section class="bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-900 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl mb-6">
+                Welcome to <span class="text-primary-600 dark:text-primary-400">[ Awesome ] Bharat</span>
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">
+                A curated collection of awesome made by Indians! Discover your inspiration and the great people who made that possible!
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a
+                    href="#latest"
+                    class="px-8 py-3 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium transition-colors"
+                >
+                    Discover
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Apps -->
+    <section id="latest" class="py-16 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold">Latest Apps</h2>
+                <a
+                    href="/apps"
+                    class="text-primary-600 dark:text-primary-400 hover:underline font-medium"
+                >
+                    View all
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {latestApps.map((app) => (
+                    <ContentCard
+                        title={app.data.title}
+                        description={app.data.description}
+                        href={`/apps/${app.slug}`}
+                        date={app.data.date}
+                        tags={app.data.tags}
+                        image={app.data.coverImage}
+                    />
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Artists -->
+    {featuredArtists.length > 0 && (
+        <section class="py-16 bg-gray-50 dark:bg-gray-950">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-3xl font-bold">Featured Artists</h2>
+                    <a
+                        href="/artists"
+                        class="text-primary-600 dark:text-primary-400 hover:underline font-medium"
+                    >
+                        View all
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {featuredArtists.map((artist) => (
+                        <ContentCard
+                            title={artist.data.title}
+                            description={artist.data.description}
+                            href={`/artists/${artist.slug}`}
+                            date={artist.data.date}
+                            tags={artist.data.tags}
+                            image={artist.data.coverImage}
+                        />
+                    ))}
+                </div>
+            </div>
+        </section>
+    )}
 </BaseLayout>
