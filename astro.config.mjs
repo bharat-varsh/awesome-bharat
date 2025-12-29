@@ -6,7 +6,8 @@ import { fileURLToPath } from 'url';
 import { resolve } from 'path';
 
 export default defineConfig({
-    site: 'https://awesomebharat.com/',
+    site: 'https://bharat-varsh.github.io',
+    base: "/awesome-bharat",
     integration: [
         mdx(),
         sitemap(),
