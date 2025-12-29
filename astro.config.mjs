@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import { resolve } from 'path';
 
 export default defineConfig({
-    site: 'https://awesomebharat.com',
+    site: 'https://awesomebharat.com/',
     integration: [
         mdx(),
         sitemap(),
