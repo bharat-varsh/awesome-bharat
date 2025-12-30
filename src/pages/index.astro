@@ -32,15 +32,6 @@ const featuredArtists = artists.filter(artist => artist.data.featured).slice(0, 
             <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">
                 A curated collection of awesome made by Indians! Discover your inspiration and the great people who made that possible!
             </p>
-
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                    href="#latest"
-                    class="px-8 py-3 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium transition-colors"
-                >
-                    Discover
-                </a>
-            </div>
         </div>
     </section>
 
@@ -101,4 +92,13 @@ const featuredArtists = artists.filter(artist => artist.data.featured).slice(0, 
             </div>
         </section>
     )}
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+        <a
+            href="/tags"
+            class="px-8 py-3 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium transition-colors"
+        >
+            Explore everything
+        </a>
+    </div>
 </BaseLayout>

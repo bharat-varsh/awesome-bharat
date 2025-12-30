@@ -25,6 +25,7 @@ const apps = defineCollection({
         ).optional(),
         draft: z.boolean().default(false),
     }),
+    
 });
 
 // Artists
