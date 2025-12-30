@@ -24,19 +24,19 @@ const featuredArtists = artists.filter(artist => artist.data.featured).slice(0, 
     description="A curated collection of awesome made by Indians! Discover your inspiration and the great people who made that possible!"
 >
     <!-- Hero section -->
-    <section class="bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-900 py-20">
+    <section class="bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-900 py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl mb-6">
                 Welcome to <span class="text-primary-600 dark:text-primary-400">[ Awesome ] Bharat</span>
             </h1>
-            <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">
+            <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
                 A curated collection of awesome made by Indians! Discover your inspiration and the great people who made that possible!
             </p>
         </div>
     </section>
 
     <!-- Latest Apps -->
-    <section id="latest" class="py-16 bg-white dark:bg-gray-900">
+    <section id="latest" class="py-10 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-3xl font-bold">Latest Apps</h2>
@@ -93,12 +93,14 @@ const featuredArtists = artists.filter(artist => artist.data.featured).slice(0, 
         </section>
     )}
 
-    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-4">
-        <a
-            href="/tags"
-            class="px-8 py-3 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium transition-colors"
-        >
-            Explore everything
-        </a>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+            <a
+                href="/tags"
+                class="px-8 py-3 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium transition-colors"
+            >
+                Explore everything
+            </a>
+        </div>
     </div>
 </BaseLayout>
