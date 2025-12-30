@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import ContentLayout from '@/layouts/ContentLayout.astro';
+
+export const getStaticPaths = (async () => {
+    const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
+
+    return apps
+        .filter(app => !app.data.draft)
+        .map((app) => ({
+            params: { slug: app.slug },
+            props: { app },
+        }));
+}) satisfies GetStaticPaths;
+
+const { app } = Astro.props as { app: CollectionEntry<'apps'> };
+const { Content } = await app.render();
+---
+
+<ContentLayout
+    title={app.data.title}
+    description={app.data.description}
+    image={app.data.coverImage}
+    date={app.data.date}
+    tags={app.data.tags}
+    youtubeLinks={app.data.youtubeLinks}
+    externalLinks={app.data.externalLinks}
+>
+    <Content />
+</ContentLayout>
