@@ -7,7 +7,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
     site: 'https://awesomebharat.com',
-    integration: [
+    integrations: [
         mdx(),
         sitemap(),
         tailwind({
