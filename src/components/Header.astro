@@ -53,22 +53,24 @@ const socials = [
             row-start-1 row-end-3 md:row-start-1
             text-center my-1 md:my-0"
             >
-                <Image
-                    src="/images/awebha-logo.svg"
-                    alt="Awesome Bharat Logo"
-                    class="h-5 md:h-5 lg:h-6 w-auto"
-                    width={24}
-                    height={24}
-                    loading="eager"
-                />
-
+                <a href="/" aria-label="Awesome Bharat home" class="inline-flex items-center">
+                    <Image
+                        src="/images/awebha-logo.svg"
+                        alt="Awesome Bharat Logo"
+                        class="h-5 md:h-5 lg:h-6 w-auto"
+                        width={24}
+                        height={24}
+                        loading="eager"
+                    />
+                </a>
                 <a
                     href="/"
-                    class="text-lg md:text-xl lg:text-2xl
-            font-bold md:font-semibold lg:font-bold
-            text-primary-600 dark:text-primary-400
-            hover:text-primary-700 dark:hover:text-primary-300
-            transition-colors"
+                    class="hidden md:inline
+                    text-lg md:text-xl lg:text-2xl
+                    font-bold md:font-semibold lg:font-bold
+                    text-primary-600 dark:text-primary-400
+                    hover:text-primary-700 dark:hover:text-primary-300
+                    transition-colors"
                     >[ Awesome ] Bharat</a
                 >
 
