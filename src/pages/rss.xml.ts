@@ -17,7 +17,6 @@ interface RSSItem {
 
 export async function GET(context: APIContext) {
     const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
-    const artists = (await getCollection('artists')) as Array<CollectionEntry<'artists'>>;
 
     const appItems = apps
         .filter((app) => !app.data.draft)
@@ -29,18 +28,8 @@ export async function GET(context: APIContext) {
             categories: app.data.tags || [],
         }));
 
-    const artistItems = artists
-        .filter((artist) => !artist.data.draft)
-        .map((artist) => ({
-            title: artist.data.title,
-            description: artist.data.description,
-            publishedDate: artist.data.date,
-            link: `/apps/${artist.slug}/`,
-            categories: artist.data.tags || [],
-        }));
-
     // Combine all items and sort by date (reverse chronological)
-    const allItems: RSSItem[] = [...appItems, ...artistItems].sort(
+    const allItems: RSSItem[] = [...appItems].sort(
         (a, b) => b.publishedDate.valueOf() - a.publishedDate.valueOf()
     );
 

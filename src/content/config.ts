@@ -10,7 +10,10 @@ const apps = defineCollection({
     schema: z.object({
         title: z.string(),
         description: z.string(),
-        date: z.coerce.date(),
+        date: z
+            .date()
+            .optional()
+            .default(() => new Date()),
         tags: z.array(z.string()).optional(),
         coverImage: z.string().optional(),
         featured: z.boolean().default(false),
@@ -29,30 +32,6 @@ const apps = defineCollection({
     }),
 });
 
-// Artists
-const artists = defineCollection({
-    type: 'content',
-    schema: z.object({
-        title: z.string(),
-        description: z.string(),
-        date: z.coerce.date(),
-        tags: z.array(z.string()).optional(),
-        coverImage: z.string().optional(),
-        featured: z.boolean().default(false),
-        youtubeLinks: z.array(z.string()).optional(),
-        externalLinks: z
-            .array(
-                z.object({
-                    label: z.string(),
-                    url: z.string().url(),
-                })
-            )
-            .optional(),
-        draft: z.boolean().default(false),
-    }),
-});
-
 export const collections = {
     apps,
-    artists,
 };

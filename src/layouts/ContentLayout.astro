@@ -59,12 +59,14 @@ const resolvedImage = resolveCoverImage(slug, image);
             {
                 resolvedImage && (
                     <Image
+                        class="w-full rounded-lg shadow-lg object-cover"
                         src={resolvedImage}
                         alt={title}
-                        class="w-full rounded-lg shadow-lg aspect-video object-cover"
-                        width={400}
-                        height={300}
                         loading="eager"
+                        format="webp"
+                        widths={[320, 480, 640, 800, 960, 1200]}
+                        aspectRatio="4/3"
+                        sizes="(min-width:1024px) 800px, (min-width:768px) 640px, 100vw"
                     />
                 )
             }
