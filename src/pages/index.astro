@@ -63,6 +63,7 @@ const featuredArtists = artists.filter((artist) => artist.data.featured).slice(0
                             date={app.data.date}
                             tags={app.data.tags}
                             image={app.data.coverImage}
+                            slug={app.slug}
                         />
                     ))
                 }
@@ -94,6 +95,7 @@ const featuredArtists = artists.filter((artist) => artist.data.featured).slice(0
                                 date={artist.data.date}
                                 tags={artist.data.tags}
                                 image={artist.data.coverImage}
+                                slug={artist.slug}
                             />
                         ))}
                     </div>

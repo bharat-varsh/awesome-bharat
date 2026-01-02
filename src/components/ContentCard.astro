@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { formatDate } from '../utils/dateUtils.ts';
+import { resolveCoverImage } from '../utils/imageResolvers.ts';
 
 export interface Props {
     title: string;
@@ -9,23 +10,29 @@ export interface Props {
     date: Date;
     tags?: string[];
     image?: string;
+    slug: string;
 }
 
-const { title, description, href, date, tags, image } = Astro.props;
+const { title, description, href, date, tags, image, slug } = Astro.props;
+const resolvedImage = resolveCoverImage(slug, image);
+
+// const images = resolvePageImages(frontmatter.images);
 ---
 
 <article
     class="group relative flex flex-col h-full bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-shadow overflow-hidden"
 >
     {
-        image && (
+        resolvedImage && (
             <a href={href} class="block aspect-video overflow-hidden">
                 <Image
-                    src={image}
+                    src={resolvedImage}
                     alt={title}
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    format="webp"
                     width={400}
                     height={300}
+                    sizes="(min-width: 1280px) 320px, (min-width: 768px) 240px, 200px"
                     loading="eager"
                 />
             </a>
@@ -66,3 +73,17 @@ const { title, description, href, date, tags, image } = Astro.props;
         </div>
     </div>
 </article>
+
+<!-- 
+    ---
+    const images = resolvePageImages(frontmatter.images);
+    ---
+
+    {images.hero && (
+    <Image src={images.hero} alt="Hero image" />
+    )}
+
+    {images.architecture && (
+    <Image src={images.architecture} alt="Architecture diagram" />
+    )}
+-->

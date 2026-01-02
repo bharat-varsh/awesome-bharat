@@ -4,8 +4,10 @@
 import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import { formatDate } from '../utils/dateUtils.ts';
+import { resolveCoverImage } from '../utils/imageResolvers.ts';
 
 export interface Props {
+    slug: string;
     title: string;
     description: string;
     image?: string;
@@ -15,7 +17,8 @@ export interface Props {
     externalLinks?: { label: string; url: string }[];
 }
 
-const { title, description, image, date, tags, youtubeLinks, externalLinks } = Astro.props;
+const { slug, title, description, image, date, tags, youtubeLinks, externalLinks } = Astro.props;
+const resolvedImage = resolveCoverImage(slug, image);
 ---
 
 <BaseLayout
@@ -54,9 +57,9 @@ const { title, description, image, date, tags, youtubeLinks, externalLinks } = A
             </div>
 
             {
-                image && (
+                resolvedImage && (
                     <Image
-                        src={image}
+                        src={resolvedImage}
                         alt={title}
                         class="w-full rounded-lg shadow-lg aspect-video object-cover"
                         width={400}
