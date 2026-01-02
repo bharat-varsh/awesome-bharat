@@ -1,7 +1,9 @@
 # Thank you for your contribution to the Awesome Bharat
 
 ## Getting started
+
 ### Prerequisites
+
 - Node.js 18+
 - npm, pnpm, or yarn
 
@@ -35,7 +37,7 @@ Open [localhost:4321](http://localhost:4321) in your browser (We highly recommen
 ### Available scripts (Ensure that your run them in that order)
 
 | Run order | Command            | Action                                         |
-|-----------|--------------------|------------------------------------------------|
+| --------- | ------------------ | ---------------------------------------------- |
 | 1         | `npm run dev`      | Start development server at `localhost:4321`   |
 | 2         | `npm run lint`     | Run `ESLint` to check for code issues          |
 | 3         | `npm run lint:fix` | Automatically fix `ESLint` issues              |

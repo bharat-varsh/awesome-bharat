@@ -1,4 +1,5 @@
 # 🇮🇳 Awesome! Made in Bharat 🇮🇳
+
 Welcome to the curated collection of amazing applications by Indian developers and companies! Discover apps and the great people who built them!
 
 > [!NOTE]

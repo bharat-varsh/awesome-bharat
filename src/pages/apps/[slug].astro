@@ -8,7 +8,7 @@ export const getStaticPaths = (async () => {
     const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
 
     return apps
-        .filter(app => !app.data.draft)
+        .filter((app) => !app.data.draft)
         .map((app) => ({
             params: { slug: app.slug },
             props: { app },
