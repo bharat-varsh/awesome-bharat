@@ -29,7 +29,7 @@ export async function GET(context: APIContext) {
         }));
 
     // Combine all items and sort by date (reverse chronological)
-    const allItems: RSSItem[] = [...appItems, ].sort(
+    const allItems: RSSItem[] = [...appItems].sort(
         (a, b) => b.publishedDate.valueOf() - a.publishedDate.valueOf()
     );
 

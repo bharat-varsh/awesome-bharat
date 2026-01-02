@@ -10,7 +10,10 @@ const apps = defineCollection({
     schema: z.object({
         title: z.string(),
         description: z.string(),
-        date: z.date().optional().default(() => new Date()),
+        date: z
+            .date()
+            .optional()
+            .default(() => new Date()),
         tags: z.array(z.string()).optional(),
         coverImage: z.string().optional(),
         featured: z.boolean().default(false),
