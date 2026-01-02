@@ -1,6 +1,6 @@
 ---
 /**
- * Homepage - Main landing page
+ * Homepage – Main landing page
  */
 
 import { getCollection } from 'astro:content';
@@ -13,28 +13,27 @@ const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
 const latestApps = apps
     .filter((app) => !app.data.draft)
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-    .slice(0, 6);
-
-const artists = (await getCollection('artists')) as Array<CollectionEntry<'artists'>>;
-const featuredArtists = artists.filter((artist) => artist.data.featured).slice(0, 3);
+    .slice(0, 20);
 ---
 
 <BaseLayout
     title="Home | Awesome Bharat"
-    description="A curated collection of awesome made by Indians! Discover your inspiration and the great people who made that possible!"
+    description="A curated collection of awesome made by Indians!"
 >
-    <!-- Hero section -->
+    <!-- Hero -->
     <section
-        class="bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-900 py-10"
+        class="py-12 bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-900"
     >
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl mb-6">
-                <!-- Single-line version (md and up) -->
-                <span class="hidden md:block text-5xl sm:text-6xl lg:text-7xl">
-                    Welcome to <span class="text-primary-600 dark:text-primary-400">[ Awesome ]</span> Bharat
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="font-bold tracking-tight mb-6">
+                <!-- Desktop -->
+                <span class="hidden md:block text-5xl lg:text-6xl">
+                    Welcome to
+                    <span class="text-primary-600 dark:text-primary-400">[ Awesome ]</span>
+                    Bharat
                 </span>
 
-                <!-- Multi-line version (below md) -->
+                <!-- Mobile -->
                 <span class="block md:hidden text-4xl leading-tight">
                     <span class="block">Welcome</span>
                     <span class="block">to</span>
@@ -42,7 +41,8 @@ const featuredArtists = artists.filter((artist) => artist.data.featured).slice(0
                     <span class="block">Bharat</span>
                 </span>
             </h1>
-            <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+
+            <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
                 A curated collection of awesome made by Indians! Discover your inspiration and the
                 great people who made that possible!
             </p>
@@ -50,77 +50,71 @@ const featuredArtists = artists.filter((artist) => artist.data.featured).slice(0
     </section>
 
     <!-- Latest Apps -->
-    <section id="latest" class="py-10 bg-white dark:bg-gray-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl font-bold">Latest Apps</h2>
-                <a
-                    href="/apps"
-                    class="text-primary-600 dark:text-primary-400 hover:underline font-medium"
-                >
+    <section class="py-12 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold">Latest Apps</h2>
+                <a href="/apps" class="text-sm font-medium text-primary-600 dark:text-primary-400">
                     View all
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
-                {
-                    latestApps.map((app) => (
-                        <ContentCard
-                            title={app.data.title}
-                            description={app.data.description}
-                            href={`/apps/${app.slug}`}
-                            date={app.data.date}
-                            tags={app.data.tags}
-                            image={app.data.coverImage}
-                            slug={app.slug}
-                        />
-                    ))
-                }
+            <!-- Horizontal scroll row -->
+            <div class="relative">
+                <!-- Left arrow -->
+                <button
+                    aria-label="Scroll left"
+                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
+                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
+                 text-white items-center justify-center"
+                    onclick="this.nextElementSibling.scrollBy({ left: -320, behavior: 'smooth' })"
+                >
+                    ‹
+                </button>
+
+                <!-- Scroll container -->
+                <div
+                    class="flex gap-5 overflow-x-auto scroll-smooth pb-2
+                 snap-x snap-mandatory
+                 px-10 md:px-12 scrollbar-hide"
+                >
+                    {
+                        latestApps.map((app) => (
+                            <ContentCard
+                                title={app.data.title}
+                                href={`/apps/${app.slug}`}
+                                image={app.data.coverImage}
+                                slug={app.slug}
+                                tags={app.data.tags}
+                                class="snap-start"
+                            />
+                        ))
+                    }
+                </div>
+
+                <!-- Right arrow -->
+                <button
+                    aria-label="Scroll right"
+                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
+                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
+                 text-white items-center justify-center"
+                    onclick="this.previousElementSibling.scrollBy({ left: 320, behavior: 'smooth' })"
+                >
+                    ›
+                </button>
+            </div>
+
+            <!-- CTA -->
+            <div class="mt-10 text-center">
+                <a
+                    href="/apps"
+                    class="inline-block px-8 py-3 rounded-lg
+                 bg-primary-600 text-white font-medium
+                 hover:bg-primary-700 transition-colors"
+                >
+                    Explore everything
+                </a>
             </div>
         </div>
     </section>
-
-    <!-- Featured Artists -->
-    {
-        featuredArtists.length > 0 && (
-            <section class="py-16 bg-gray-50 dark:bg-gray-950">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-3xl font-bold">Featured Artists</h2>
-                        <a
-                            href="/artists"
-                            class="text-primary-600 dark:text-primary-400 hover:underline font-medium"
-                        >
-                            View all
-                        </a>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {featuredArtists.map((artist) => (
-                            <ContentCard
-                                title={artist.data.title}
-                                description={artist.data.description}
-                                href={`/artists/${artist.slug}`}
-                                date={artist.data.date}
-                                tags={artist.data.tags}
-                                image={artist.data.coverImage}
-                                slug={artist.slug}
-                            />
-                        ))}
-                    </div>
-                </div>
-            </section>
-        )
-    }
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-4">
-            <a
-                href="/tags"
-                class="px-8 py-3 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium transition-colors"
-            >
-                Explore everything
-            </a>
-        </div>
-    </div>
 </BaseLayout>
