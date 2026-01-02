@@ -10,7 +10,9 @@
         "astro": "astro",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "format": "prettier --write \"**/*.{js,ts,mjs,astro,md,mdx,json}\""
+        "format": "prettier --write \"**/*.{js,ts,mjs,astro,md,mdx,json}\"",
+        "prebuild": "npm run format && npm run lint",
+        "build.local": "npm run build && npm run preview"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.0.0",
