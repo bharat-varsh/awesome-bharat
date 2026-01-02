@@ -29,9 +29,18 @@ const featuredArtists = artists.filter((artist) => artist.data.featured).slice(0
     >
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl mb-6">
-                Welcome to <span class="text-primary-600 dark:text-primary-400"
-                    >[ Awesome ] Bharat</span
-                >
+                <!-- Single-line version (md and up) -->
+                <span class="hidden md:block text-5xl sm:text-6xl lg:text-7xl">
+                    Welcome to <span class="text-primary-600 dark:text-primary-400">[ Awesome ]</span> Bharat
+                </span>
+
+                <!-- Multi-line version (below md) -->
+                <span class="block md:hidden text-4xl leading-tight">
+                    <span class="block">Welcome</span>
+                    <span class="block">to</span>
+                    <span class="block text-primary-600 dark:text-primary-400">[ Awesome ]</span>
+                    <span class="block">Bharat</span>
+                </span>
             </h1>
             <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
                 A curated collection of awesome made by Indians! Discover your inspiration and the
