@@ -1,10 +1,13 @@
 ---
 /** Layout for individual content pages (apps, products, companies, people, channels, etc) */
 
-import BaseLayout from "./BaseLayout.astro";
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
 import { formatDate } from '../utils/dateUtils.ts';
+import { resolveCoverImage } from '../utils/imageResolvers.ts';
 
 export interface Props {
+    slug: string;
     title: string;
     description: string;
     image?: string;
@@ -14,7 +17,8 @@ export interface Props {
     externalLinks?: { label: string; url: string }[];
 }
 
-const { title, description, image, date, tags, youtubeLinks, externalLinks } = Astro.props;
+const { slug, title, description, image, date, tags, youtubeLinks, externalLinks } = Astro.props;
+const resolvedImage = resolveCoverImage(slug, image);
 ---
 
 <BaseLayout
@@ -36,28 +40,34 @@ const { title, description, image, date, tags, youtubeLinks, externalLinks } = A
                     {formatDate(date)}
                 </time>
 
-                {tags && tags.length > 0 && (
-                    <div class="flex flex-wrap gap-2">
-                        {tags.map((tag) => (
-                            <a
-                                href={`/tags/${tag}`}
-                                class="px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors"
-                            >
-                                #{tag}
-                            </a>
-                        ))}
-                    </div>
-                )}
+                {
+                    tags && tags.length > 0 && (
+                        <div class="flex flex-wrap gap-2">
+                            {tags.map((tag) => (
+                                <a
+                                    href={`/tags/${tag}`}
+                                    class="px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors"
+                                >
+                                    #{tag}
+                                </a>
+                            ))}
+                        </div>
+                    )
+                }
             </div>
 
-            {image && (
-                <img
-                    src={image}
-                    alt={title}
-                    class="w-full rounded-lg shadow-lg aspect-video object-cover"
-                    loading="eager"
-                />
-            )}
+            {
+                resolvedImage && (
+                    <Image
+                        src={resolvedImage}
+                        alt={title}
+                        class="w-full rounded-lg shadow-lg aspect-video object-cover"
+                        width={400}
+                        height={300}
+                        loading="eager"
+                    />
+                )
+            }
         </header>
 
         <div class="prose prose-lg dark:prose-dark max-w-none">
@@ -65,48 +75,50 @@ const { title, description, image, date, tags, youtubeLinks, externalLinks } = A
         </div>
 
         <!-- Article footer with additional links -->
-         {(youtubeLinks || externalLinks) && (
-            <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
-                {youtubeLinks && youtubeLinks.length > 0 && (
-                    <div class="mb-6">
-                        <h3 class="text-xl font-semibold mb-3">Related Videos</h3>
-                        <ul class="space-y-2">
-                            {youtubeLinks.map((link) => (
-                                <li>
-                                    <a
-                                        href={link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="text-primary-600 dark:text-primary-400 hover:underline"
-                                    >
-                                        {link}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+        {
+            (youtubeLinks || externalLinks) && (
+                <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+                    {youtubeLinks && youtubeLinks.length > 0 && (
+                        <div class="mb-6">
+                            <h3 class="text-xl font-semibold mb-3">Related Videos</h3>
+                            <ul class="space-y-2">
+                                {youtubeLinks.map((link) => (
+                                    <li>
+                                        <a
+                                            href={link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="text-primary-600 dark:text-primary-400 hover:underline"
+                                        >
+                                            {link}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
 
-                {externalLinks && externalLinks.length > 0 && (
-                    <div class="mb-6">
-                        <h3 class="text-xl font-semibold mb-3">External Resources</h3>
-                        <ul class="space-y-2">
-                            {externalLinks.map((link) => (
-                                <li>
-                                    <a
-                                        href={link.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="text-primary-600 dark:text-primary-400 hover:underline"
-                                    >
-                                        {link.label}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </footer>
-         )}
+                    {externalLinks && externalLinks.length > 0 && (
+                        <div class="mb-6">
+                            <h3 class="text-xl font-semibold mb-3">External Resources</h3>
+                            <ul class="space-y-2">
+                                {externalLinks.map((link) => (
+                                    <li>
+                                        <a
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="text-primary-600 dark:text-primary-400 hover:underline"
+                                        >
+                                            {link.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </footer>
+            )
+        }
     </article>
 </BaseLayout>

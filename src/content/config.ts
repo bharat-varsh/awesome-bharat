@@ -17,15 +17,16 @@ const apps = defineCollection({
         paid: z.boolean().default(false),
         source: z.enum(['open-source', 'closed-source']).default('open-source'),
         youtubeLinks: z.array(z.string()).optional(),
-        externalLinks: z.array(
-            z.object({
-                label: z.string(),
-                url: z.string().url(),
-            })
-        ).optional(),
+        externalLinks: z
+            .array(
+                z.object({
+                    label: z.string(),
+                    url: z.string().url(),
+                })
+            )
+            .optional(),
         draft: z.boolean().default(false),
     }),
-    
 });
 
 // Artists
@@ -39,12 +40,14 @@ const artists = defineCollection({
         coverImage: z.string().optional(),
         featured: z.boolean().default(false),
         youtubeLinks: z.array(z.string()).optional(),
-        externalLinks: z.array(
-            z.object({
-                label: z.string(),
-                url: z.string().url(),
-            })
-        ).optional(),
+        externalLinks: z
+            .array(
+                z.object({
+                    label: z.string(),
+                    url: z.string().url(),
+                })
+            )
+            .optional(),
         draft: z.boolean().default(false),
     }),
 });

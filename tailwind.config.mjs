@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+import typography from '@tailwindcss/typography';
+
 export default {
     content: ['./src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx}'],
     darkMode: 'class',
@@ -6,7 +9,7 @@ export default {
         extend: {
             colors: {
                 primary: {
-                    50:  '#fff7ed',
+                    50: '#fff7ed',
                     100: '#ffedd5',
                     200: '#fed7aa',
                     300: '#fdba74',
@@ -18,7 +21,7 @@ export default {
                     900: '#7c2d12',
                 },
                 secondary: {
-                    50:  '#f0f6ff',
+                    50: '#f0f6ff',
                     100: '#e0edff',
                     200: '#c7ddff',
                     300: '#a4c8ff',
@@ -28,8 +31,7 @@ export default {
                     700: '#254ea6',
                     800: '#1b3c85',
                     900: '#132a5e',
-                }
-
+                },
             },
             typography: (theme) => ({
                 DEFAULT: {
@@ -90,5 +92,5 @@ export default {
             }),
         },
     },
-    plugins: [require('@tailwindcss/typography')],
+    plugins: [typography],
 };
