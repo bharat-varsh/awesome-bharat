@@ -23,13 +23,13 @@ const resolvedImage = resolveCoverImage(slug, image) as ImageMetadata;
     <div class="rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
         <div class="rounded-lg overflow-hidden">
             <Image
+                class="aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
                 src={resolvedImage}
                 alt={title}
-                width={400}
-                height={400}
                 format="webp"
+                widths={[140, 160, 180, 200, 220]}
+                aspectRatio="1/1"
                 sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
-                class="aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
             />
         </div>
     </div>
