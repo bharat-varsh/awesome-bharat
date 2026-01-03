@@ -7,6 +7,10 @@ import type { CollectionEntry } from 'astro:content';
 import RightSidebar from '../components/RightSidebar.astro';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
+import googlePlayBadge from '../assets/images/badges/google-play-badge.png';
+import appStoreBadge from '../assets/images/badges/app-store-badge.png';
+import fdroidBadge from '../assets/images/badges/fdroid-badge.png';
+import githubBadge from '../assets/images/badges/github-badge.png';
 
 export interface Props {
     slug: string;
@@ -21,6 +25,7 @@ export interface Props {
     source: string;
     youtubeVideoLinks?: string[];
     externalLinks?: { label: string; url: string }[];
+    storeLinks?: { label: string; url: string }[];
     authors?: Array<CollectionEntry<'persons'>>;
 }
 
@@ -37,6 +42,7 @@ const {
     source,
     youtubeVideoLinks,
     externalLinks,
+    storeLinks,
     authors = [],
 } = Astro.props;
 const resolvedImage = resolveLogo(slug, image);
@@ -64,16 +70,15 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                     {
                         resolvedImage && (
                             <div class="md:row-span-3 xl:row-span-2 flex items-start justify-start">
-                                <div class="w-24 h-24 flex-shrink-0 aspect-square rounded-lg shadow-md overflow-hidden">
+                                <div class="w-24 h-24 flex-shrink-0 rounded-lg">
                                     <Image
-                                        class="w-full h-full object-cover"
+                                        class="w-full h-full object-contain"
                                         src={resolvedImage}
                                         alt={title}
                                         loading="eager"
                                         format="webp"
                                         width={96}
                                         height={96}
-                                        aspectRatio="1/1"
                                     />
                                 </div>
                             </div>
@@ -161,6 +166,95 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                     }
                 </div>
             </header>
+
+            <!-- Description -->
+            <div class="mt-6 mb-10 px-4 sm:px-6 lg:px-0">
+                <p
+                    class="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-none"
+                >
+                    {description}
+                </p>
+            </div>
+
+            <!-- Store badges -->
+            {
+                storeLinks && storeLinks.length > 0 && (
+                    <div class="mb-10 px-4 sm:px-6 lg:px-0">
+                        <div class="flex flex-wrap gap-4 items-center">
+                            {storeLinks.map((store) => {
+                                const isPlayStore =
+                                    store.label.toLowerCase().includes('play store') ||
+                                    store.url.includes('play.google.com');
+                                const isAppStore =
+                                    store.label.toLowerCase().includes('app store') ||
+                                    store.url.includes('apps.apple.com');
+                                const isFdroidStore =
+                                    store.label.toLowerCase().includes('fdroid') ||
+                                    store.url.includes('f-droid.org');
+                                const isGithubRelease =
+                                    store.label.toLowerCase().includes('github') ||
+                                    store.url.includes('github.com');
+
+                                return (
+                                    <a
+                                        href={store.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-block transition-opacity hover:opacity-80"
+                                        aria-label={`Get it on ${store.label}`}
+                                    >
+                                        {isPlayStore ? (
+                                            <Image
+                                                src={googlePlayBadge}
+                                                alt={`Get it on ${store.label}`}
+                                                class="h-12 sm:h-14 md:h-16 w-auto"
+                                                format="webp"
+                                                widths={[124, 145, 165, 200]}
+                                                sizes="(min-width:768px) 165px (min-width:640px) 145px, 124px"
+                                                loading="lazy"
+                                            />
+                                        ) : isFdroidStore ? (
+                                            <Image
+                                                src={fdroidBadge}
+                                                alt={`Get it on ${store.label}`}
+                                                class="h-12 sm:h-14 md:h-16 w-auto"
+                                                format="webp"
+                                                widths={[124, 145, 165, 200]}
+                                                sizes="(min-width:768px) 165px (min-width:640px) 145px, 124px"
+                                                loading="lazy"
+                                            />
+                                        ) : isAppStore ? (
+                                            <Image
+                                                src={appStoreBadge}
+                                                alt={`Get it on ${store.label}`}
+                                                class="h-12 sm:h-10 md:h-12 w-auto"
+                                                format="webp"
+                                                widths={[124, 145, 165, 200]}
+                                                sizes="(min-width:768px) 165px (min-width:640px) 145px, 124px"
+                                                loading="lazy"
+                                            />
+                                        ) : isGithubRelease ? (
+                                            <Image
+                                                src={githubBadge}
+                                                alt={`Get it on ${store.label}`}
+                                                class="h-12 sm:h-14 md:h-16 w-auto"
+                                                format="webp"
+                                                widths={[124, 145, 165, 200]}
+                                                sizes="(min-width:768px) 165px (min-width:640px) 145px, 124px"
+                                                loading="lazy"
+                                            />
+                                        ) : (
+                                            <div class="h-12 sm:h-10 md:h-11 px-6 flex items-center justify-center bg-gray-900 dark:bg-gray-100 rounded-lg text-white dark:text-gray-900 font-semibold text-sm sm:text-base whitespace-nowwrap hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors">
+                                                {store.label}
+                                            </div>
+                                        )}
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )
+            }
 
             <div class="prose prose-lg dark:prose-dark max-w-none">
                 <slot />

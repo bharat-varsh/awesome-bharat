@@ -3,7 +3,7 @@ import type { ImageMetadata } from 'astro';
 import defaultCardImage from '@/assets/images/default-card-image.png';
 
 import linkora from '@/assets/images/linkora.png';
-import mindful from '@/assets/images/mindful.webp';
+import mindful from '@/assets/images/mindful.png';
 // import linkoraHero from '@/assets/images/linkora-hero.png';
 // import linkoraArchitecture from '@/assets/images/linkora-architecture.png';
 // import linkoraFlow from '@/assets/images/linkora-flow.png';
