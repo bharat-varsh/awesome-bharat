@@ -1,0 +1,57 @@
+---
+interface Props {
+    position?: 'left' | 'right';
+    class?: string;
+}
+
+const { position = 'left', class: customClass = '' } = Astro.props;
+---
+
+<aside
+    class:list={[
+        'flex-shrink-0',
+        'bg-gray-50 dark:bg-gray-900',
+        'border-gray-200 dark:border-gray-800',
+        position === 'left' &&
+            'hidden lg:block w-64 sticky top-16 h-[calc(100vh-4rem)] self-start overflow-y-auto order-first border-r',
+        position === 'right' &&
+            'w-full max-w-4xl mx-auto lg:max-w-none lg:mx-0 lg:w-64 lg:block lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:self-start lg:overflow-y-auto lg:order-last lg:border-l border-t lg:border-t-0',
+        customClass,
+    ]}
+>
+    <div class="p-6 space-y-6">
+        <slot />
+    </div>
+</aside>
+
+<style is:global>
+    aside {
+        scrollbar-width: thin;
+        scrollbar-color: #d1d5db #f3f4f6;
+    }
+
+    aside::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    aside::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    aside::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 3px;
+    }
+
+    aside::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af;
+    }
+
+    :root.dark aside::-webkit-scrollbar-thumb {
+        background: #4b5563;
+    }
+
+    :root.dark aside::-webkit-scrollbar-thumb:hover {
+        background: #6b7280;
+    }
+</style>
