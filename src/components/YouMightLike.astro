@@ -1,0 +1,28 @@
+---
+import RelatedItem from './RelatedItem.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+    items: Array<CollectionEntry<'apps' | 'persons' | 'companies'>>;
+    collectionName: 'apps' | 'persons' | 'companies';
+    title?: string;
+    maxItems?: number;
+}
+
+const { items, collectionName, title = 'You Might Like', maxItems = 6 } = Astro.props;
+
+const displayItems = items.slice(0, maxItems);
+---
+
+{
+    displayItems.length > 0 && (
+        <div class="space-y-3">
+            <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
+            <div class="space-y-2">
+                {displayItems.map((item) => (
+                    <RelatedItem item={item} collection={collectionName} />
+                ))}
+            </div>
+        </div>
+    )
+}

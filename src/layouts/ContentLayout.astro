@@ -4,6 +4,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import type { CollectionEntry } from 'astro:content';
+import RightSidebar from '../components/RightSidebar.astro';
 import { formatDate } from '../utils/dateUtils.ts';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 
@@ -41,106 +42,114 @@ const resolvedImage = resolveLogo(slug, image);
     publishedTime={date.toISOString()}
     tags={tags}
 >
-    <article class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <header class="mb-8 space-y-4">
-            <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                {title}
-            </h1>
+    <div class="flex flex-col lg:flex-row gap-0 relative">
+        <article class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+            <header class="mb-8 space-y-4">
+                <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                    {title}
+                </h1>
 
-            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                <time datetime={date.toISOString()}>
-                    {formatDate(date)}
-                </time>
+                <div
+                    class="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400"
+                >
+                    <time datetime={date.toISOString()}>
+                        {formatDate(date)}
+                    </time>
+
+                    {
+                        tags && tags.length > 0 && (
+                            <div class="flex flex-wrap gap-2">
+                                {tags.map((tag) => (
+                                    <a
+                                        href={`/tags/${tag}`}
+                                        class="px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors"
+                                    >
+                                        #{tag}
+                                    </a>
+                                ))}
+                            </div>
+                        )
+                    }
+                </div>
 
                 {
-                    tags && tags.length > 0 && (
-                        <div class="flex flex-wrap gap-2">
-                            {tags.map((tag) => (
-                                <a
-                                    href={`/tags/${tag}`}
-                                    class="px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors"
-                                >
-                                    #{tag}
-                                </a>
-                            ))}
-                        </div>
+                    resolvedImage && (
+                        <Image
+                            class="w-full rounded-lg shadow-lg object-cover"
+                            src={resolvedImage}
+                            alt={title}
+                            loading="eager"
+                            format="webp"
+                            widths={[320, 480, 640, 800, 960, 1200]}
+                            aspectRatio="4/3"
+                            sizes="(min-width:1024px) 800px, (min-width:768px) 640px, 100vw"
+                        />
                     )
                 }
+            </header>
+
+            <div class="prose prose-lg dark:prose-dark max-w-none">
+                <slot />
             </div>
 
+            <!-- Article footer with additional links -->
             {
-                resolvedImage && (
-                    <Image
-                        class="w-full rounded-lg shadow-lg object-cover"
-                        src={resolvedImage}
-                        alt={title}
-                        loading="eager"
-                        format="webp"
-                        widths={[320, 480, 640, 800, 960, 1200]}
-                        aspectRatio="4/3"
-                        sizes="(min-width:1024px) 800px, (min-width:768px) 640px, 100vw"
-                    />
+                (youtubeVideoLinks || externalLinks) && (
+                    <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+                        {youtubeVideoLinks && youtubeVideoLinks.length > 0 && (
+                            <div class="mb-6">
+                                <h3 class="text-xl font-semibold mb-3">Related Videos</h3>
+                                <ul class="space-y-2">
+                                    {youtubeVideoLinks.map((link) => (
+                                        <li>
+                                            <a
+                                                href={link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="text-primary-600 dark:text-primary-400 hover:underline"
+                                            >
+                                                {link}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {externalLinks && externalLinks.length > 0 && (
+                            <div class="mb-6">
+                                <h3 class="text-xl font-semibold mb-3">External Resources</h3>
+                                <ul class="space-y-2">
+                                    {externalLinks.map((link) => (
+                                        <li>
+                                            <a
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="text-primary-600 dark:text-primary-400 hover:underline"
+                                            >
+                                                {link.label}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </footer>
                 )
             }
-        </header>
+        </article>
 
-        <div class="prose prose-lg dark:prose-dark max-w-none">
-            <slot />
-        </div>
+        <!-- {
+            authors?.map((author) => (
+                <a href={`/authors/${author.slug}`} class="text-primary-600 hover:underline">
+                    {author.data.name}
+                </a>
+            ))
+        } -->
 
-        <!-- Article footer with additional links -->
-        {
-            (youtubeVideoLinks || externalLinks) && (
-                <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
-                    {youtubeVideoLinks && youtubeVideoLinks.length > 0 && (
-                        <div class="mb-6">
-                            <h3 class="text-xl font-semibold mb-3">Related Videos</h3>
-                            <ul class="space-y-2">
-                                {youtubeVideoLinks.map((link) => (
-                                    <li>
-                                        <a
-                                            href={link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="text-primary-600 dark:text-primary-400 hover:underline"
-                                        >
-                                            {link}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-
-                    {externalLinks && externalLinks.length > 0 && (
-                        <div class="mb-6">
-                            <h3 class="text-xl font-semibold mb-3">External Resources</h3>
-                            <ul class="space-y-2">
-                                {externalLinks.map((link) => (
-                                    <li>
-                                        <a
-                                            href={link.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="text-primary-600 dark:text-primary-400 hover:underline"
-                                        >
-                                            {link.label}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                </footer>
-            )
-        }
-    </article>
-
-    {
-        authors?.map((author) => (
-            <a href={`/authors/${author.slug}`} class="text-primary-600 hover:underline">
-                {author.data.name}
-            </a>
-        ))
-    }
+        <RightSidebar>
+            <slot name="right-sidebar" />
+        </RightSidebar>
+    </div>
 </BaseLayout>
