@@ -5,7 +5,6 @@ import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import type { CollectionEntry } from 'astro:content';
 import RightSidebar from '../components/RightSidebar.astro';
-import { formatDate } from '../utils/dateUtils.ts';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
 
@@ -82,7 +81,9 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                     }
 
                     <!-- Column 2: Title and Author -->
-                    <div class="min-w-0 flex flex-col justify-center gap-1 md:col-start-2 xl:col-start-2 xl:row-span-2">
+                    <div
+                        class="min-w-0 flex flex-col justify-center gap-1 md:col-start-2 xl:col-start-2 xl:row-span-2"
+                    >
                         <h1
                             class="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight leading-tight line-clamp-2 min-w-0"
                         >
@@ -104,7 +105,9 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                     </div>
 
                     <!-- Column 3: Badges -->
-                    <div class="min-w-0 grid grid-cols-2 gap-2 content-start md:col-start-2 xl:col-start-3 xl:row-span-2">
+                    <div
+                        class="min-w-0 grid grid-cols-2 gap-2 content-start md:col-start-2 xl:col-start-3 xl:row-span-2"
+                    >
                         <span
                             class="min-w-0 px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium text-center leading-tight text-xs text-balance line-clamp-2"
                         >
@@ -143,9 +146,7 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                     {
                         tags && tags.length > 0 && (
                             <div class="min-w-0 flex items-start md:col-start-2 xl:col-start-4 xl:row-span-2">
-                                <div
-                                    class="w-full h-[56px] overflow-y-auto overflow-x-hidden flex flex-wrap gap-2 content-start pr-2 scrollbar-hide"
-                                >
+                                <div class="w-full h-[56px] overflow-y-auto overflow-x-hidden flex flex-wrap gap-2 content-start pr-2 scrollbar-hide">
                                     {tags.map((tag) => (
                                         <a
                                             href={`/tags/${tag}`}
