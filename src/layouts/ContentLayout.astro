@@ -162,6 +162,15 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                 </div>
             </header>
 
+            <!-- Description -->
+            <div class="mt-6 mb-10 px-4 sm:px-6 lg:px-0">
+                <p
+                    class="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-none"
+                >
+                    {description}
+                </p>
+            </div>
+
             <div class="prose prose-lg dark:prose-dark max-w-none">
                 <slot />
             </div>
