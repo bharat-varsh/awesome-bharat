@@ -7,6 +7,7 @@ import type { CollectionEntry } from 'astro:content';
 import RightSidebar from '../components/RightSidebar.astro';
 import { formatDate } from '../utils/dateUtils.ts';
 import { resolveLogo } from '../utils/imageResolvers.ts';
+import { formatCategoryName } from '../utils/textUtils.ts';
 
 export interface Props {
     slug: string;
@@ -15,6 +16,10 @@ export interface Props {
     image?: string;
     date: Date;
     tags?: string[];
+    category: string;
+    paid: boolean;
+    offline: boolean;
+    source: string;
     youtubeVideoLinks?: string[];
     externalLinks?: { label: string; url: string }[];
     authors?: Array<CollectionEntry<'persons'>>;
@@ -27,11 +32,19 @@ const {
     image,
     date,
     tags,
+    category,
+    paid,
+    offline,
+    source,
     youtubeVideoLinks,
     externalLinks,
     authors = [],
 } = Astro.props;
 const resolvedImage = resolveLogo(slug, image);
+
+// Get first author for display
+const primaryAuthor = authors.length > 0 ? authors[0] : null;
+const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor.slug}` : null;
 ---
 
 <BaseLayout
@@ -44,48 +57,109 @@ const resolvedImage = resolveLogo(slug, image);
 >
     <div class="flex flex-col lg:flex-row gap-0 relative">
         <article class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-            <header class="mb-8 space-y-4">
-                <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                    {title}
-                </h1>
-
+            <header class="mb-8">
                 <div
-                    class="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400"
+                    class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-8 gap-2 lg:gap-3 mb-6 auto-rows-max lg:auto-rows-fr"
                 >
-                    <time datetime={date.toISOString()}>
-                        {formatDate(date)}
-                    </time>
+                    <!-- Column 1: Logo -->
+                    {
+                        resolvedImage && (
+                            <div class="sm:col-span-1 lg:row-span-2 flex items-start justify-start">
+                                <div class="w-24 h-24 flex-shrink-0 aspect-square rounded-lg shadow-md overflow-hidden">
+                                    <Image
+                                        class="w-full h-full object-cover"
+                                        src={resolvedImage}
+                                        alt={title}
+                                        loading="eager"
+                                        format="webp"
+                                        width={96}
+                                        height={96}
+                                        aspectRation="1/1"
+                                    />
+                                </div>
+                            </div>
+                        )
+                    }
 
+                    <!-- Column 2: Title and Author -->
+                    <div class="sm:col-span-2 lg:col-span-2 flex flex-col justify-between gap-1">
+                        <h1
+                            class="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight line-clamp-2"
+                        >
+                            {title}
+                        </h1>
+                        {
+                            primaryAuthor && (
+                                <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-1">
+                                    <span class="text-gray-500 dark:text-gray-5001">by </span>
+                                    <a
+                                        href={authorLink}
+                                        class="text-primary-600 dark:text-primary-400 hover:underline font-medium"
+                                    >
+                                        {primaryAuthor.data.name}
+                                    </a>
+                                </div>
+                            )
+                        }
+                    </div>
+
+                    <!-- Column 3: Badges -->
+                    <div class="sm:col-span-2 lg:col-span-2 grid grid-cols-2 gap-2">
+                        <span
+                            class="text-[10px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium text-center"
+                        >
+                            {formatCategoryName(category)}
+                        </span>
+                        <span
+                            class={`text=[10px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-full font-medium text-center ${
+                                source === 'openSource'
+                                    ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+                            }`}
+                        >
+                            {source === 'openSource' ? 'Open Source' : 'Closed Source'}
+                        </span>
+                        <span
+                            class={`text-[10px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-full font-medium text-center ${
+                                paid
+                                    ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300'
+                                    : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                            }`}
+                        >
+                            {paid ? 'Paid' : 'Free'}
+                        </span>
+                        <span
+                            class={`text-[10px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-full font-medium text-center ${
+                                offline
+                                    ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+                            }`}
+                        >
+                            {offline ? 'Fully offline' : 'Needs internet'}
+                        </span>
+                    </div>
+
+                    <!-- Column 4: Tags -->
                     {
                         tags && tags.length > 0 && (
-                            <div class="flex flex-wrap gap-2">
-                                {tags.map((tag) => (
-                                    <a
-                                        href={`/tags/${tag}`}
-                                        class="px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors"
-                                    >
-                                        #{tag}
-                                    </a>
-                                ))}
+                            <div class="sm:col-span-4 lg:col-span-3 lg:row-span-2 flex items-start">
+                                <div
+                                    class="w-full h-[56px] overflow-x-hidden flex flex-wrap gap-2 content-start pr-2"
+                                    style="scrollbar-width: thin; scrollbar-color: rgb(209, 213 219) transparent;"
+                                >
+                                    {tags.map((tag) => (
+                                        <a
+                                            href={`/tags/${tag}`}
+                                            class="text-xs px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors whitespace-nowrap flex-shrink-0"
+                                        >
+                                            #{tag}
+                                        </a>
+                                    ))}
+                                </div>
                             </div>
                         )
                     }
                 </div>
-
-                {
-                    resolvedImage && (
-                        <Image
-                            class="w-full rounded-lg shadow-lg object-cover"
-                            src={resolvedImage}
-                            alt={title}
-                            loading="eager"
-                            format="webp"
-                            widths={[320, 480, 640, 800, 960, 1200]}
-                            aspectRatio="4/3"
-                            sizes="(min-width:1024px) 800px, (min-width:768px) 640px, 100vw"
-                        />
-                    )
-                }
             </header>
 
             <div class="prose prose-lg dark:prose-dark max-w-none">
