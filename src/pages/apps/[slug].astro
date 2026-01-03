@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import type { CollectionEntry } from 'astro:content';
+import type { Author } from '@/content/config.ts';
 import ContentLayout from '@/layouts/ContentLayout.astro';
 
 export const getStaticPaths = (async () => {
@@ -17,9 +18,9 @@ export const getStaticPaths = (async () => {
 
 const { app } = Astro.props as { app: CollectionEntry<'apps'> };
 const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
-const resolvedAuthors = app.data.authors.map((author) =>
-    persons.find((person) => person.slug === author.slug)
-);
+const resolvedAuthors = app.data.authors
+    .map((author: Author) => persons.find((person) => person.slug === author.slug))
+    .filter((author: Author): author is CollectionEntry<'persons'> => Boolean(author));
 
 const { Content } = await app.render();
 ---

@@ -4,6 +4,13 @@ import { defineCollection, z } from 'astro:content';
  * Define schema for different content types
  */
 
+const authorSchema = z.object({
+    slug: z.string(), // links to /persons/[slug]
+    type: z.enum(['company', 'person']),
+});
+
+export type Author = z.infer<typeof authorSchema>;
+
 // Applications
 const apps = defineCollection({
     type: 'content',
@@ -11,12 +18,7 @@ const apps = defineCollection({
         featured: z.boolean().default(false),
         title: z.string(),
         description: z.string(),
-        authors: z.array(
-            z.object({
-                slug: z.string(), // links to /persons/[slug]
-                type: z.enum(['company', 'person']),
-            })
-        ),
+        authors: z.array(authorSchema),
         type: z.enum(['app', 'plugin']),
         devices: z.array(z.enum(['auto', 'desktop', 'mobile', 'tv', 'watch'])),
         source: z.enum(['closed-source', 'openSource']),
