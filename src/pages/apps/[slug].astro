@@ -4,25 +4,31 @@ import type { GetStaticPaths } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import type { Author } from '@/content/config.ts';
 import ContentLayout from '@/layouts/ContentLayout.astro';
+import YouMightLike from '@components/YouMightLike.astro';
+import { getRelatedContentSimple } from '@utils/relatedContent.js';
 
 export const getStaticPaths = (async () => {
     const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
+    const publishedApps = apps.filter((app) => !app.data.draft);
 
-    return apps
-        .filter((app) => !app.data.draft)
-        .map((app) => ({
-            params: { slug: app.slug },
-            props: { app },
-        }));
+    return publishedApps.map((app) => ({
+        params: { slug: app.slug },
+        props: { app, allApps: publishedApps },
+    }));
 }) satisfies GetStaticPaths;
 
-const { app } = Astro.props as { app: CollectionEntry<'apps'> };
+const { app, allApps } = Astro.props as {
+    app: CollectionEntry<'apps'>;
+    allApps: Array<CollectionEntry<'apps'>>;
+};
 const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
 const resolvedAuthors = app.data.authors
     .map((author: Author) => persons.find((person) => person.slug === author.slug))
     .filter((author: Author): author is CollectionEntry<'persons'> => Boolean(author));
 
 const { Content } = await app.render();
+
+const relatedApps = getRelatedContentSimple(app, allApps, 'apps', 6);
 ---
 
 <ContentLayout
@@ -37,4 +43,14 @@ const { Content } = await app.render();
     authors={resolvedAuthors}
 >
     <Content />
+
+    <!-- Right sidebar content -->
+    <div slot="right-sidebar">
+        <YouMightLike
+            items={relatedApps}
+            collectionName="apps"
+            title="You might like"
+            maxItems={6}
+        />
+    </div>
 </ContentLayout>

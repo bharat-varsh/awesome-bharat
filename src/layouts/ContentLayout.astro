@@ -4,6 +4,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import type { CollectionEntry } from 'astro:content';
+import RightSidebar from '../components/RightSidebar.astro';
 import { formatDate } from '../utils/dateUtils.ts';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 
@@ -136,11 +137,15 @@ const resolvedImage = resolveLogo(slug, image);
         }
     </article>
 
-    {
+    <!-- {
         authors?.map((author) => (
             <a href={`/authors/${author.slug}`} class="text-primary-600 hover:underline">
                 {author.data.name}
             </a>
         ))
-    }
+    } -->
+
+    <RightSidebar>
+        <slot name="right-sidebar" />
+    </RightSidebar>
 </BaseLayout>
