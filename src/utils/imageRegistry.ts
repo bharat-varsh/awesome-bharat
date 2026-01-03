@@ -1,19 +1,19 @@
 import type { ImageMetadata } from 'astro';
 
-import defaultCardImage from '@/assets/images/defaultCardImage.png';
+import defaultCardImage from '@/assets/images/default-card-image.png';
 
-// App / card images
 import linkora from '@/assets/images/linkora.png';
+import mindful from '@/assets/images/mindful.webp';
 // import linkoraHero from '@/assets/images/linkora-hero.png';
 // import linkoraArchitecture from '@/assets/images/linkora-architecture.png';
 // import linkoraFlow from '@/assets/images/linkora-flow.png';
 
 export const imageRegistry: Record<string, ImageMetadata> = {
-    // defaults
     default: defaultCardImage,
 
-    // card / cover images
+    // logos
     linkora,
+    mindful,
 
     // page images
     //   'linkora-hero': linkoraHero,
