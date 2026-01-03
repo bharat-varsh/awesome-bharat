@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { resolveLogo } from '../utils/imageResolvers.ts';
 
 interface Props {
     item: CollectionEntry<'apps' | 'persons' | 'companies'>;
@@ -10,6 +11,7 @@ interface Props {
 const { item, collection } = Astro.props;
 
 const href = `/${collection}/${item.slug}`;
+const resolvedImage = resolveLogo(item.slug, item.data.logo);
 ---
 
 <a
@@ -19,7 +21,7 @@ const href = `/${collection}/${item.slug}`;
     <div class="space-y-2">
         <Image
             class="aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
-            src={item.data.logo}
+            src={resolvedImage}
             alt={item.data.title}
             format="webp"
             widths={[140, 160, 180, 200, 220]}
@@ -41,7 +43,7 @@ const href = `/${collection}/${item.slug}`;
                             {tag}
                         </span>
                     ))}
-                    {item.data.tag.length > 2 && (
+                    {item.data.tags.length > 2 && (
                         <span class="text-xs px-2 py-0.5 text-gray-500 dark:text-gray-400">
                             +{item.data.tags.length - 2}
                         </span>
