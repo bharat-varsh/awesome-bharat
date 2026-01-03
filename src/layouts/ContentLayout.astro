@@ -70,16 +70,15 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                     {
                         resolvedImage && (
                             <div class="md:row-span-3 xl:row-span-2 flex items-start justify-start">
-                                <div class="w-24 h-24 flex-shrink-0 aspect-square rounded-lg shadow-md overflow-hidden">
+                                <div class="w-24 h-24 flex-shrink-0 rounded-lg">
                                     <Image
-                                        class="w-full h-full object-cover"
+                                        class="w-full h-full object-contain"
                                         src={resolvedImage}
                                         alt={title}
                                         loading="eager"
                                         format="webp"
                                         width={96}
                                         height={96}
-                                        aspectRatio="1/1"
                                     />
                                 </div>
                             </div>
