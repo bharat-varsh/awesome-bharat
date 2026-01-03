@@ -16,6 +16,11 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { app } = Astro.props as { app: CollectionEntry<'apps'> };
+const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+const resolvedAuthors = app.data.authors.map((author) =>
+    persons.find((person) => person.slug === author.slug)
+);
+
 const { Content } = await app.render();
 ---
 
@@ -23,11 +28,12 @@ const { Content } = await app.render();
     slug={app.slug}
     title={app.data.title}
     description={app.data.description}
-    image={app.data.coverImage}
+    image={app.data.logo}
     date={app.data.date}
     tags={app.data.tags}
-    youtubeLinks={app.data.youtubeLinks}
+    youtubeVideoLinks={app.data.youtubeVideoLinks}
     externalLinks={app.data.externalLinks}
+    authors={resolvedAuthors}
 >
     <Content />
 </ContentLayout>

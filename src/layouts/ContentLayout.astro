@@ -3,8 +3,9 @@
 
 import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
 import { formatDate } from '../utils/dateUtils.ts';
-import { resolveCoverImage } from '../utils/imageResolvers.ts';
+import { resolveLogo } from '../utils/imageResolvers.ts';
 
 export interface Props {
     slug: string;
@@ -13,12 +14,23 @@ export interface Props {
     image?: string;
     date: Date;
     tags?: string[];
-    youtubeLinks?: string[];
+    youtubeVideoLinks?: string[];
     externalLinks?: { label: string; url: string }[];
+    authors?: Array<CollectionEntry<'persons'>>;
 }
 
-const { slug, title, description, image, date, tags, youtubeLinks, externalLinks } = Astro.props;
-const resolvedImage = resolveCoverImage(slug, image);
+const {
+    slug,
+    title,
+    description,
+    image,
+    date,
+    tags,
+    youtubeVideoLinks,
+    externalLinks,
+    authors = [],
+} = Astro.props;
+const resolvedImage = resolveLogo(slug, image);
 ---
 
 <BaseLayout
@@ -78,13 +90,13 @@ const resolvedImage = resolveCoverImage(slug, image);
 
         <!-- Article footer with additional links -->
         {
-            (youtubeLinks || externalLinks) && (
+            (youtubeVideoLinks || externalLinks) && (
                 <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
-                    {youtubeLinks && youtubeLinks.length > 0 && (
+                    {youtubeVideoLinks && youtubeVideoLinks.length > 0 && (
                         <div class="mb-6">
                             <h3 class="text-xl font-semibold mb-3">Related Videos</h3>
                             <ul class="space-y-2">
-                                {youtubeLinks.map((link) => (
+                                {youtubeVideoLinks.map((link) => (
                                     <li>
                                         <a
                                             href={link}
@@ -123,4 +135,12 @@ const resolvedImage = resolveCoverImage(slug, image);
             )
         }
     </article>
+
+    {
+        authors?.map((author) => (
+            <a href={`/authors/${author.slug}`} class="text-primary-600 hover:underline">
+                {author.data.name}
+            </a>
+        ))
+    }
 </BaseLayout>

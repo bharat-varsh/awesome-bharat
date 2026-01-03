@@ -3,13 +3,13 @@ import { imageRegistry } from './imageRegistry.ts';
 
 /**
  * Resolution order:
- * 1. explicit coverImage
+ * 1. explicit logo
  * 2. slug-based image
  * 3. default image
  */
-export function resolveCoverImage(slug: string, coverImage?: string): ImageMetadata {
-    if (coverImage && imageRegistry[coverImage]) {
-        return imageRegistry[coverImage];
+export function resolveLogo(slug: string, logo?: string): ImageMetadata {
+    if (logo && imageRegistry[logo]) {
+        return imageRegistry[logo];
     }
 
     if (imageRegistry[slug]) {

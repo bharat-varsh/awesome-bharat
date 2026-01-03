@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro';
 
-import defaultCardImage from '@/assets/images/default-card-image.png';
+import defaultCardImage from '@/assets/images/defaultCardImage.png';
 
 // App / card images
 import linkora from '@/assets/images/linkora.png';
