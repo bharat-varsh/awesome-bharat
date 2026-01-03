@@ -1,0 +1,56 @@
+---
+import SidebarNav from './SidebarNav.astro';
+---
+
+<div class="lg:hidden">
+    <div id="mobile-nav-menu" class="fixed inset-0 bg-black/50 hidden z-30 lg:hidden"></div>
+
+    <div
+        id="mobile-nav-drawer"
+        class="fixed left-0 top-16 bottom-0 w-64 bg-white dark:bg-gray-900 shadow-lg transform -translate-x-full transition-transform z-40 overflow-y-auto lg:hidden"
+    >
+        <div class="p-6">
+            <SidebarNav />
+        </div>
+    </div>
+</div>
+
+<script>
+    const toggle = document.getElementById('mobile-nav-toggle');
+    const menu = document.getElementById('mobile-nav-menu');
+    const drawer = document.getElementById('mobile-nav-drawer');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    function closeMenu() {
+        drawer?.classList.add('-translate-x-full');
+        menu?.classList.add('hidden');
+        hamburgerIcon?.classList.remove('hidden');
+        closeIcon?.classList.add('hidden');
+        toggle?.setAttribute('aria-expanded', 'false');
+    }
+
+    function openMenu() {
+        drawer?.classList.remove('-translate-x-full');
+        menu?.classList.remove('hidden');
+        hamburgerIcon?.classList.add('hidden');
+        closeIcon?.classList.remove('hidden');
+        toggle?.setAttribute('aria-expanded', 'true');
+    }
+
+    toggle?.addEventListener('click', () => {
+        const isOpen = toggle?.getAttribute('aria-expanded') === 'true';
+        if (isOpen) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    menu?.addEventListener('click', closeMenu);
+
+    // Close on navigation
+    drawer?.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', closeMenu);
+    });
+</script>
