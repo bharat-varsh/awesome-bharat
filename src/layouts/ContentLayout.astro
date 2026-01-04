@@ -114,15 +114,11 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
 
                     <!-- Column 3: Badges -->
                     <div
-                        class="min-w-0 grid grid-cols-2 gap-2 content-start md:col-start-2 xl:col-start-3 xl:row-span-2"
+                        class="min-w-0 flex items-center grid grid-cols-1 gap-4 content-center md:col-start-2 xl:col-start-3 xl:row-span-2"
                     >
+                    <div class="w-full flex flex-wrap gap-2 content-start gap-4">
                         <span
-                            class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-1 py-1 font-small text-center text-xs text-balance line-clamp-2"
-                        >
-                            {formatCategoryName(category)}
-                        </span>
-                        <span
-                            class={`rounded-lg ring-2 text-black min-w-0 px-1 py-1 font-small text-center text-xs text-balance line-clamp-2 ${
+                            class={`rounded-lg ring-1 text-black min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2 ${
                                 source === 'openSource'
                                     ? 'bg-green-300 ring-green-300'
                                     : 'bg-red-400 ring-red-400'
@@ -131,24 +127,30 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                             {source === 'openSource' ? 'Open Source' : 'Closed Source'}
                         </span>
                         <span
-                            class={`rounded-lg ring-2 text-black bg-green min-w-0 px-1 py-1 font-small text-center leading-tight text-xs line-clamp-2 ${
+                            class={`rounded-lg ring-1 text-black bg-green min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs line-clamp-2 ${
                                 paid ? 'bg-red-400 ring-red-400' : 'bg-green-300 ring-green-300'
                             }`}
                         >
                             {paid ? 'Paid' : 'Free'}
                         </span>
                         <span
-                            class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-1 py-1 font-small text-center leading-tight text-xs"
+                            class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs"
                         >
                             {offline ? 'Fully offline' : 'Needs internet'}
                         </span>
+                        <span
+                            class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2"
+                        >
+                            {formatCategoryName(category)}
+                        </span>
+                        </div>
                     </div>
 
                     <!-- Column 4: Tags -->
                     {
                         tags && tags.length > 0 && (
-                            <div class="min-w-0 flex items-start md:col-start-2 xl:col-start-4 xl:row-span-2">
-                                <div class="w-full h-[56px] overflow-y-auto overflow-x-hidden flex flex-wrap gap-2 content-start pr-2 scrollbar-hide">
+                            <div class="min-w-0 flex items-start md:col-start-2 xl:col-start-4 xl:row-span-2 pt-2 line-clamp-2">
+                                <div class="w-full h-[60px] overflow-y-auto overflow-x-hidden flex flex-wrap gap-2 content-start scrollbar-hide">
                                     {tags.map((tag) => (
                                         <a
                                             href={`/tags/${tag}`}

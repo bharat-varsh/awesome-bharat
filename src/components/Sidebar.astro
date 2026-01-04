@@ -9,7 +9,7 @@ const { position = 'left', class: customClass = '' } = Astro.props;
 
 <aside
     class:list={[
-        'flex-shrink-0 scrollbar-hide',
+        'flex-shrink-0 scrollbar-hide max-w-6xl px-10 lg:px-4 py-8 lg:py-4',
         'bg-gray-50 dark:bg-gray-900',
         'border-gray-200 dark:border-gray-800',
         position === 'left' &&
@@ -19,7 +19,7 @@ const { position = 'left', class: customClass = '' } = Astro.props;
         customClass,
     ]}
 >
-    <div class="p-3 md:p-6 space-y-6">
+    <div class="space-y-6">
         <slot />
     </div>
 </aside>
