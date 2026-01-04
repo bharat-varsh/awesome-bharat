@@ -28,7 +28,15 @@ const resolvedAuthors = app.data.authors
 
 const { Content } = await app.render();
 
-const relatedApps = getRelatedContentSimple(app, allApps, 'apps', 6);
+const relatedApps = getRelatedContentSimple(app, allApps, 'apps', 8);
+const relatedAppsEnriched = relatedApps.map(app => ({
+    item: app,
+    resolved: {
+        author: app.data.authors[0]
+            ? persons.find(p => p.slug === app.data.authors[0].slug)
+            : null
+    }
+}));
 ---
 
 <ContentLayout
@@ -52,10 +60,10 @@ const relatedApps = getRelatedContentSimple(app, allApps, 'apps', 6);
     <!-- Right sidebar content -->
     <div slot="right-sidebar">
         <YouMightLike
-            items={relatedApps}
+            items={relatedAppsEnriched}
             collectionName="apps"
-            title="You might like"
-            maxItems={6}
+            title="You might also like"
+            maxItems={8}
         />
     </div>
 </ContentLayout>

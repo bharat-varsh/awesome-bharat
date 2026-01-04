@@ -69,8 +69,8 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                     <!-- Column 1: Logo -->
                     {
                         resolvedImage && (
-                            <div class="md:row-span-3 xl:row-span-2 flex items-start justify-start">
-                                <div class="w-24 h-24 flex-shrink-0 rounded-lg">
+                            <div class="rounded-xl md:row-span-3 xl:row-span-2 flex items-start justify-start">
+                                <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden">
                                     <Image
                                         class="w-full h-full object-contain"
                                         src={resolvedImage}
@@ -168,7 +168,7 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
             </header>
 
             <!-- Description -->
-            <div class="mt-6 mb-10 px-4 sm:px-6 lg:px-0">
+            <div class="mt-4 mb-6 px-4 sm:px-4 lg:px-0">
                 <p
                     class="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-none"
                 >
@@ -179,7 +179,7 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
             <!-- Store badges -->
             {
                 storeLinks && storeLinks.length > 0 && (
-                    <div class="mb-10 px-4 sm:px-6 lg:px-0">
+                    <div class="mb-6 px-2 sm:px-2 lg:px-0">
                         <div class="flex flex-wrap gap-4 items-center">
                             {storeLinks.map((store) => {
                                 const isPlayStore =
