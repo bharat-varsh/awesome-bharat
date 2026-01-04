@@ -120,7 +120,9 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                         </span>
                         <span
                             class={`rounded-lg ring-2 text-black min-w-0 px-1 py-1 font-small text-center text-xs text-balance line-clamp-2 ${
-                                source === 'openSource' ? 'bg-green-300 ring-green-300' : 'bg-red-400 ring-red-400'
+                                source === 'openSource'
+                                    ? 'bg-green-300 ring-green-300'
+                                    : 'bg-red-400 ring-red-400'
                             }`}
                         >
                             {source === 'openSource' ? 'Open Source' : 'Closed Source'}

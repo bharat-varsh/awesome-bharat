@@ -56,15 +56,17 @@ const resolvedImage = resolveLogo(item.slug, item.data.logo);
             <div class="flex flex-wrap gap-3">
                 <span
                     class={`min-w-0 px-2.5 py-1 rounded-lg ring-2 text-black font-small text-center leading-tight text-xs text-balance line-clamp-2 ${
-                                item.data.source === 'openSource' ? 'bg-green-300 ring-green-300' : 'bg-red-400 ring-red-400'
-                            }`}
+                        item.data.source === 'openSource'
+                            ? 'bg-green-300 ring-green-300'
+                            : 'bg-red-400 ring-red-400'
+                    }`}
                 >
                     {item.data.source === 'openSource' ? 'Open Source' : 'Closed Source'}
                 </span>
                 <span
                     class={`min-w-0 px-2.5 py-1 rounded-lg ring-2 text-black bg-green font-small text-center leading-tight text-xs line-clamp-2 ${
-                                item.data.paid ? 'bg-red-400 ring-red-400' : 'bg-green-300 ring-green-300'
-                            }`}
+                        item.data.paid ? 'bg-red-400 ring-red-400' : 'bg-green-300 ring-green-300'
+                    }`}
                 >
                     {item.data.paid ? 'Paid' : 'Free'}
                 </span>
