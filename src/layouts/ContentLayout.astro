@@ -63,8 +63,8 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
     publishedTime={date.toISOString()}
     tags={tags}
 >
-    <div class="flex flex-col lg:flex-row gap-0 relative">
-        <article class="max-w-6xl mx-auto px-4 py-8">
+    <div class="flex flex-col lg:flex-row gap-0 relative justify-center items-center">
+        <article class="max-w-6xl px-10 py-8 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto scrollbar-hide">
             <header class="mb-12 rounded-2xl ring ring-primary-300/80 dark:ring-primary-800">
                 <div
                     class="grid grid-cols-1 gap-6 p-3 md:grid-cols-[96px_minmax(0,1fr)] xl:grid-cols-[96px_minmax(0,2fr)_minmax(0,2fr)_minmax(0,3fr)] xl:grid-rows-2 shadow-2xl shadow-primary-400/80 dark:shadow-2xl dark:shadow-primary-900/80"
@@ -114,15 +114,11 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
 
                     <!-- Column 3: Badges -->
                     <div
-                        class="min-w-0 grid grid-cols-2 gap-2 content-start md:col-start-2 xl:col-start-3 xl:row-span-2"
+                        class="min-w-0 flex items-center grid grid-cols-1 gap-4 content-center md:col-start-2 xl:col-start-3 xl:row-span-2"
                     >
+                    <div class="w-full flex flex-wrap gap-2 content-start gap-4">
                         <span
-                            class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-1 py-1 font-small text-center text-xs text-balance line-clamp-2"
-                        >
-                            {formatCategoryName(category)}
-                        </span>
-                        <span
-                            class={`rounded-lg ring-2 text-black min-w-0 px-1 py-1 font-small text-center text-xs text-balance line-clamp-2 ${
+                            class={`rounded-lg ring-1 text-black min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2 ${
                                 source === 'openSource'
                                     ? 'bg-green-300 ring-green-300'
                                     : 'bg-red-400 ring-red-400'
@@ -131,24 +127,30 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                             {source === 'openSource' ? 'Open Source' : 'Closed Source'}
                         </span>
                         <span
-                            class={`rounded-lg ring-2 text-black bg-green min-w-0 px-1 py-1 font-small text-center leading-tight text-xs line-clamp-2 ${
+                            class={`rounded-lg ring-1 text-black bg-green min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs line-clamp-2 ${
                                 paid ? 'bg-red-400 ring-red-400' : 'bg-green-300 ring-green-300'
                             }`}
                         >
                             {paid ? 'Paid' : 'Free'}
                         </span>
                         <span
-                            class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-1 py-1 font-small text-center leading-tight text-xs"
+                            class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs"
                         >
                             {offline ? 'Fully offline' : 'Needs internet'}
                         </span>
+                        <span
+                            class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2"
+                        >
+                            {formatCategoryName(category)}
+                        </span>
+                        </div>
                     </div>
 
                     <!-- Column 4: Tags -->
                     {
                         tags && tags.length > 0 && (
-                            <div class="min-w-0 flex items-start md:col-start-2 xl:col-start-4 xl:row-span-2">
-                                <div class="w-full h-[56px] overflow-y-auto overflow-x-hidden flex flex-wrap gap-2 content-start pr-2 scrollbar-hide">
+                            <div class="min-w-0 flex items-start md:col-start-2 xl:col-start-4 xl:row-span-2 pt-2 line-clamp-2">
+                                <div class="w-full h-[60px] overflow-y-auto overflow-x-hidden flex flex-wrap gap-2 content-start scrollbar-hide">
                                     {tags.map((tag) => (
                                         <a
                                             href={`/tags/${tag}`}
