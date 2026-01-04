@@ -81,6 +81,13 @@ const apps = defineCollection({
                 })
             )
             .optional(),
+        screenshots: z
+            .array(
+                z.object({
+                    url: z.string().url(),
+                })
+            )
+            .optional(),
         externalLinks: z
             .array(
                 z.object({

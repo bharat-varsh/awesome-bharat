@@ -5,6 +5,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import type { CollectionEntry } from 'astro:content';
 import RightSidebar from '../components/RightSidebar.astro';
+import Screenshots from '../components/Screenshots.astro';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
 import googlePlayBadge from '../assets/images/badges/google-play-badge.png';
@@ -26,6 +27,7 @@ export interface Props {
     youtubeVideoLinks?: string[];
     externalLinks?: { label: string; url: string }[];
     storeLinks?: { label: string; url: string }[];
+    screenshots?: Array<{ url: string; }>;
     authors?: Array<CollectionEntry<'persons'>>;
 }
 
@@ -43,6 +45,7 @@ const {
     youtubeVideoLinks,
     externalLinks,
     storeLinks,
+    screenshots,
     authors = [],
 } = Astro.props;
 const resolvedImage = resolveLogo(slug, image);
@@ -249,6 +252,9 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                     </div>
                 )
             }
+
+            <!-- Screenshots -->
+            {screenshots && <Screenshots screenshots={screenshots} />}
 
             <div class="prose prose-lg dark:prose-dark max-w-none">
                 <slot />
