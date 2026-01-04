@@ -114,34 +114,22 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                         class="min-w-0 grid grid-cols-2 gap-2 content-start md:col-start-2 xl:col-start-3 xl:row-span-2"
                     >
                         <span
-                            class="min-w-0 px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium text-center leading-tight text-xs text-balance line-clamp-2"
+                            class="min-w-0 px-2.5 py-1 rounded-full bg-black dark:bg-white text-white dark:text-black font-medium text-center leading-tight text-xs text-balance line-clamp-2"
                         >
                             {formatCategoryName(category)}
                         </span>
                         <span
-                            class={`min-w-0 px-2.5 py-1 rounded-full font-medium text-center leading-tight text-xs text-balance line-clamp-2 ${
-                                source === 'openSource'
-                                    ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-                            }`}
+                            class="min-w-0 px-2.5 py-1 rounded-full font-medium text-center leading-tight text-xs text-balance line-clamp-2 bg-black dark:bg-white text-white dark:text-black"
                         >
                             {source === 'openSource' ? 'Open Source' : 'Closed Source'}
                         </span>
                         <span
-                            class={`min-w-0 px-2.5 py-1 rounded-full font-medium text-center leading-tight text-xs ${
-                                paid
-                                    ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300'
-                                    : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                            }`}
+                            class="min-w-0 px-2.5 py-1 rounded-full font-medium text-center leading-tight text-xs bg-black dark:bg-white text-white dark:text-black"
                         >
                             {paid ? 'Paid' : 'Free'}
                         </span>
                         <span
-                            class={`min-w-0 px-2.5 py-1 rounded-full font-medium text-center leading-tight text-xs ${
-                                offline
-                                    ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
-                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-                            }`}
+                            class="min-w-0 px-2.5 py-1 rounded-full font-medium text-center leading-tight text-xs bg-black dark:bg-white text-white dark:text-black"
                         >
                             {offline ? 'Fully offline' : 'Needs internet'}
                         </span>
@@ -155,7 +143,7 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                                     {tags.map((tag) => (
                                         <a
                                             href={`/tags/${tag}`}
-                                            class="text-xs px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors whitespace-nowrap flex-shrink-0"
+                                            class="text-xs px-3 py-1 rounded-full bg-primary-600 dark:bg-primary-300 text-white dark:text-black hover:bg-primary-700 dark:hover:bg-primary-200 transition-colors whitespace-nowrap flex-shrink-0"
                                         >
                                             #{tag}
                                         </a>
