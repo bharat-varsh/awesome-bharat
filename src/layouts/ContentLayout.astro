@@ -61,10 +61,10 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
     tags={tags}
 >
     <div class="flex flex-col lg:flex-row gap-0 relative">
-        <article class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-            <header class="mb-8">
+        <article class="max-w-6xl mx-auto px-4 py-8">
+            <header class="mb-12 rounded-2xl ring ring-primary-300/80 dark:ring-primary-800">
                 <div
-                    class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-[96px_minmax(0,1fr)] xl:grid-cols-[96px_minmax(0,2fr)_minmax(0,2fr)_minmax(0,3fr)] xl:grid-rows-2"
+                    class="grid grid-cols-1 gap-6 p-3 md:grid-cols-[96px_minmax(0,1fr)] xl:grid-cols-[96px_minmax(0,2fr)_minmax(0,2fr)_minmax(0,3fr)] xl:grid-rows-2 shadow-2xl shadow-primary-400/80 dark:shadow-2xl dark:shadow-primary-900/80"
                 >
                     <!-- Column 1: Logo -->
                     {
@@ -114,22 +114,26 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                         class="min-w-0 grid grid-cols-2 gap-2 content-start md:col-start-2 xl:col-start-3 xl:row-span-2"
                     >
                         <span
-                            class="min-w-0 px-2.5 py-1 rounded-full bg-black dark:bg-white text-white dark:text-black font-medium text-center leading-tight text-xs text-balance line-clamp-2"
+                            class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-1 py-1 font-small text-center text-xs text-balance line-clamp-2"
                         >
                             {formatCategoryName(category)}
                         </span>
                         <span
-                            class="min-w-0 px-2.5 py-1 rounded-full font-medium text-center leading-tight text-xs text-balance line-clamp-2 bg-black dark:bg-white text-white dark:text-black"
+                            class={`rounded-lg ring-2 text-black min-w-0 px-1 py-1 font-small text-center text-xs text-balance line-clamp-2 ${
+                                source === 'openSource' ? 'bg-green-300 ring-green-300' : 'bg-red-400 ring-red-400'
+                            }`}
                         >
                             {source === 'openSource' ? 'Open Source' : 'Closed Source'}
                         </span>
                         <span
-                            class="min-w-0 px-2.5 py-1 rounded-full font-medium text-center leading-tight text-xs bg-black dark:bg-white text-white dark:text-black"
+                            class={`rounded-lg ring-2 text-black bg-green min-w-0 px-1 py-1 font-small text-center leading-tight text-xs line-clamp-2 ${
+                                paid ? 'bg-red-400 ring-red-400' : 'bg-green-300 ring-green-300'
+                            }`}
                         >
                             {paid ? 'Paid' : 'Free'}
                         </span>
                         <span
-                            class="min-w-0 px-2.5 py-1 rounded-full font-medium text-center leading-tight text-xs bg-black dark:bg-white text-white dark:text-black"
+                            class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-1 py-1 font-small text-center leading-tight text-xs"
                         >
                             {offline ? 'Fully offline' : 'Needs internet'}
                         </span>
@@ -156,7 +160,7 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
             </header>
 
             <!-- Description -->
-            <div class="mt-4 mb-6 px-4 sm:px-4 lg:px-0">
+            <div class="mt-10 mb-6 px-4 sm:px-4 lg:px-0">
                 <p
                     class="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-none"
                 >
@@ -188,7 +192,7 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                                         href={store.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="inline-block transition-opacity hover:opacity-80"
+                                        class="inline-block hover:scale-105"
                                         aria-label={`Get it on ${store.label}`}
                                     >
                                         {isPlayStore ? (
@@ -295,14 +299,6 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                 )
             }
         </article>
-
-        <!-- {
-            authors?.map((author) => (
-                <a href={`/authors/${author.slug}`} class="text-primary-600 hover:underline">
-                    {author.data.name}
-                </a>
-            ))
-        } -->
 
         <RightSidebar>
             <slot name="right-sidebar" />
