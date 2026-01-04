@@ -44,7 +44,7 @@ function getRelatedContent(
     currentItem: CollectionEntry<SupportedCollection>,
     allItems: Array<CollectionEntry<SupportedCollection>>,
     collectionName: SupportedCollection,
-    maxResults: number = 6
+    maxResults: number = 8
 ): Array<{ item: CollectionEntry<SupportedCollection>; score: number }> {
     const matchingFields = MATCHING_FIELDS_CONFIG[collectionName] || [];
 
@@ -66,7 +66,7 @@ export function getRelatedContentSimple(
     currentItem: CollectionEntry<SupportedCollection>,
     allItems: Array<CollectionEntry<SupportedCollection>>,
     collectionName: SupportedCollection,
-    maxResults: number = 6
+    maxResults: number = 8
 ): Array<CollectionEntry<SupportedCollection>> {
     return getRelatedContent(currentItem, allItems, collectionName, maxResults).map(
         (result) => result.item
