@@ -1,0 +1,117 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+    screenshots: Array<{
+        url: string;
+    }>;
+    title?: string;
+}
+
+const { screenshots, title = 'Screenshots' } = Astro.props;
+---
+
+{
+    screenshots && screenshots.length > 0 && (
+        <div class="mb-8">
+            <h3 class="text-lg sm:text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                {title}
+            </h3>
+
+            <div class="relative group">
+                <div
+                    id="screenshots-scroll"
+                    class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
+                >
+                    {screenshots.map((screenshot) => (
+                        <div
+                            class="flex-shrink-0 snap-center overflow-hideen screenshot-loader"
+                            style="height: 0;"
+                        >
+                            <div class="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                                {/* <img
+                                        src={screenshot.url}
+                                        alt="App screenshot"
+                                        loading="lazy"
+                                        class="h-64 sm:h-80 md:h-96 w-auto object-contain"
+                                        onload="this.closest('.screenshot-loader').style.height = 'auto'"
+                                        onerror="this.closest('.screenshot-loader').remove()"
+                                        style="aspect-ratio: auto;"
+                                    /> */}
+                                <Image
+                                    src={screenshot.url}
+                                    alt="App screenshot"
+                                    loading="eager"
+                                    class="h-64 sm:h-80 md:h-96 w-auto object-contain"
+                                    onload="this.closest('.screenshot-loader').style.height = 'auto'"
+                                    onerror="this.closest('.screenshot-loader').remove()"
+                                    width={800}
+                                    height={600}
+                                    densities={[1, 2]}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <button
+                    id="scroll-left"
+                    class="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 shadow-lg hover:bg-gray-800 dark:hover-bg-gray-200 transition-all opacity-0 group-hover:opacity-100 z-20"
+                    aria-label="Scroll left"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M15 19l-7-7 7-7"
+                        />
+                    </svg>
+                </button>
+
+                <button
+                    id="scroll-right"
+                    class="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 shadow-lg hover:bg-gray-800 dark:hover-bg-gray-200 transition-all opacity-0 group-hover:opacity-100 z-20"
+                    aria-label="Scroll right"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 5l7 7-7 7"
+                        />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="md:hidden mt-2 text-center text-xs text-gray-500 dark:text-gray-400">
+                Swipe to see more
+            </div>
+        </div>
+    )
+}
+
+<script>
+    const scrollContainer = document.getElementById('screenshots-scroll');
+    const leftButton = document.getElementById('scroll-left');
+    const rightButton = document.getElementById('scroll-right');
+
+    if (scrollContainer && leftButton && rightButton) {
+        const scrollAmount = 320; // Scroll by approximately one screenshot + gap
+
+        leftButton.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth',
+            });
+        });
+
+        rightButton.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth',
+            });
+        });
+    }
+</script>
