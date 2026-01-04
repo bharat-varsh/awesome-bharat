@@ -29,13 +29,13 @@ const resolvedAuthors = app.data.authors
 const { Content } = await app.render();
 
 const relatedApps = getRelatedContentSimple(app, allApps, 'apps', 8);
-const relatedAppsEnriched = relatedApps.map(app => ({
+const relatedAppsEnriched = relatedApps.map((app) => ({
     item: app,
     resolved: {
         author: app.data.authors[0]
-            ? persons.find(p => p.slug === app.data.authors[0].slug)
-            : null
-    }
+            ? persons.find((p) => p.slug === app.data.authors[0].slug)
+            : null,
+    },
 }));
 ---
 
