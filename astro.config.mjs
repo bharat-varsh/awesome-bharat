@@ -20,9 +20,6 @@ export default defineConfig({
             wrap: true,
         },
     },
-    image: {
-        domains: ['i.ibb.co'],
-    },
     // optimization
     vite: {
         resolve: {

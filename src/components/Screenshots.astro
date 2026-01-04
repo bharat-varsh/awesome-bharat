@@ -29,16 +29,16 @@ const { screenshots, title = 'Screenshots' } = Astro.props;
                             style="height: 0;"
                         >
                             <div class="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-                                {/* <img
-                                        src={screenshot.url}
-                                        alt="App screenshot"
-                                        loading="lazy"
-                                        class="h-64 sm:h-80 md:h-96 w-auto object-contain"
-                                        onload="this.closest('.screenshot-loader').style.height = 'auto'"
-                                        onerror="this.closest('.screenshot-loader').remove()"
-                                        style="aspect-ratio: auto;"
-                                    /> */}
-                                <Image
+                                <img
+                                    src={screenshot.url}
+                                    alt="App screenshot"
+                                    loading="lazy"
+                                    class="h-64 sm:h-80 md:h-96 w-auto object-contain"
+                                    onload="this.closest('.screenshot-loader').style.height = 'auto'"
+                                    onerror="this.closest('.screenshot-loader').remove()"
+                                    style="aspect-ratio: auto;"
+                                />
+                                {/* <Image
                                     src={screenshot.url}
                                     alt="App screenshot"
                                     loading="eager"
@@ -48,7 +48,7 @@ const { screenshots, title = 'Screenshots' } = Astro.props;
                                     width={800}
                                     height={600}
                                     densities={[1, 2]}
-                                />
+                                /> */}
                             </div>
                         </div>
                     ))}
