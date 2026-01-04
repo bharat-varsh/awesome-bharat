@@ -19,8 +19,12 @@ const resolvedImage = resolveLogo(item.slug, item.data.logo);
     href={href}
     class="group block py-3 rounded-lg hover:shadow-md dark:hover:shadow-lg transition-all duration-200"
 >
-    <div class="space-y-2 gap-x-2 sm:gap-x-2 lg:gap-x-2 grid grid-cols-3 grid-rows-[auto_auto_auto_auto]">
-        <div class="row-span-2 col-span-1 rounded-xl md:row-span-3 xl:row-span-2 flex items-start justify-start">
+    <div
+        class="space-y-2 gap-x-2 sm:gap-x-2 lg:gap-x-2 grid grid-cols-3 grid-rows-[auto_auto_auto_auto]"
+    >
+        <div
+            class="row-span-2 col-span-1 rounded-xl md:row-span-3 xl:row-span-2 flex items-start justify-start"
+        >
             <div class="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden">
                 <Image
                     class="w-full h-full object-contain"
@@ -48,28 +52,27 @@ const resolvedImage = resolveLogo(item.slug, item.data.logo);
             )
         }
 
-        <div
-            class="col-span-3 justify-center gap-1"
-        >
-        <div class="flex flex-wrap gap-1">
-            <span
-                class={`text-xs px-2 py-0.5 rounded-full ${
-                    item.data.source === 'openSource'
-                        ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-                }`}
-            >
-                {item.data.source === 'openSource' ? 'Open Source' : 'Closed Source'}
-            </span>
-            <span
-                class={`text-xs px-2 py-0.5 rounded-full ${
-                    item.data.paid
-                        ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300'
-                        : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                }`}
-            >
-                {item.data.paid ? 'Paid' : 'Free'}
-            </span></div>
+        <div class="col-span-3 justify-center gap-1">
+            <div class="flex flex-wrap gap-1">
+                <span
+                    class={`text-xs px-2 py-0.5 rounded-full ${
+                        item.data.source === 'openSource'
+                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+                    }`}
+                >
+                    {item.data.source === 'openSource' ? 'Open Source' : 'Closed Source'}
+                </span>
+                <span
+                    class={`text-xs px-2 py-0.5 rounded-full ${
+                        item.data.paid
+                            ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300'
+                            : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                    }`}
+                >
+                    {item.data.paid ? 'Paid' : 'Free'}
+                </span>
+            </div>
         </div>
 
         {
