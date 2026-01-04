@@ -6,13 +6,13 @@ import { resolveLogo } from '../utils/imageResolvers.ts';
 interface Props {
     item: CollectionEntry<'apps' | 'persons' | 'companies'>;
     collection: 'apps' | 'persons' | 'companies';
+    resolved?: Record<string, any>;
 }
 
-const { item, collection } = Astro.props;
+const { item, collection, resolved } = Astro.props;
 
 const href = `/${collection}/${item.slug}`;
 const resolvedImage = resolveLogo(item.slug, item.data.logo);
-// const primaryAuthor = item.data.authors.length > 0 ? item.data.authors[0] : null;
 ---
 
 <a
@@ -39,14 +39,14 @@ const resolvedImage = resolveLogo(item.slug, item.data.logo);
         >
             {item.data.title}
         </h4>
-        <!-- {
-            primaryAuthor && (
-                <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-1 min-w-0">
+        {
+            resolved && (
+                <div class="row-span-2 col-span-2 text-xs text-gray-600 dark:text-gray-400 line-clamp-1">
                     <span class="text-gray-500 dark:text-gray-500">by </span>
-                    {primaryAuthor.data.name}
+                    <span class="font-medium">{resolved.author?.data?.name}</span>
                 </div>
             )
-        } -->
+        }
 
         <div
             class="col-span-3 justify-center gap-1"

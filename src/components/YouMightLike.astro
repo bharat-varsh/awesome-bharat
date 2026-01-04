@@ -2,9 +2,14 @@
 import RelatedItem from './RelatedItem.astro';
 import type { CollectionEntry } from 'astro:content';
 
+type CollectionType = 'apps' | 'persons' | 'companies';
+
 interface Props {
-    items: Array<CollectionEntry<'apps' | 'persons' | 'companies'>>;
-    collectionName: 'apps' | 'persons' | 'companies';
+    items: Array<{
+        item: CollectionEntry<CollectionType>;
+        resolved?: Record<string, any>;
+    }>;
+    collectionName: CollectionType;
     title?: string;
     maxItems?: number;
 }
@@ -19,9 +24,11 @@ const displayItems = items.slice(0, maxItems);
         <div class="space-y-3">
             <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
             <div class="space-y-4">
-                {displayItems.map((item) => (
-                    <RelatedItem item={item} collection={collectionName} />
-                    <div class="border-t border-gray-300 dark:border-gray-700"></div>
+                {displayItems.map(({ item, resolved }) => (
+                    <>
+                        <RelatedItem item={item} collection={collectionName} resolved={resolved}/>
+                        <div class="border-t border-gray-300 dark:border-gray-700"></div>
+                    </>
                 ))}
             </div>
         </div>
