@@ -63,8 +63,8 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
     publishedTime={date.toISOString()}
     tags={tags}
 >
-    <div class="flex flex-col lg:flex-row gap-0 relative">
-        <article class="max-w-6xl mx-auto px-4 py-8">
+    <div class="flex flex-col lg:flex-row gap-0 relative justify-center items-center">
+        <article class="max-w-6xl px-10 py-8 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto scrollbar-hide">
             <header class="mb-12 rounded-2xl ring ring-primary-300/80 dark:ring-primary-800">
                 <div
                     class="grid grid-cols-1 gap-6 p-3 md:grid-cols-[96px_minmax(0,1fr)] xl:grid-cols-[96px_minmax(0,2fr)_minmax(0,2fr)_minmax(0,3fr)] xl:grid-rows-2 shadow-2xl shadow-primary-400/80 dark:shadow-2xl dark:shadow-primary-900/80"
