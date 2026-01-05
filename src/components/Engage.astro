@@ -4,6 +4,10 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 import type { Link } from '@/content/config.ts';
+import addIcon from '@/assets/images/engage/add.svg';
+import bugIcon from '@/assets/images/engage/bug.svg';
+import fixIcon from '@/assets/images/engage/fix.svg';
+import suggestIcon from '@/assets/images/engage/suggest.svg';
 import defaultImage from '@/assets/images/engage/default.svg';
 import instagram from '@/assets/images/engage/instagram.svg';
 import reddit from '@/assets/images/engage/reddit.svg';
@@ -41,46 +45,70 @@ const normalizeSocialLabel = (label: string): string => label.toLowerCase();
         app.data.source === 'openSource' && gitHubUrl && (
             <div class="space-y-3">
                 <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Contribute</h3>
-                <div class="grid grid-cols-3 md:grid-cols-2 gap-2 items-start">
+                <div class="flex flex-wrap gap-3">
                     <a
                         href={`${gitHubUrl}/issues?q=is%3Aissue%20state%3Aopen%20(no%3Alabel%20OR%20label%3Adocumentation%20OR%20label%3Aenhancement%20OR%20label%3A%22good%20first%20issue%22%20OR%20label%3A%22help%20wanted%22%20OR%20label%3A%22high%20priority%22)`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="group relative inline-flex items-center justify-center px-2 py-1.5 rounded-lg font-small text-xs text-white overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30 dark:hover:shadow-primary-600/30"
+                        class="hover:scale-110 p-3 group relative inline-flex items-center justify-center rounded-lg transition-all transition-transform duration-300 shadow-lg shadow-primary-500/60 dark:shadow-primary-600/50"
                     >
-                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-500 dark:to-primary-600 transition-all duration-300" />
-                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-600 dark:to-primary-700 opacity-0 grou-hover:opacity-100 transition-opacity duration-300" />
-                        <span class="relative">Add a feature</span>
+                        <Image
+                            class="relative w-4 h-4"
+                            src={addIcon}
+                            alt="Add a feature"
+                            format="webp"
+                            widths={[140, 160, 180, 200, 220]}
+                            aspectRatio="1/1"
+                            sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
+                        />
                     </a>
                     <a
-                        href={`${gitHubUrl}/issues/new?template=feature_request.md`}
+                        href={`${gitHubUrl}/issues?q=is%3Aissue%20state%3Aopen%20(no%3Alabel%20OR%20label%3Adocumentation%20OR%20label%3Aenhancement%20OR%20label%3A%22good%20first%20issue%22%20OR%20label%3A%22help%20wanted%22%20OR%20label%3A%22high%20priority%22)`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="group relative inline-flex items-center justify-center px-2 py-1.5 rounded-lg font-small text-xs text-white overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30 dark:hover:shadow-primary-600/30"
+                        class="hover:scale-110 p-3 group relative inline-flex items-center justify-center rounded-lg transition-all transition-transform duration-300 shadow-lg shadow-primary-500/60 dark:shadow-primary-600/50"
                     >
-                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-500 dark:to-primary-600 transition-all duration-300" />
-                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-600 dark:to-primary-700 opacity-0 grou-hover:opacity-100 transition-opacity duration-300" />
-                        <span class="relative">Suggest feature</span>
+                        <Image
+                            class="relative w-4 h-4"
+                            src={fixIcon}
+                            alt="Fix an issue"
+                            format="webp"
+                            widths={[140, 160, 180, 200, 220]}
+                            aspectRatio="1/1"
+                            sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
+                        />
                     </a>
                     <a
-                        href={`${gitHubUrl}/issues?q=is%3Aissue%20state%3Aopen%20(no%3Alabel%20OR%20label%3Abug)`}
+                        href={`${gitHubUrl}/issues?q=is%3Aissue%20state%3Aopen%20(no%3Alabel%20OR%20label%3Adocumentation%20OR%20label%3Aenhancement%20OR%20label%3A%22good%20first%20issue%22%20OR%20label%3A%22help%20wanted%22%20OR%20label%3A%22high%20priority%22)`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="group relative inline-flex items-center justify-center px-2 py-1.5 rounded-lg font-small text-xs text-white overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30 dark:hover:shadow-primary-600/30"
+                        class="hover:scale-110 p-3 group relative inline-flex items-center justify-center rounded-lg transition-all transition-transform duration-300 shadow-lg shadow-primary-500/60 dark:shadow-primary-600/50"
                     >
-                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-500 dark:to-primary-600 transition-all duration-300" />
-                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-600 dark:to-primary-700 opacity-0 grou-hover:opacity-100 transition-opacity duration-300" />
-                        <span class="relative">Solve an issue</span>
+                        <Image
+                            class="relative w-4 h-4"
+                            src={suggestIcon}
+                            alt="Suggest a feature"
+                            format="webp"
+                            widths={[140, 160, 180, 200, 220]}
+                            aspectRatio="1/1"
+                            sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
+                        />
                     </a>
                     <a
-                        href={`${gitHubUrl}/issues/new?template=bug_report.md`}
+                        href={`${gitHubUrl}/issues?q=is%3Aissue%20state%3Aopen%20(no%3Alabel%20OR%20label%3Adocumentation%20OR%20label%3Aenhancement%20OR%20label%3A%22good%20first%20issue%22%20OR%20label%3A%22help%20wanted%22%20OR%20label%3A%22high%20priority%22)`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="group relative inline-flex items-center justify-center px-2 py-1.5 rounded-lg font-small text-xs text-white overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30 dark:hover:shadow-primary-600/30"
+                        class="hover:scale-110 p-3 group relative inline-flex items-center justify-center rounded-lg transition-all transition-transform duration-300 shadow-lg shadow-primary-500/60 dark:shadow-primary-600/50"
                     >
-                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-500 dark:to-primary-600 transition-all duration-300" />
-                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-600 dark:to-primary-700 opacity-0 grou-hover:opacity-100 transition-opacity duration-300" />
-                        <span class="relative">Report a bug</span>
+                        <Image
+                            class="relative w-4 h-4"
+                            src={bugIcon}
+                            alt="Report a bug"
+                            format="webp"
+                            widths={[140, 160, 180, 200, 220]}
+                            aspectRatio="1/1"
+                            sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
+                        />
                     </a>
                 </div>
             </div>
@@ -103,10 +131,10 @@ const normalizeSocialLabel = (label: string): string => label.toLowerCase();
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 title={social.label}
-                                class="inline-flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 hover:shadow-lg bg-gray-200 dark:bg-gray-700 hover:bg-primary-600 dark:hover:bg-primary-500"
+                                class="hover:scale-110 inline-flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 shadow-lg shadow-primary-500/60 dark:shadow-primary-600/50"
                             >
                                 <Image
-                                    class="w-5 h-5 object-contain"
+                                    class="w-full h-full object-contain"
                                     src={iconPath}
                                     alt={social.label}
                                     format="webp"
