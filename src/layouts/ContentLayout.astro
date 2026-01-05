@@ -33,6 +33,7 @@ export interface Props {
     repositoryLinks?: { label: string; url: string }[];
     screenshots?: Array<{ url: string }>;
     socials?: { label: string; url: string }[];
+    website?: string;
     authors?: Array<CollectionEntry<'persons'>>;
 }
 
@@ -54,6 +55,7 @@ const {
     repositoryLinks,
     screenshots,
     socials,
+    website,
     authors = [],
 } = Astro.props;
 const resolvedImage = resolveLogo(slug, image);
@@ -186,7 +188,7 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
             </div>
 
             <!-- Engagement -->
-            <Engage repositoryLinks={repositoryLinks} source={source} socials={socials} />
+            <Engage repositoryLinks={repositoryLinks} source={source} socials={socials} website={website} />
 
             <!-- Store badges -->
             {
