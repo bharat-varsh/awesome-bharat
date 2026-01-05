@@ -7,7 +7,6 @@ import type { CollectionEntry } from 'astro:content';
 import RightSidebar from '../components/RightSidebar.astro';
 import Screenshots from '../components/Screenshots.astro';
 import Engage from '@/components/Engage.astro';
-import Divider from '@/components/Divider.astro';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
 import googlePlayBadge from '../assets/images/badges/google-play-badge.png';
@@ -127,12 +126,12 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                         <div class="w-full flex flex-wrap gap-2 content-start gap-4">
                             <span
                                 class={`rounded-lg ring-1 text-black min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2 ${
-                                    source === 'openSource'
+                                    source === 'open-source'
                                         ? 'bg-green-300 ring-green-300'
                                         : 'bg-red-400 ring-red-400'
                                 }`}
                             >
-                                {source === 'openSource' ? 'Open Source' : 'Closed Source'}
+                                {source === 'open-source' ? 'Open Source' : 'Closed Source'}
                             </span>
                             <span
                                 class={`rounded-lg ring-1 text-black bg-green min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs line-clamp-2 ${
@@ -144,7 +143,7 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                             <span
                                 class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs"
                             >
-                                {offline ? 'Fully offline' : 'Needs internet'}
+                                {offline ? 'Works offline' : 'Needs internet'}
                             </span>
                             <span
                                 class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2"
@@ -266,8 +265,6 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                 )
             }
 
-            <Divider />
-
             <!-- Engagement -->
             <Engage
                 repositoryLinks={repositoryLinks}
@@ -275,13 +272,14 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                 socials={socials}
             />
 
-            <Divider />
-
+            <!-- Features -->
             <div class="prose prose-lg dark:prose-dark max-w-none">
                 <slot />
             </div>
 
-            <!-- Article footer with additional links -->
+            <!-- Youtube Links -->
+
+            <!-- Additional resources -->
             {
                 (youtubeVideoLinks || externalLinks) && (
                     <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
