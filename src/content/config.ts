@@ -69,8 +69,8 @@ const apps = defineCollection({
         ]),
         tags: z.array(z.string()),
         website: z.string().url().optional(),
-        youtubeVideoLinks: z.array(z.string().url()).optional(),
-        youtubeShortsLinks: z.array(z.string().url()).optional(),
+        youtubeVideoIds: z.array(z.string()).optional(),
+        youtubeShortsIds: z.array(z.string()).optional(),
         repositoryLinks: z.array(linkSchema).optional(),
         storeLinks: z.array(linkSchema).optional(),
         screenshots: z

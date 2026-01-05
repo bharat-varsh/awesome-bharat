@@ -7,6 +7,7 @@ import type { CollectionEntry } from 'astro:content';
 import RightSidebar from '../components/RightSidebar.astro';
 import Screenshots from '../components/Screenshots.astro';
 import Engage from '@/components/Engage.astro';
+import YouTubeEmbed from '@/components/YouTubeEmbed.astro';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
 import googlePlayBadge from '../assets/images/badges/google-play-badge.png';
@@ -25,12 +26,13 @@ export interface Props {
     paid: boolean;
     offline: boolean;
     source: string;
-    youtubeVideoLinks?: string[];
+    youtubeVideoIds?: string[];
+    youtubeShortsIds?: string[];
     externalLinks?: { label: string; url: string }[];
     storeLinks?: { label: string; url: string }[];
-    repositoryLinks?: { label: string; url: string}[];
+    repositoryLinks?: { label: string; url: string }[];
     screenshots?: Array<{ url: string }>;
-    socials?: { label: string; url: string}[];
+    socials?: { label: string; url: string }[];
     authors?: Array<CollectionEntry<'persons'>>;
 }
 
@@ -45,7 +47,8 @@ const {
     paid,
     offline,
     source,
-    youtubeVideoLinks,
+    youtubeVideoIds,
+    youtubeShortsIds,
     externalLinks,
     storeLinks,
     repositoryLinks,
@@ -182,8 +185,8 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                 </p>
             </div>
 
-            <!-- Screenshots -->
-            {screenshots && <Screenshots screenshots={screenshots} />}
+            <!-- Engagement -->
+            <Engage repositoryLinks={repositoryLinks} source={source} socials={socials} />
 
             <!-- Store badges -->
             {
@@ -265,63 +268,46 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                 )
             }
 
-            <!-- Engagement -->
-            <Engage
-                repositoryLinks={repositoryLinks}
-                source={source}
-                socials={socials}
-            />
+            <!-- Screenshots -->
+            {screenshots && <Screenshots screenshots={screenshots} />}
+
+            <!-- Youtube Links -->
+            {
+                ((youtubeVideoIds && youtubeVideoIds.length > 0) ||
+                    (youtubeShortsIds && youtubeShortsIds.length > 0)) && (
+                    <YouTubeEmbed
+                        youtubeVideoIds={youtubeVideoIds}
+                        youtubeShortsIds={youtubeShortsIds}
+                    />
+                )
+            }
 
             <!-- Features -->
             <div class="prose prose-lg dark:prose-dark max-w-none">
                 <slot />
             </div>
 
-            <!-- Youtube Links -->
-
             <!-- Additional resources -->
             {
-                (youtubeVideoLinks || externalLinks) && (
+                externalLinks && externalLinks.length > 0 && (
                     <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
-                        {youtubeVideoLinks && youtubeVideoLinks.length > 0 && (
-                            <div class="mb-6">
-                                <h3 class="text-xl font-semibold mb-3">Related Videos</h3>
-                                <ul class="space-y-2">
-                                    {youtubeVideoLinks.map((link) => (
-                                        <li>
-                                            <a
-                                                href={link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                class="text-primary-600 dark:text-primary-400 hover:underline"
-                                            >
-                                                {link}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        {externalLinks && externalLinks.length > 0 && (
-                            <div class="mb-6">
-                                <h3 class="text-xl font-semibold mb-3">External Resources</h3>
-                                <ul class="space-y-2">
-                                    {externalLinks.map((link) => (
-                                        <li>
-                                            <a
-                                                href={link.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                class="text-primary-600 dark:text-primary-400 hover:underline"
-                                            >
-                                                {link.label}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
+                        <div class="mb-6">
+                            <h3 class="text-xl font-semibold mb-3">External Resources</h3>
+                            <ul class="space-y-2">
+                                {externalLinks.map((link) => (
+                                    <li>
+                                        <a
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="text-primary-600 dark:text-primary-400 hover:underline"
+                                        >
+                                            {link.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </footer>
                 )
             }
