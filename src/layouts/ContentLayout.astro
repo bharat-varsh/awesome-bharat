@@ -6,6 +6,8 @@ import BaseLayout from './BaseLayout.astro';
 import type { CollectionEntry } from 'astro:content';
 import RightSidebar from '../components/RightSidebar.astro';
 import Screenshots from '../components/Screenshots.astro';
+import Engage from '@/components/Engage.astro';
+import Divider from '@/components/Divider.astro';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
 import googlePlayBadge from '../assets/images/badges/google-play-badge.png';
@@ -27,7 +29,9 @@ export interface Props {
     youtubeVideoLinks?: string[];
     externalLinks?: { label: string; url: string }[];
     storeLinks?: { label: string; url: string }[];
+    repositoryLinks?: { label: string; url: string}[];
     screenshots?: Array<{ url: string }>;
+    socials?: { label: string; url: string}[];
     authors?: Array<CollectionEntry<'persons'>>;
 }
 
@@ -45,7 +49,9 @@ const {
     youtubeVideoLinks,
     externalLinks,
     storeLinks,
+    repositoryLinks,
     screenshots,
+    socials,
     authors = [],
 } = Astro.props;
 const resolvedImage = resolveLogo(slug, image);
@@ -177,11 +183,14 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                 </p>
             </div>
 
+            <!-- Screenshots -->
+            {screenshots && <Screenshots screenshots={screenshots} />}
+
             <!-- Store badges -->
             {
                 storeLinks && storeLinks.length > 0 && (
                     <div class="mb-6 px-2 sm:px-2 lg:px-0">
-                        <div class="flex flex-wrap gap-4 items-center">
+                        <div class="flex flex-wrap gap-4 items-center justify-center">
                             {storeLinks.map((store) => {
                                 const isPlayStore =
                                     store.label.toLowerCase().includes('play store') ||
@@ -257,8 +266,16 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                 )
             }
 
-            <!-- Screenshots -->
-            {screenshots && <Screenshots screenshots={screenshots} />}
+            <Divider />
+
+            <!-- Engagement -->
+            <Engage
+                repositoryLinks={repositoryLinks}
+                source={source}
+                socials={socials}
+            />
+
+            <Divider />
 
             <div class="prose prose-lg dark:prose-dark max-w-none">
                 <slot />

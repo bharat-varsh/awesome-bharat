@@ -14,10 +14,12 @@ import reddit from '@/assets/images/engage/reddit.svg';
 import telegram from '@/assets/images/engage/telegram.svg';
 
 interface Props {
-    app: CollectionEntry<'apps'>;
+    source: string;
+    repositoryLinks?: { label: string; url: string}[];
+    socials?: { label: string; url: string}[];
 }
 
-const { app } = Astro.props;
+const { repositoryLinks, source, socials } = Astro.props;
 
 // Social platforms to logo mapping
 const socialIconMap: Record<string, ImageMetadata> = {
@@ -30,7 +32,7 @@ const socialIconMap: Record<string, ImageMetadata> = {
     __DEFAULT: defaultImage,
 };
 
-const gitHubUrl = app.data.repositoryLinks?.find(
+const gitHubUrl = repositoryLinks?.find(
     (link: Link) => link.label.toLowerCase() === 'github'
 )?.url;
 
@@ -38,11 +40,11 @@ const normalizeSocialLabel = (label: string): string => label.toLowerCase();
 ---
 
 <div
-    class="gap-x-4 gap-y-4 mb-6 grid grid-cols-2 gap-x-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-1"
+    class="gap-x-4 gap-y-4 mb-6 grid grid-cols-2 gap-x-2"
 >
     <!-- Contribute (Open source only) -->
     {
-        app.data.source === 'openSource' && gitHubUrl && (
+        source === 'openSource' && gitHubUrl && (
             <div class="space-y-3">
                 <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Contribute</h3>
                 <div class="flex flex-wrap gap-3">
@@ -117,11 +119,11 @@ const normalizeSocialLabel = (label: string): string => label.toLowerCase();
 
     <!-- Interact section -->
     {
-        app.data.socials && app.data.socials.length > 0 && (
+        socials && socials.length > 0 && (
             <div class="space-y-3">
                 <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Interact</h3>
                 <div class="flex flex-wrap gap-2 justify-start">
-                    {app.data.socials.map((social: Link) => {
+                    {socials.map((social: Link) => {
                         const iconKey = normalizeSocialLabel(social.label);
                         const iconPath = socialIconMap[iconKey] || socialIconMap['__DEFAULT'];
 
