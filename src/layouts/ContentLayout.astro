@@ -33,6 +33,7 @@ export interface Props {
     repositoryLinks?: { label: string; url: string }[];
     screenshots?: Array<{ url: string }>;
     socials?: { label: string; url: string }[];
+    website?: string;
     authors?: Array<CollectionEntry<'persons'>>;
 }
 
@@ -54,6 +55,7 @@ const {
     repositoryLinks,
     screenshots,
     socials,
+    website,
     authors = [],
 } = Astro.props;
 const resolvedImage = resolveLogo(slug, image);
@@ -186,13 +188,18 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
             </div>
 
             <!-- Engagement -->
-            <Engage repositoryLinks={repositoryLinks} source={source} socials={socials} />
+            <Engage
+                repositoryLinks={repositoryLinks}
+                source={source}
+                socials={socials}
+                website={website}
+            />
 
             <!-- Store badges -->
             {
                 storeLinks && storeLinks.length > 0 && (
                     <div class="mb-6 px-2 sm:px-2 lg:px-0">
-                        <div class="flex flex-wrap gap-4 items-center justify-center">
+                        <div class="flex flex-wrap gap-4 items-center justify-around">
                             {storeLinks.map((store) => {
                                 const isPlayStore =
                                     store.label.toLowerCase().includes('play store') ||
@@ -283,9 +290,89 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
             }
 
             <!-- Features -->
-            <div class="prose prose-lg dark:prose-dark max-w-none">
+            <div class="prose prose-lg dark:prose-dark max-w-none mb-2">
                 <slot />
             </div>
+
+            <!-- Store badges -->
+            {
+                storeLinks && storeLinks.length > 0 && (
+                    <div class="mb-6 px-2 sm:px-2 lg:px-0">
+                        <div class="flex flex-wrap gap-4 items-center justify-around">
+                            {storeLinks.map((store) => {
+                                const isPlayStore =
+                                    store.label.toLowerCase().includes('play store') ||
+                                    store.url.includes('play.google.com');
+                                const isAppStore =
+                                    store.label.toLowerCase().includes('app store') ||
+                                    store.url.includes('apps.apple.com');
+                                const isFdroidStore =
+                                    store.label.toLowerCase().includes('fdroid') ||
+                                    store.url.includes('f-droid.org');
+                                const isGithubRelease =
+                                    store.label.toLowerCase().includes('github') ||
+                                    store.url.includes('github.com');
+
+                                return (
+                                    <a
+                                        href={store.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-block hover:scale-105"
+                                        aria-label={`Get it on ${store.label}`}
+                                    >
+                                        {isPlayStore ? (
+                                            <Image
+                                                src={googlePlayBadge}
+                                                alt={`Get it on ${store.label}`}
+                                                class="h-12 sm:h-14 md:h-16 w-auto"
+                                                format="webp"
+                                                widths={[124, 145, 165, 200]}
+                                                sizes="(min-width:768px) 165px (min-width:640px) 145px, 124px"
+                                                loading="lazy"
+                                            />
+                                        ) : isFdroidStore ? (
+                                            <Image
+                                                src={fdroidBadge}
+                                                alt={`Get it on ${store.label}`}
+                                                class="h-12 sm:h-14 md:h-16 w-auto"
+                                                format="webp"
+                                                widths={[124, 145, 165, 200]}
+                                                sizes="(min-width:768px) 165px (min-width:640px) 145px, 124px"
+                                                loading="lazy"
+                                            />
+                                        ) : isAppStore ? (
+                                            <Image
+                                                src={appStoreBadge}
+                                                alt={`Get it on ${store.label}`}
+                                                class="h-12 sm:h-10 md:h-12 w-auto"
+                                                format="webp"
+                                                widths={[124, 145, 165, 200]}
+                                                sizes="(min-width:768px) 165px (min-width:640px) 145px, 124px"
+                                                loading="lazy"
+                                            />
+                                        ) : isGithubRelease ? (
+                                            <Image
+                                                src={githubBadge}
+                                                alt={`Get it on ${store.label}`}
+                                                class="h-12 sm:h-14 md:h-16 w-auto"
+                                                format="webp"
+                                                widths={[124, 145, 165, 200]}
+                                                sizes="(min-width:768px) 165px (min-width:640px) 145px, 124px"
+                                                loading="lazy"
+                                            />
+                                        ) : (
+                                            <div class="h-12 sm:h-10 md:h-11 px-6 flex items-center justify-center bg-gray-900 dark:bg-gray-100 rounded-lg text-white dark:text-gray-900 font-semibold text-sm sm:text-base whitespace-nowwrap hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors">
+                                                {store.label}
+                                            </div>
+                                        )}
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )
+            }
 
             <!-- Additional resources -->
             {
