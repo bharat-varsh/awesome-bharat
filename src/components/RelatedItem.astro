@@ -6,7 +6,7 @@ import { resolveLogo } from '../utils/imageResolvers.ts';
 interface Props {
     item: CollectionEntry<'apps' | 'persons' | 'companies'>;
     collection: 'apps' | 'persons' | 'companies';
-    resolved?: Record<string, any>;
+    resolved?: Record<string, CollectionEntry<'persons'>>;
 }
 
 const { item, collection, resolved } = Astro.props;
@@ -47,7 +47,7 @@ const resolvedImage = resolveLogo(item.slug, item.data.logo);
             resolved && (
                 <div class="row-span-2 col-span-3 text-xs text-gray-600 dark:text-gray-400 line-clamp-1">
                     <span class="text-gray-500 dark:text-gray-500">by </span>
-                    <span class="font-medium">{resolved.author?.data?.name}</span>
+                    <span class="font-medium">{resolved?.author?.data?.name}</span>
                 </div>
             )
         }

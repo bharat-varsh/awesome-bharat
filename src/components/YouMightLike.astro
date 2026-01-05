@@ -7,7 +7,7 @@ type CollectionType = 'apps' | 'persons' | 'companies';
 interface Props {
     items: Array<{
         item: CollectionEntry<CollectionType>;
-        resolved?: Record<string, any>;
+        resolved?: Record<string, CollectionEntry<'persons'>>;
     }>;
     collectionName: CollectionType;
     title?: string;
