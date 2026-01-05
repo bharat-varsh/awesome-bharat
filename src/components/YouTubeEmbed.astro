@@ -1,27 +1,213 @@
 ---
-/**
- * Responsive YouTube video embed
- * Usage: <YouTubeEmbed id="youtube-video-id" title="Video Title" />
- */
+import Divider from '@/components/Divider.astro';
 
 export interface Props {
-    id: string;
-    title?: string;
-    startTime?: number;
+    youtubeVideoIds?: string[];
+    youtubeShortsIds?: string[];
 }
 
-const { id, title = 'YouTube video', startTime } = Astro.props;
-const src = startTime
-    ? `https://www.youtube-nocookie.com/embed/${id}?start=${startTime}`
-    : `https://www.youtube-nocookie.com/embed/${id}`;
+const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
 ---
 
-<div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg my-8">
-    <iframe
-        src={src}
-        title={title}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        loading="eager"
-        class="absolute top-0 left-0 w-full h-full"></iframe>
-</div>
+<>
+    <div class="space-y-8">
+        {
+            youtubeShortsIds && youtubeShortsIds.length > 0 && (
+                <div class="mb-8">
+                    <h3 class="text-md sm:text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                        Youtube Shorts ({youtubeShortsIds.length})
+                    </h3>
+
+                    <div class="relative group">
+                        <div
+                            id="shorts-scroll"
+                            class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
+                        >
+                            {youtubeShortsIds.map((id) => (
+                                <div class="flex-shrink-0 snap-center overflow-hideen shorts-loader">
+                                    <div class="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                                        <div class="aspect-[9/16] w-full">
+                                            <iframe
+                                                class="w-full h-full rounded-lg"
+                                                src={`https://www.youtube.com/embed/${id}`}
+                                                title="YouTube Short"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowfullscreen
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <button
+                            id="shorts-scroll-left"
+                            class="flex absolute left-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full text-white dark:text-gray-900 shadow-lg bg-gray-800 dark:bg-gray-200 transition-all opacity-100 z-20"
+                            aria-label="Scroll left"
+                        >
+                            <svg
+                                class="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M15 19l-7-7 7-7"
+                                />
+                            </svg>
+                        </button>
+
+                        <button
+                            id="shorts-scroll-right"
+                            class="flex absolute right-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full text-white dark:text-gray-900 shadow-lg bg-gray-800 dark:bg-gray-200 transition-all opacity-100 z-20"
+                            aria-label="Scroll right"
+                        >
+                            <svg
+                                class="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            )
+        }
+    </div>
+
+    <div class="space-y-8">
+        {
+            youtubeVideoIds && youtubeVideoIds.length > 0 && (
+                <div class="mb-8">
+                    <h3 class="text-md sm:text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                        Youtube Videos ({youtubeVideoIds.length})
+                    </h3>
+
+                    <div class="relative group">
+                        <div
+                            id="long-form-scroll"
+                            class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
+                        >
+                            {youtubeVideoIds.map((id) => (
+                                <div class="flex-shrink-0 snap-center overflow-hidden long-form-loader">
+                                    <div class="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                                        <div class="aspect-video w-full h-full">
+                                            <iframe
+                                                class="w-full h-full rounded-lg"
+                                                src={`https://www.youtube.com/embed/${id}`}
+                                                title="YouTube Video"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowfullscreen
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <button
+                            id="long-form-scroll-left"
+                            class="flex absolute left-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full text-white dark:text-gray-900 shadow-lg bg-gray-800 dark:bg-gray-200 transition-all opacity-100 z-20"
+                            aria-label="Scroll left"
+                        >
+                            <svg
+                                class="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M15 19l-7-7 7-7"
+                                />
+                            </svg>
+                        </button>
+
+                        <button
+                            id="long-form-scroll-right"
+                            class="flex absolute right-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full text-white dark:text-gray-900 shadow-lg bg-gray-800 dark:bg-gray-200 transition-all opacity-100 z-20"
+                            aria-label="Scroll right"
+                        >
+                            <svg
+                                class="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            )
+        }
+    </div>
+
+    {
+        ((youtubeVideoIds && youtubeVideoIds.length > 0) ||
+            (youtubeShortsIds && youtubeShortsIds.length > 0)) && <Divider />
+    }
+</>
+
+<script>
+    const shortsScrollContainer = document.getElementById('shorts-scroll');
+    const shortsLeftButton = document.getElementById('shorts-scroll-left');
+    const shortsRightButton = document.getElementById('shorts-scroll-right');
+
+    if (shortsScrollContainer && shortsLeftButton && shortsRightButton) {
+        const scrollAmount = 320; // Scroll by approximately one screenshot + gap
+
+        shortsLeftButton.addEventListener('click', () => {
+            shortsScrollContainer.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth',
+            });
+        });
+
+        shortsRightButton.addEventListener('click', () => {
+            shortsScrollContainer.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth',
+            });
+        });
+    }
+
+    const longFormScrollContainer = document.getElementById('long-form-scroll');
+    const longFormLeftButton = document.getElementById('long-form-scroll-left');
+    const longFormRightButton = document.getElementById('long-form-scroll-right');
+
+    if (longFormScrollContainer && longFormLeftButton && longFormRightButton) {
+        const scrollAmount = 320; // Scroll by approximately one screenshot + gap
+
+        longFormLeftButton.addEventListener('click', () => {
+            longFormScrollContainer.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth',
+            });
+        });
+
+        longFormRightButton.addEventListener('click', () => {
+            longFormScrollContainer.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth',
+            });
+        });
+    }
+</script>
