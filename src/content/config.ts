@@ -9,7 +9,13 @@ const authorSchema = z.object({
     type: z.enum(['company', 'person']),
 });
 
+const linkSchema = z.object({
+    label: z.string(),
+    url: z.string().url(),
+});
+
 export type Author = z.infer<typeof authorSchema>;
+export type Link = z.infer<typeof linkSchema>;
 
 // Applications
 const apps = defineCollection({
@@ -65,22 +71,8 @@ const apps = defineCollection({
         website: z.string().url().optional(),
         youtubeVideoLinks: z.array(z.string().url()).optional(),
         youtubeShortsLinks: z.array(z.string().url()).optional(),
-        repositoryLinks: z
-            .array(
-                z.object({
-                    label: z.string(),
-                    url: z.string().url(),
-                })
-            )
-            .optional(),
-        storeLinks: z
-            .array(
-                z.object({
-                    label: z.string(),
-                    url: z.string().url(),
-                })
-            )
-            .optional(),
+        repositoryLinks: z.array(linkSchema).optional(),
+        storeLinks: z.array(linkSchema).optional(),
         screenshots: z
             .array(
                 z.object({
@@ -88,22 +80,8 @@ const apps = defineCollection({
                 })
             )
             .optional(),
-        externalLinks: z
-            .array(
-                z.object({
-                    label: z.string(),
-                    url: z.string().url(),
-                })
-            )
-            .optional(),
-        socials: z
-            .array(
-                z.object({
-                    label: z.string(),
-                    url: z.string().url(),
-                })
-            )
-            .optional(),
+        externalLinks: z.array(linkSchema).optional(),
+        socials: z.array(linkSchema).optional(),
         logo: z.string().optional(),
         date: z
             .date()
@@ -120,14 +98,7 @@ const persons = defineCollection({
         bio: z.string().optional(),
         email: z.string().email().optional(),
         website: z.string().url().optional(),
-        socials: z
-            .array(
-                z.object({
-                    label: z.string(),
-                    url: z.string().url(),
-                })
-            )
-            .optional(),
+        socials: z.array(linkSchema).optional(),
         avatar: z.string().optional(),
         draft: z.boolean().default(false),
     }),
@@ -141,14 +112,7 @@ const companies = defineCollection({
         founded: z.number().optional(),
         location: z.string().optional(),
         website: z.string().url().optional(),
-        socials: z
-            .array(
-                z.object({
-                    label: z.string(),
-                    url: z.string().url(),
-                })
-            )
-            .optional(),
+        socials: z.array(linkSchema).optional(),
         members: z
             .array(
                 z.object({

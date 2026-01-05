@@ -1,0 +1,124 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+import type { Link } from '@/content/config.ts';
+import defaultImage from '@/assets/images/engage/default.svg';
+import instagram from '@/assets/images/engage/instagram.svg';
+import reddit from '@/assets/images/engage/reddit.svg';
+import telegram from '@/assets/images/engage/telegram.svg';
+
+interface Props {
+    app: CollectionEntry<'apps'>;
+}
+
+const { app } = Astro.props;
+
+// Social platforms to logo mapping
+const socialIconMap: Record<string, ImageMetadata> = {
+    bluesky: defaultImage,
+    discord: defaultImage,
+    instagram,
+    reddit,
+    telegram,
+    x: defaultImage,
+    __DEFAULT: defaultImage,
+};
+
+const gitHubUrl = app.data.repositoryLinks?.find(
+    (link: Link) => link.label.toLowerCase() === 'github'
+)?.url;
+
+const normalizeSocialLabel = (label: string): string => label.toLowerCase();
+---
+
+<div
+    class="gap-x-4 gap-y-4 mb-6 grid grid-cols-2 gap-x-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-1"
+>
+    <!-- Contribute (Open source only) -->
+    {
+        app.data.source === 'openSource' && gitHubUrl && (
+            <div class="space-y-3">
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Contribute</h3>
+                <div class="grid grid-cols-3 md:grid-cols-2 gap-2 items-start">
+                    <a
+                        href={`${gitHubUrl}/issues?q=is%3Aissue%20state%3Aopen%20(no%3Alabel%20OR%20label%3Adocumentation%20OR%20label%3Aenhancement%20OR%20label%3A%22good%20first%20issue%22%20OR%20label%3A%22help%20wanted%22%20OR%20label%3A%22high%20priority%22)`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="group relative inline-flex items-center justify-center px-2 py-1.5 rounded-lg font-small text-xs text-white overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30 dark:hover:shadow-primary-600/30"
+                    >
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-500 dark:to-primary-600 transition-all duration-300" />
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-600 dark:to-primary-700 opacity-0 grou-hover:opacity-100 transition-opacity duration-300" />
+                        <span class="relative">Add a feature</span>
+                    </a>
+                    <a
+                        href={`${gitHubUrl}/issues/new?template=feature_request.md`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="group relative inline-flex items-center justify-center px-2 py-1.5 rounded-lg font-small text-xs text-white overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30 dark:hover:shadow-primary-600/30"
+                    >
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-500 dark:to-primary-600 transition-all duration-300" />
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-600 dark:to-primary-700 opacity-0 grou-hover:opacity-100 transition-opacity duration-300" />
+                        <span class="relative">Suggest feature</span>
+                    </a>
+                    <a
+                        href={`${gitHubUrl}/issues?q=is%3Aissue%20state%3Aopen%20(no%3Alabel%20OR%20label%3Abug)`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="group relative inline-flex items-center justify-center px-2 py-1.5 rounded-lg font-small text-xs text-white overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30 dark:hover:shadow-primary-600/30"
+                    >
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-500 dark:to-primary-600 transition-all duration-300" />
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-600 dark:to-primary-700 opacity-0 grou-hover:opacity-100 transition-opacity duration-300" />
+                        <span class="relative">Solve an issue</span>
+                    </a>
+                    <a
+                        href={`${gitHubUrl}/issues/new?template=bug_report.md`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="group relative inline-flex items-center justify-center px-2 py-1.5 rounded-lg font-small text-xs text-white overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30 dark:hover:shadow-primary-600/30"
+                    >
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-500 dark:to-primary-600 transition-all duration-300" />
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 dark:from-primary-600 dark:to-primary-700 opacity-0 grou-hover:opacity-100 transition-opacity duration-300" />
+                        <span class="relative">Report a bug</span>
+                    </a>
+                </div>
+            </div>
+        )
+    }
+
+    <!-- Interact section -->
+    {
+        app.data.socials && app.data.socials.length > 0 && (
+            <div class="space-y-3">
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Interact</h3>
+                <div class="flex flex-wrap gap-2 justify-start">
+                    {app.data.socials.map((social: Link) => {
+                        const iconKey = normalizeSocialLabel(social.label);
+                        const iconPath = socialIconMap[iconKey] || socialIconMap['__DEFAULT'];
+
+                        return (
+                            <a
+                                href={social.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={social.label}
+                                class="inline-flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 hover:shadow-lg bg-gray-200 dark:bg-gray-700 hover:bg-primary-600 dark:hover:bg-primary-500"
+                            >
+                                <Image
+                                    class="w-5 h-5 object-contain"
+                                    src={iconPath}
+                                    alt={social.label}
+                                    format="webp"
+                                    widths={[140, 160, 180, 200, 220]}
+                                    aspectRatio="1/1"
+                                    sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
+                                />
+                            </a>
+                        );
+                    })}
+                </div>
+            </div>
+        )
+    }
+</div>

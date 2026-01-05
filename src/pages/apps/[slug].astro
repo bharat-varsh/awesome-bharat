@@ -4,8 +4,10 @@ import type { GetStaticPaths } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import type { Author } from '@/content/config.ts';
 import ContentLayout from '@/layouts/ContentLayout.astro';
+import Engage from '@/components/Engage.astro';
 import YouMightLike from '@components/YouMightLike.astro';
 import { getRelatedContentSimple } from '@utils/relatedContent.js';
+import Divider from '@/components/Divider.astro';
 
 export const getStaticPaths = (async () => {
     const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
@@ -60,6 +62,10 @@ const relatedAppsEnriched = relatedApps.map((app) => ({
 
     <!-- Right sidebar content -->
     <div slot="right-sidebar">
+        <Engage app={app} />
+
+        <Divider />
+
         <YouMightLike
             items={relatedAppsEnriched}
             collectionName="apps"

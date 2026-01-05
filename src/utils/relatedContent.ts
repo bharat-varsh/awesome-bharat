@@ -1,6 +1,7 @@
 import type { CollectionEntry } from 'astro:content';
 
 export type SupportedCollection = 'apps' | 'persons' | 'companies';
+type SupportedCollectionData = CollectionEntry<SupportedCollection>['data'];
 
 const MATCHING_FIELDS_CONFIG: Record<SupportedCollection, string[]> = {
     apps: ['tags'],
@@ -8,32 +9,26 @@ const MATCHING_FIELDS_CONFIG: Record<SupportedCollection, string[]> = {
     companies: ['tags'],
 };
 
-function calculateRelevanceScore(
-    currentItem: any,
-    candidateItem: any,
-    matchingFields: string[]
+function calculateRelevanceScore<K extends readonly (keyof SupportedCollectionData)[]>(
+    currentItem: SupportedCollectionData,
+    candidateItem: SupportedCollectionData,
+    matchingFields: K
 ): number {
-    if (!currentItem || !candidateItem) return 0;
-
     let score = 0;
 
     for (const field of matchingFields) {
         const currentValue = currentItem[field];
         const candidateValue = candidateItem[field];
 
-        if (!currentValue || !candidateValue) continue;
-
-        // Handle array fields (like tags)
         if (Array.isArray(currentValue) && Array.isArray(candidateValue)) {
-            const matches = currentValue.filter((v: any) => candidateValue.includes(v));
+            const matches = currentValue.filter((v) => candidateValue.includes(v));
             score += matches.length;
-        }
-
-        // Handle string fields
-        else if (typeof currentValue === 'string' && typeof candidateValue === 'string') {
-            if (currentValue === candidateValue) {
-                score += 2; // String exact matches are valued higher
-            }
+        } else if (
+            typeof currentValue === 'string' &&
+            typeof candidateValue === 'string' &&
+            currentValue === candidateValue
+        ) {
+            score += 2;
         }
     }
 
