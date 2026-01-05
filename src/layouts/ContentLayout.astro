@@ -22,7 +22,7 @@ export interface Props {
     image?: string;
     date: Date;
     tags?: string[];
-    category: string;
+    categories: string[];
     paid: boolean;
     offline: boolean;
     source: string;
@@ -44,7 +44,7 @@ const {
     image,
     date,
     tags,
-    category,
+    categories,
     paid,
     offline,
     source,
@@ -130,31 +130,41 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                     >
                         <div class="w-full flex flex-wrap gap-2 content-start gap-4">
                             <span
-                                class={`rounded-lg ring-1 text-black min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2 ${
+                                class={`rounded-lg ring-2 text-black min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2 ${
                                     source === 'open-source'
-                                        ? 'bg-green-300 ring-green-300'
-                                        : 'bg-red-400 ring-red-400'
+                                        ? 'ring-green-600'
+                                        : 'ring-red-400'
                                 }`}
                             >
                                 {source === 'open-source' ? 'Open Source' : 'Closed Source'}
                             </span>
                             <span
-                                class={`rounded-lg ring-1 text-black bg-green min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs line-clamp-2 ${
-                                    paid ? 'bg-red-400 ring-red-400' : 'bg-green-300 ring-green-300'
+                                class={`rounded-lg ring-2 text-black bg-green min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs line-clamp-2 ${
+                                    paid ? 'ring-red-400' : 'ring-green-600'
                                 }`}
                             >
                                 {paid ? 'Paid' : 'Free'}
                             </span>
                             <span
-                                class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs"
+                                class={`rounded-lg ring-2 dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs ${
+                                    offline ? 'ring-green-600' : 'ring-red-400'
+                                }`}
                             >
                                 {offline ? 'Works offline' : 'Needs internet'}
                             </span>
-                            <span
-                                class="rounded-lg ring-1 ring-black dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2"
-                            >
-                                {formatCategoryName(category)}
-                            </span>
+                            {
+                                categories.slice(0, 2).map((category) => (
+                                    <span
+                                        class="rounded-lg ring-1 ring-black dark:ring-white
+                                                text-black dark:text-white
+                                                min-w-0 px-2 py-2
+                                                font-medium text-center text-xs
+                                                text-balance line-clamp-2"
+                                        >
+                                        {formatCategoryName(category)}
+                                    </span>
+                                ))
+                            }
                         </div>
                     </div>
 

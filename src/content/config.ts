@@ -30,7 +30,7 @@ const apps = defineCollection({
         source: z.enum(['closed-source', 'open-source']),
         paid: z.boolean(),
         offline: z.boolean(),
-        category: z.enum([
+        categories: z.array(z.enum([
             'art',
             'beauty',
             'booksAndReference',
@@ -66,7 +66,7 @@ const apps = defineCollection({
             'video',
             'watchFaces',
             'weather',
-        ]),
+        ])),
         tags: z.array(z.string()),
         website: z.string().url().optional(),
         youtubeVideoIds: z.array(z.string()).optional(),
