@@ -24,6 +24,7 @@ export interface Props {
     tags?: string[];
     categories: string[];
     paid: boolean;
+    ads: boolean;
     offline: boolean;
     source: string;
     youtubeVideoIds?: string[];
@@ -46,6 +47,7 @@ const {
     tags,
     categories,
     paid,
+    ads,
     offline,
     source,
     youtubeVideoIds,
@@ -130,18 +132,25 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                     >
                         <div class="w-full flex flex-wrap gap-2 content-start gap-4">
                             <span
-                                class={`rounded-lg ring-2 text-black min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2 text-black dark:text-white ${
-                                    source === 'open-source' ? 'ring-green-600' : 'ring-red-400'
-                                }`}
-                            >
-                                {source === 'open-source' ? 'Open Source' : 'Closed Source'}
-                            </span>
-                            <span
                                 class={`rounded-lg ring-2 text-black bg-green min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs line-clamp-2 text-black dark:text-white ${
                                     paid ? 'ring-red-400' : 'ring-green-600'
                                 }`}
                             >
                                 {paid ? 'Paid' : 'Free'}
+                            </span>
+                            <span
+                                class={`rounded-lg ring-2 text-black bg-green min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs line-clamp-2 text-black dark:text-white ${
+                                    ads ? 'ring-red-400' : 'ring-green-600'
+                                }`}
+                            >
+                                {ads ? 'Has ads' : 'No Ads'}
+                            </span>
+                            <span
+                                class={`rounded-lg ring-2 text-black min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2 text-black dark:text-white ${
+                                    source === 'open-source' ? 'ring-green-600' : 'ring-red-400'
+                                }`}
+                            >
+                                {source === 'open-source' ? 'Open Source' : 'Closed Source'}
                             </span>
                             <span
                                 class={`rounded-lg ring-2 dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs ${

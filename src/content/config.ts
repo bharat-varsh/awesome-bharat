@@ -29,6 +29,7 @@ const apps = defineCollection({
         devices: z.array(z.enum(['auto', 'desktop', 'mobile', 'tv', 'watch'])),
         source: z.enum(['closed-source', 'open-source']),
         paid: z.boolean(),
+        ads: z.boolean(),
         offline: z.boolean(),
         categories: z.array(
             z.enum([

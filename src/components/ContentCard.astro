@@ -18,7 +18,7 @@ const resolvedImage = resolveLogo(slug, image) as ImageMetadata;
 
 <a
     href={href}
-    class={`group flex-shrink-0 w-[140px] sm:w-[160px] md:w-[180px] lg:w-[200px] ${extraClass}`}
+    class={`group flex-shrink-0 w-[60px] sm:w-[80px] md:w-[100px] lg:w-[120px] ${extraClass}`}
 >
     <div class="rounded-xl p-1">
         <div class="rounded-lg overflow-hidden">
@@ -27,9 +27,9 @@ const resolvedImage = resolveLogo(slug, image) as ImageMetadata;
                 src={resolvedImage}
                 alt={title}
                 format="webp"
-                widths={[140, 160, 180, 200, 220]}
+                widths={[60, 80, 100, 120, 140]}
                 aspectRatio="1/1"
-                sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
+                sizes="(min-width:1024px) 120px, (min-width:640px) 100px, 80px"
             />
         </div>
     </div>
