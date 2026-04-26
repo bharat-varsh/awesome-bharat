@@ -4,8 +4,8 @@ import type { GetStaticPaths } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import type { Author } from '@/content/config.ts';
 import ContentLayout from '@/layouts/ContentLayout.astro';
-import YouMightLike from '@components/YouMightLike.astro';
-import { getRelatedContentSimple } from '@utils/relatedContent.js';
+import YouMightLike from '@/components/YouMightLike.astro';
+import { getRelatedContentSimple } from '@/utils/relatedContent.ts';
 
 export const getStaticPaths = (async () => {
     const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;

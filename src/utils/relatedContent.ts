@@ -53,7 +53,7 @@ function calculateRelevanceScore<K extends readonly (keyof SupportedCollectionDa
     return score;
 }
 
-function getRelatedContent(
+export function getRelatedContent(
     currentItem: CollectionEntry<SupportedCollection>,
     allItems: Array<CollectionEntry<SupportedCollection>>,
     collectionName: SupportedCollection,

@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import Divider from './Divider.astro';
-import brandLogo from '@assets/images/brand-logo.svg';
+import brandLogo from '@/assets/images/brand-logo.svg';
 
 // Fetch all collections
 const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;

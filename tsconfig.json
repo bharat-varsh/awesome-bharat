@@ -5,13 +5,7 @@
         "moduleResolution": "NodeNext",
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"],
-            "@components/*": ["./src/components/*"],
-            "@layouts/*": ["./src/layouts/*"],
-            "@content/*": ["./src/content/*"],
-            "@styles/*": ["./src/styles/*"],
-            "@assets/*": ["./src/assets/*"],
-            "@utils/*": ["./src/utils/*"]
+            "@/*": ["./src/*"]
         },
         "jsx": "react-jsx",
         "jsxImportSource": "react"
