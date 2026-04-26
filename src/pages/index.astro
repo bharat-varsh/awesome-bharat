@@ -4,15 +4,29 @@
  */
 
 import { getCollection } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ContentCard from '@components/ContentCard.astro';
 
-const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
+const [apps, persons, companies] = await Promise.all([
+    getCollection('apps'),
+    getCollection('persons'),
+    getCollection('companies'),
+]);
+
+const stats = {
+    apps: apps.filter((app: { data: { draft: boolean } }) => !app.data.draft).length,
+    persons: persons.filter((p: { data: { draft: boolean } }) => !p.data.draft).length,
+    companies: companies.filter((c: { data: { draft: boolean } }) => !c.data.draft).length,
+};
 
 const latestApps = apps
-    .filter((app) => !app.data.draft)
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .filter((app: { data: { draft: boolean; date: { valueOf: () => number } } }) => !app.data.draft)
+    .sort(
+        (
+            a: { data: { date: { valueOf: () => number } } },
+            b: { data: { date: { valueOf: () => number } } }
+        ) => b.data.date.valueOf() - a.data.date.valueOf()
+    )
     .slice(0, 20);
 ---
 
@@ -21,29 +35,62 @@ const latestApps = apps
     description="A curated collection of awesome made by Indians!"
 >
     <!-- Hero -->
-    <section class="py-4">
-        <div class="max-w-7xl mx-auto px-4 text-center">
+    <section class="py-12 relative overflow-hidden">
+        <!-- Background gradient -->
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-primary-100 via-primary-50/50 to-transparent dark:from-secondary-900 dark:via-secondary-800/50 dark:to-transparent"
+        >
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 text-center relative">
             <h1 class="font-bold tracking-tight mb-6">
                 <!-- Desktop -->
                 <span class="hidden md:block text-5xl lg:text-6xl">
                     Welcome to
-                    <span class="text-primary-600 dark:text-primary-400">[ Awesome ]</span>
-                    Bharat
+                    <span class="text-primary-600 dark:text-primary-400"> Awesome</span>
+                    <span class="font-extrabold"> Bharat</span>
                 </span>
 
                 <!-- Mobile -->
-                <span class="block md:hidden text-4xl leading-tight">
-                    <span class="block">Welcome</span>
-                    <span class="block">to</span>
-                    <span class="block text-primary-600 dark:text-primary-400">[ Awesome ]</span>
-                    <span class="block">Bharat</span>
+                <span class="block md:hidden text-4xl lg:text-5xl leading-tight">
+                    <span class="block">Welcome to</span>
+                    <span class="block text-primary-600 dark:text-primary-400">Awesome</span>
+                    <span class="block font-extrabold">Bharat</span>
                 </span>
             </h1>
 
-            <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">
                 A curated collection of awesome made by Indians! Discover your inspiration and the
                 great people who made that possible!
             </p>
+
+            <!-- Stat strip -->
+            <div
+                class="inline-flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+                <span class="flex items-center gap-1.5">
+                    <span class="text-primary-600 dark:text-primary-400 font-bold text-lg"
+                        >{stats.apps}</span
+                    >
+                    apps
+                </span>
+                <span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-600"></span>
+                <span class="flex items-center gap-1.5">
+                    <span class="text-primary-600 dark:text-primary-400 font-bold text-lg"
+                        >{stats.persons}</span
+                    >
+                    people
+                </span>
+                <span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-600"></span>
+                <span class="flex items-center gap-1.5">
+                    <span class="text-primary-600 dark:text-primary-400 font-bold text-lg"
+                        >{stats.companies}</span
+                    >
+                    companies
+                </span>
+                <span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-600"></span>
+                <span class="text-primary-600 dark:text-primary-400">all Indian-made</span>
+            </div>
         </div>
     </section>
 
@@ -77,16 +124,21 @@ const latestApps = apps
                  px-10 md:px-12 scrollbar-hide"
                 >
                     {
-                        latestApps.map((app) => (
-                            <ContentCard
-                                title={app.data.title}
-                                href={`/apps/${app.slug}`}
-                                image={app.data.logo}
-                                slug={app.slug}
-                                tags={app.data.tags}
-                                class="snap-start"
-                            />
-                        ))
+                        latestApps.map(
+                            (app: {
+                                data: { title: string; logo?: string; tags: string[] };
+                                slug: string;
+                            }) => (
+                                <ContentCard
+                                    title={app.data.title}
+                                    href={`/apps/${app.slug}`}
+                                    image={app.data.logo}
+                                    slug={app.slug}
+                                    tags={app.data.tags}
+                                    class="snap-start"
+                                />
+                            )
+                        )
                     }
                 </div>
 
