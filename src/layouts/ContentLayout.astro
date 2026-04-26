@@ -10,6 +10,7 @@ import Engage from '@/components/Engage.astro';
 import YouTubeEmbed from '@/components/YouTubeEmbed.astro';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
+import { getPrimaryCTA } from '../utils/ctaUtils.ts';
 import googlePlayBadge from '../assets/images/badges/google-play-badge.png';
 import appStoreBadge from '../assets/images/badges/app-store-badge.png';
 import fdroidBadge from '../assets/images/badges/fdroid-badge.png';
@@ -65,6 +66,14 @@ const resolvedImage = resolveLogo(slug, image);
 // Get first author for display
 const primaryAuthor = authors.length > 0 ? authors[0] : null;
 const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor.slug}` : null;
+
+// Compute primary CTA
+const primaryCTA = getPrimaryCTA({
+    storeLinks,
+    repositoryLinks,
+    website,
+    source,
+});
 ---
 
 <BaseLayout
@@ -122,6 +131,32 @@ const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor
                                         {primaryAuthor.data.name}
                                     </a>
                                 </div>
+                            )
+                        }
+                        {
+                            primaryCTA && (
+                                <a
+                                    href={primaryCTA.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex items-center justify-center px-4 py-2 mt-2 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-400 rounded-lg transition-colors w-fit"
+                                >
+                                    {primaryCTA.label}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4 h-4 ml-2"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
+                                    </svg>
+                                </a>
                             )
                         }
                     </div>
