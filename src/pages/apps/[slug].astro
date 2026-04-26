@@ -41,6 +41,7 @@ const relatedAppsEnriched = relatedApps.map((app) => ({
 
 <ContentLayout
     slug={app.slug}
+    collection="apps"
     title={app.data.title}
     description={app.data.description}
     image={app.data.logo}
@@ -51,6 +52,7 @@ const relatedAppsEnriched = relatedApps.map((app) => ({
     ads={app.data.ads}
     offline={app.data.offline}
     source={app.data.source}
+    type={app.data.type}
     youtubeVideoIds={app.data.youtubeVideoIds}
     youtubeShortsIds={app.data.youtubeShortsIds}
     externalLinks={app.data.externalLinks}
