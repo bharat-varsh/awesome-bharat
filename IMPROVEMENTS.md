@@ -30,9 +30,9 @@ This document captures all identified issues and proposed improvements across th
 ```astro
 <!-- Before -->
 <div class="flex flex-col lg:flex-row gap-0 justify-center items-center">
-
-<!-- After -->
-<div class="flex flex-col lg:flex-row gap-0 justify-center items-start">
+    <!-- After -->
+    <div class="flex flex-col lg:flex-row gap-0 justify-center items-start"></div>
+</div>
 ```
 
 **Files:** `src/layouts/ContentLayout.astro`
@@ -118,6 +118,7 @@ Apply the display font to headings only (`h1`–`h3`) and keep system sans-serif
 **Problem:** The light mode body background (`primary-100/30` ≈ very pale cream) and the sidebar background (`primary-50`) are nearly identical. There is no clear visual separation between regions.
 
 **Fix:**
+
 - Body background: keep `primary-50` (solid, not transparent)
 - Sidebar background: `white` in light mode, `secondary-800` in dark mode
 - Add a visible `border-r` on the left sidebar in light mode
@@ -143,8 +144,9 @@ Apply the display font to headings only (`h1`–`h3`) and keep system sans-serif
 **Problem:** The hero is a centered heading and two lines of text on a plain background. It has no visual energy and doesn't communicate what the site is about at a glance.
 
 **Proposed redesign:**
+
 - Add a subtle background: a radial gradient from `primary-100` to `primary-50`, or a low-opacity geometric/mandala pattern SVG
-- Add a stat strip below the subtitle: *"X apps · Y people · Z companies · all Indian-made"* — pulls live counts from collections at build time
+- Add a stat strip below the subtitle: _"X apps · Y people · Z companies · all Indian-made"_ — pulls live counts from collections at build time
 - Keep the heading but drop the `[ Awesome ]` bracket styling — replace with a proper typographic treatment (e.g., the word "Awesome" in the primary orange, "Bharat" in a slightly heavier weight)
 
 **Files:** `src/pages/index.astro`
@@ -156,6 +158,7 @@ Apply the display font to headings only (`h1`–`h3`) and keep system sans-serif
 **Problem:** The homepage only shows "Latest Apps". The site covers apps, people, companies, and more — none of that is visible on the homepage.
 
 **Proposed layout:**
+
 1. Hero (stat strip + tagline)
 2. "Latest Apps" — horizontal scroll row (existing, improved)
 3. "Featured People" — horizontal scroll row of person cards
@@ -172,6 +175,7 @@ Apply the display font to headings only (`h1`–`h3`) and keep system sans-serif
 **Problem:** The scroll arrows use fragile inline `onclick` DOM traversal. The cards are too small (60–120px) for a homepage feature row.
 
 **Fix:**
+
 - Use `data-scroll-container` attributes and a `<script>` block for arrow behavior
 - Increase card size in the homepage row context (use a larger variant)
 - Add a subtle fade gradient on the right edge to hint at more content
@@ -187,6 +191,7 @@ Apply the display font to headings only (`h1`–`h3`) and keep system sans-serif
 **Problem:** There is no single obvious action on the detail page. The store badges are buried below the description, engage section, and other content. A user landing on the Neend page has to scroll to find the Download button.
 
 **Fix:** Add a prominent primary CTA button directly in the header card, next to the title. The CTA label and URL should be derived from the content type:
+
 - App with `storeLinks` → "Download" (links to Play Store or App Store)
 - Open-source with `repositoryLinks` → "View on GitHub"
 - Person with `website` → "Visit Website"
@@ -203,6 +208,7 @@ This logic belongs in a utility function `getPrimaryCTA(data)` that returns `{ l
 **Problem:** The current header is a dense 4-column grid of badges with no breathing room. The badges use `ring-2` which looks like form validation errors. The layout collapses awkwardly on medium screens.
 
 **Proposed layout:**
+
 ```
 [ Logo 96px ]  [ Title (large)          ]  [ Primary CTA button ]
                [ by Author Name         ]
@@ -211,6 +217,7 @@ This logic belongs in a utility function `getPrimaryCTA(data)` that returns `{ l
 ```
 
 **Badge redesign:** Replace `ring-2` with filled pill chips:
+
 - Green background + white text: Free, No Ads, Open Source, Works Offline
 - Red/muted background: Paid, Has Ads, Closed Source, Needs Internet
 - Neutral gray background: category names
@@ -224,6 +231,7 @@ This logic belongs in a utility function `getPrimaryCTA(data)` that returns `{ l
 **Problem:** The "Contribute to development" and "On the web" sections show bare icon buttons with no labels. Users cannot tell what the icons do without hovering.
 
 **Fix:** Replace icon-only buttons with labeled action cards:
+
 ```
 [ icon ]  Add a feature     →  links to GitHub issues
 [ icon ]  Fix a bug         →  links to GitHub bug issues
@@ -260,11 +268,12 @@ Once the `items-start` fix is applied, the right sidebar will scroll correctly. 
 **Problem:** The current listing page (`/apps`) is a plain heading + subtitle + icon grid. It has no visual energy and gives no context about what the collection contains.
 
 **Proposed hero banner:**
+
 - Full-width strip, ~200px tall
 - Background: gradient from `primary-600` to `secondary-400` (orange → teal), or a subtle pattern
 - Left side: collection icon (large), collection name (large heading), item count
 - Right side: a short punchy description and a stat or fact
-- Example for Apps: *"2 apps · built by Indians · downloaded by millions"*
+- Example for Apps: _"2 apps · built by Indians · downloaded by millions"_
 
 **Files:** `src/pages/apps/index.astro`, new `src/components/CollectionHero.astro`
 
@@ -275,6 +284,7 @@ Once the `items-start` fix is applied, the right sidebar will scroll correctly. 
 **Problem:** `ContentCard` is 60–120px wide — designed for compact scroll rows. In a full listing grid, this is too small and shows almost no information.
 
 **Fix:** Create a `ContentCardFull.astro` variant for listing grids:
+
 - Logo: 64px
 - Title: medium weight, 2-line clamp
 - Description: 2-line clamp (from `description` field)
@@ -305,11 +315,13 @@ These pages do not exist yet. They are a significant feature addition.
 ### 6.1 Create Tag Landing Pages (`/tags/[tag]`)
 
 **Purpose:** When a user clicks a tag (e.g., `#sleep`, `#women-founders`, `#open-source`), they should land on a page that:
+
 1. Shows a hero banner with the tag name, item count, and a curated description
 2. Groups results by content type (Apps, People, Companies) in horizontal scroll rows
 3. Has a "Featured" item pinned at the top of each group
 
 **Implementation:**
+
 - New page: `src/pages/tags/[tag].astro` using `getStaticPaths`
 - Collect all items across all collections that have this tag
 - Group by collection type
@@ -324,10 +336,11 @@ These pages do not exist yet. They are a significant feature addition.
 **Purpose:** Same pattern as tag pages but for formal categories (e.g., `/categories/healthAndFitness`).
 
 **Hero content ideas:**
+
 - Category icon (emoji or SVG)
 - Category name (formatted, e.g., "Health & Fitness")
 - Item count across all content types
-- A curated one-liner: *"Indian-made apps and tools for your health journey"*
+- A curated one-liner: _"Indian-made apps and tools for your health journey"_
 
 **Files:** New `src/pages/categories/[category].astro`
 
@@ -378,6 +391,7 @@ As described in 5.2. This is the primary card for listing grids and tag/category
 **Problem:** `relatedContent.ts` only scores on `tags`. For apps, matching on `categories` and shared `authors` would produce much more relevant results.
 
 **Fix:** Update `MATCHING_FIELDS_CONFIG`:
+
 ```ts
 const MATCHING_FIELDS_CONFIG = {
     apps: ['tags', 'categories', 'authors'],
@@ -441,6 +455,7 @@ The site is described as covering "varied content from any Indian" — the curre
 ### 9.1 YouTube Channels Collection
 
 **Schema additions:**
+
 ```ts
 const youtubeChannels = defineCollection({
     schema: z.object({
@@ -454,7 +469,7 @@ const youtubeChannels = defineCollection({
         tags: z.array(z.string()),
         logo: z.string().optional(),
         draft: z.boolean().default(false),
-    })
+    }),
 });
 ```
 
@@ -465,6 +480,7 @@ const youtubeChannels = defineCollection({
 ### 9.2 Products Collection
 
 **Schema additions:**
+
 ```ts
 const products = defineCollection({
     schema: z.object({
@@ -478,7 +494,7 @@ const products = defineCollection({
         paid: z.boolean(),
         logo: z.string().optional(),
         draft: z.boolean().default(false),
-    })
+    }),
 });
 ```
 
@@ -489,6 +505,7 @@ const products = defineCollection({
 ### 9.3 Blogs / Newsletters Collection
 
 **Schema additions:**
+
 ```ts
 const blogs = defineCollection({
     schema: z.object({
@@ -501,7 +518,7 @@ const blogs = defineCollection({
         tags: z.array(z.string()),
         logo: z.string().optional(),
         draft: z.boolean().default(false),
-    })
+    }),
 });
 ```
 
@@ -522,7 +539,9 @@ Duplicate store badge rendering block in `ContentLayout.astro` (appears twice). 
 The logic for determining the primary CTA (Download vs Contribute vs Visit vs Buy) should live in `src/utils/ctaUtils.ts`, not be scattered across templates.
 
 ```ts
-export function getPrimaryCTA(data: AppData | PersonData | CompanyData): { label: string; url: string } | null
+export function getPrimaryCTA(
+    data: AppData | PersonData | CompanyData
+): { label: string; url: string } | null;
 ```
 
 ---
@@ -561,29 +580,29 @@ The internal `getRelatedContent` function (returns scored results) is not export
 
 ## Priority Order
 
-| Priority | Item | Effort | Impact |
-|----------|------|--------|--------|
-| P0 | 1.1 Right sidebar scroll fix | XS | High |
-| P0 | 1.2 Wire up Footer | XS | Medium |
-| P0 | 1.3 Fix footer copyright layout | XS | Low |
-| P1 | 4.1 Primary CTA above the fold | S | High |
-| P1 | 4.2 Redesign header card badges | S | High |
-| P1 | 5.1 Listing page hero banner | M | High |
-| P1 | 5.2 `ContentCardFull` component | M | High |
-| P1 | 2.2 Load custom font | XS | High |
-| P1 | 2.1 Fix secondary color scale | S | Medium |
-| P2 | 3.1 Hero section visual weight | S | Medium |
-| P2 | 3.2 Homepage multi-section layout | M | Medium |
-| P2 | 4.3 Redesign Engage section | S | Medium |
-| P2 | 4.4 Extract StoreBadges component | XS | Low |
-| P2 | 7.2 Fix YouMightLike grid | XS | Medium |
-| P2 | 7.3 Improve related content scoring | S | Medium |
-| P2 | 7.4 "By same author" sidebar section | S | Medium |
-| P3 | 6.1 Tag landing pages | L | High |
-| P3 | 6.2 Category landing pages | L | High |
-| P3 | 8.3 Search (Pagefind) | M | High |
-| P3 | 9.x New content type schemas | L | High |
-| P3 | 1.4–1.6 Remaining bug fixes | S | Low |
-| P3 | 10.x Code quality items | S | Low |
+| Priority | Item                                 | Effort | Impact |
+| -------- | ------------------------------------ | ------ | ------ |
+| P0       | 1.1 Right sidebar scroll fix         | XS     | High   |
+| P0       | 1.2 Wire up Footer                   | XS     | Medium |
+| P0       | 1.3 Fix footer copyright layout      | XS     | Low    |
+| P1       | 4.1 Primary CTA above the fold       | S      | High   |
+| P1       | 4.2 Redesign header card badges      | S      | High   |
+| P1       | 5.1 Listing page hero banner         | M      | High   |
+| P1       | 5.2 `ContentCardFull` component      | M      | High   |
+| P1       | 2.2 Load custom font                 | XS     | High   |
+| P1       | 2.1 Fix secondary color scale        | S      | Medium |
+| P2       | 3.1 Hero section visual weight       | S      | Medium |
+| P2       | 3.2 Homepage multi-section layout    | M      | Medium |
+| P2       | 4.3 Redesign Engage section          | S      | Medium |
+| P2       | 4.4 Extract StoreBadges component    | XS     | Low    |
+| P2       | 7.2 Fix YouMightLike grid            | XS     | Medium |
+| P2       | 7.3 Improve related content scoring  | S      | Medium |
+| P2       | 7.4 "By same author" sidebar section | S      | Medium |
+| P3       | 6.1 Tag landing pages                | L      | High   |
+| P3       | 6.2 Category landing pages           | L      | High   |
+| P3       | 8.3 Search (Pagefind)                | M      | High   |
+| P3       | 9.x New content type schemas         | L      | High   |
+| P3       | 1.4–1.6 Remaining bug fixes          | S      | Low    |
+| P3       | 10.x Code quality items              | S      | Low    |
 
 **Effort key:** XS = < 1 hour, S = half day, M = 1–2 days, L = 3+ days

@@ -15,15 +15,15 @@ The site celebrates Indian creativity and talent across all domains. Content is 
 
 ### Primary CTA by Content Type
 
-| Content type       | Primary CTA    | Source field                        |
-|--------------------|----------------|-------------------------------------|
-| App                | Download       | `storeLinks`                        |
-| Open-source repo   | Contribute     | `repositoryLinks`                   |
-| Person             | Follow / Visit | `socials` or `website`              |
-| Company            | Visit          | `website`                           |
-| YouTube channel    | Subscribe      | `socials` with label `youtube`      |
-| Product            | Buy            | `storeLinks` or `website`           |
-| Blog               | Read           | `website`                           |
+| Content type     | Primary CTA    | Source field                   |
+| ---------------- | -------------- | ------------------------------ |
+| App              | Download       | `storeLinks`                   |
+| Open-source repo | Contribute     | `repositoryLinks`              |
+| Person           | Follow / Visit | `socials` or `website`         |
+| Company          | Visit          | `website`                      |
+| YouTube channel  | Subscribe      | `socials` with label `youtube` |
+| Product          | Buy            | `storeLinks` or `website`      |
+| Blog             | Read           | `website`                      |
 
 ---
 
@@ -83,6 +83,7 @@ src/
 ## Content Collections
 
 ### Apps (`src/content/apps/`)
+
 - `title`, `description` — Basic info
 - `authors` — Array of `{ slug, type: 'person' | 'company' }`
 - `type` — `'app'` or `'plugin'`
@@ -100,11 +101,13 @@ src/
 - `featured` — Pins to top of listings
 
 ### Persons (`src/content/persons/`)
+
 - `name`, `bio`, `email`, `website`
 - `socials` — Array of `{ label, url }`
 - `avatar`, `draft`
 
 ### Companies (`src/content/companies/`)
+
 - `name`, `description`, `founded`, `location`, `website`
 - `members` — Array of `{ slug, role }` (links to persons)
 - `socials`, `logo`, `draft`
@@ -147,24 +150,31 @@ Images live in `src/assets/images/` and must be registered in `src/utils/imageRe
 ## Known Issues & Design Decisions
 
 ### Right Sidebar Scroll Bug
+
 `ContentLayout.astro` wraps the article + right sidebar in `items-center`. This stretches the sidebar to match the article height, preventing independent scroll. Fix: change to `items-start`.
 
 ### Footer Not Rendered
+
 `Footer.astro` exists but is not imported in `BaseLayout.astro`. It never renders.
 
 ### Secondary Color Scale Is Inverted
+
 In `tailwind.config.mjs`, the `secondary` palette runs from `50` (darkest) to `900` (nearly black). Tailwind convention is the opposite. This causes confusion when reading dark mode classes.
 
 ### Store Badges Duplicated
+
 `ContentLayout.astro` renders the store badges block twice (before screenshots and after the prose slot). Extract to a `StoreBadges.astro` component.
 
 ### Inline onclick Scroll Handlers
+
 The homepage carousel uses `onclick="this.nextElementSibling.scrollBy(...)"`. Fragile DOM traversal — should be proper `<script>` event listeners.
 
 ### `aspectRatio` Prop Deprecated
+
 Several `<Image>` usages pass `aspectRatio="1/1"` — removed in Astro 3, silently ignored.
 
 ### Related Content Only Matches Tags
+
 `relatedContent.ts` only scores on `tags`. Apps would benefit from also matching `categories` and `authors`.
 
 ---
