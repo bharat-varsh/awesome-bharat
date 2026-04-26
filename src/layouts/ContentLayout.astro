@@ -103,279 +103,314 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
             class="max-w-6xl px-10 py-8 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto scrollbar-hide"
         >
             <header class="mb-12">
+                <!-- Main header card with responsive layout -->
                 <div
-                    class="grid grid-cols-1 gap-6 p-3 md:grid-cols-[96px_minmax(0,1fr)] xl:grid-cols-[96px_minmax(0,2fr)_minmax(0,2fr)_minmax(0,3fr)] xl:grid-rows-2 rounded-2xl shadow-lg shadow-primary-400/80 dark:shadow-primary-900/80"
+                    class="rounded-2xl shadow-lg shadow-primary-400/80 dark:shadow-primary-900/80 bg-white dark:bg-secondary-800 p-4 sm:p-6"
                 >
-                    <!-- Column 1: Logo -->
-                    {
-                        resolvedImage && (
-                            <div class="rounded-xl md:row-span-3 xl:row-span-2 flex items-start justify-start">
-                                <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden">
-                                    <Image
-                                        class="w-full h-full object-contain"
-                                        src={resolvedImage}
-                                        alt={title}
-                                        loading="eager"
-                                        format="webp"
-                                        width={96}
-                                        height={96}
-                                    />
-                                </div>
-                            </div>
-                        )
-                    }
-
-                    <!-- Column 2: Title and Author -->
+                    <!-- Mobile: stacked, Tablet: 2-col, Desktop: 3-col -->
                     <div
-                        class="min-w-0 flex flex-col justify-center gap-1 md:col-start-2 xl:col-start-2 xl:row-span-2"
+                        class="grid grid-cols-1 md:grid-cols-[96px_1fr] lg:grid-cols-[96px_1fr_auto] gap-4 md:gap-6"
                     >
-                        <h1
-                            class="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight leading-tight line-clamp-2 min-w-0"
-                        >
-                            {title}
-                        </h1>
+                        <!-- Column 1: Logo -->
                         {
-                            primaryAuthor && (
-                                <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-1 min-w-0">
-                                    <span class="text-gray-500 dark:text-gray-500">by </span>
-                                    <a
-                                        href={authorLink}
-                                        class="text-primary-600 dark:text-primary-400 hover:underline font-medium"
-                                    >
-                                        {primaryAuthor.data.name}
-                                    </a>
+                            resolvedImage && (
+                                <div class="flex-shrink-0 mx-auto md:mx-0">
+                                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-secondary-700">
+                                        <Image
+                                            class="w-full h-full object-contain"
+                                            src={resolvedImage}
+                                            alt={title}
+                                            loading="eager"
+                                            format="webp"
+                                            width={96}
+                                            height={96}
+                                        />
+                                    </div>
                                 </div>
                             )
                         }
-                        {
-                            primaryCTALabel && primaryCTAUrl && (
-                                <div class="relative mt-2 inline-block">
-                                    <a
-                                        href={primaryCTAUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold rounded-lg transition-colors w-fit cta-trigger bg-primary-600 hover:bg-primary-700 text-white dark:bg-primary-500 dark:hover:bg-primary-400"
-                                        data-cta-dropdown
-                                    >
-                                        {primaryCTALabel}
-                                        {ctaGroups.length > 0 &&
-                                        ctaGroups.reduce(
-                                            (total, group) => total + group.links.length,
-                                            0
-                                        ) > 1 ? (
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="w-4 h-4 ml-2"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M19 9l-7 7-7-7"
-                                                />
-                                            </svg>
-                                        ) : (
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="w-4 h-4 ml-2"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                                />
-                                            </svg>
-                                        )}
-                                    </a>
-                                    {/* Dropdown Popup */}
-                                    {ctaGroups.length > 0 &&
-                                        ctaGroups.reduce(
-                                            (total, group) => total + group.links.length,
-                                            0
-                                        ) > 1 && (
-                                            <div
-                                                class="absolute left-0 z-50 mt-2 w-64 p-3 bg-white dark:bg-secondary-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 hidden cta-dropdown"
-                                                data-cta-menu
-                                            >
-                                                <div class="flex flex-col gap-3">
-                                                    {ctaGroups.map((group) => (
-                                                        <div>
-                                                            <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
-                                                                {group.label}
-                                                            </div>
-                                                            <div class="flex flex-col gap-1">
-                                                                {group.links.map((link) => {
-                                                                    const isPlayStore =
-                                                                        link.label
-                                                                            .toLowerCase()
-                                                                            .includes(
-                                                                                'play store'
-                                                                            ) ||
-                                                                        link.url.includes(
-                                                                            'play.google.com'
-                                                                        );
-                                                                    const isAppStore =
-                                                                        link.label
-                                                                            .toLowerCase()
-                                                                            .includes(
-                                                                                'app store'
-                                                                            ) ||
-                                                                        link.url.includes(
-                                                                            'apps.apple.com'
-                                                                        );
-                                                                    const isFdroidStore =
-                                                                        link.label
-                                                                            .toLowerCase()
-                                                                            .includes('fdroid') ||
-                                                                        link.url.includes(
-                                                                            'f-droid.org'
-                                                                        );
-                                                                    const isGithub =
-                                                                        link.label
-                                                                            .toLowerCase()
-                                                                            .includes('github') ||
-                                                                        link.url.includes(
-                                                                            'github.com'
-                                                                        );
-                                                                    return (
-                                                                        <a
-                                                                            href={link.url}
-                                                                            target="_blank"
-                                                                            rel="noopener noreferrer"
-                                                                            class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                                                                        >
-                                                                            {isPlayStore ? (
-                                                                                <Image
-                                                                                    src={
-                                                                                        googlePlayBadge
-                                                                                    }
-                                                                                    alt={link.label}
-                                                                                    class="h-8 w-auto"
-                                                                                    format="webp"
-                                                                                    loading="lazy"
-                                                                                />
-                                                                            ) : isFdroidStore ? (
-                                                                                <Image
-                                                                                    src={
-                                                                                        fdroidBadge
-                                                                                    }
-                                                                                    alt={link.label}
-                                                                                    class="h-8 w-auto"
-                                                                                    format="webp"
-                                                                                    loading="lazy"
-                                                                                />
-                                                                            ) : isAppStore ? (
-                                                                                <Image
-                                                                                    src={
-                                                                                        appStoreBadge
-                                                                                    }
-                                                                                    alt={link.label}
-                                                                                    class="h-8 w-auto"
-                                                                                    format="webp"
-                                                                                    loading="lazy"
-                                                                                />
-                                                                            ) : isGithub ? (
-                                                                                <Image
-                                                                                    src={
-                                                                                        githubBadge
-                                                                                    }
-                                                                                    alt={link.label}
-                                                                                    class="h-8 w-auto"
-                                                                                    format="webp"
-                                                                                    loading="lazy"
-                                                                                />
-                                                                            ) : (
-                                                                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                                                    {link.label}
-                                                                                </span>
-                                                                            )}
-                                                                        </a>
-                                                                    );
-                                                                })}
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                </div>
-                            )
-                        }
-                    </div>
 
-                    <!-- Column 3: Badges -->
-                    <div
-                        class="min-w-0 flex items-center grid grid-cols-1 gap-4 content-center md:col-start-2 xl:col-start-3 xl:row-span-2"
-                    >
-                        <div class="w-full flex flex-wrap gap-2 content-start gap-4">
-                            <span
-                                class={`rounded-lg ring-2 text-black bg-green min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs line-clamp-2 text-black dark:text-white ${
-                                    paid ? 'ring-red-400' : 'ring-green-600'
-                                }`}
+                        <!-- Column 2: Title, Author, Categories -->
+                        <div class="min-w-0 flex flex-col gap-2">
+                            <h1
+                                class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight leading-tight line-clamp-2 text-gray-900 dark:text-gray-100"
                             >
-                                {paid ? 'Paid' : 'Free'}
-                            </span>
-                            <span
-                                class={`rounded-lg ring-2 text-black bg-green min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs line-clamp-2 text-black dark:text-white ${
-                                    ads ? 'ring-red-400' : 'ring-green-600'
-                                }`}
-                            >
-                                {ads ? 'Has ads' : 'No Ads'}
-                            </span>
-                            <span
-                                class={`rounded-lg ring-2 text-black min-w-0 px-2 py-2 font-medium text-center text-xs text-balance line-clamp-2 text-black dark:text-white ${
-                                    source === 'open-source' ? 'ring-green-600' : 'ring-red-400'
-                                }`}
-                            >
-                                {source === 'open-source' ? 'Open Source' : 'Closed Source'}
-                            </span>
-                            <span
-                                class={`rounded-lg ring-2 dark:ring-white text-black dark:text-white min-w-0 px-2 py-2 font-medium text-center leading-tight text-xs ${
-                                    offline ? 'ring-green-600' : 'ring-red-400'
-                                }`}
-                            >
-                                {offline ? 'Works offline' : 'Needs internet'}
-                            </span>
+                                {title}
+                            </h1>
                             {
-                                categories.slice(0, 2).map((category) => (
-                                    <span
-                                        class="rounded-lg ring-1 ring-black dark:ring-white
-                                                text-black dark:text-white
-                                                min-w-0 px-2 py-2
-                                                font-medium text-center text-xs
-                                                text-balance line-clamp-2"
-                                    >
-                                        {formatCategoryName(category)}
-                                    </span>
-                                ))
+                                primaryAuthor && (
+                                    <div class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+                                        <span class="text-gray-500 dark:text-gray-500">by </span>
+                                        <a
+                                            href={authorLink}
+                                            class="text-primary-600 dark:text-primary-400 hover:underline font-medium"
+                                        >
+                                            {primaryAuthor.data.name}
+                                        </a>
+                                    </div>
+                                )
+                            }
+
+                            <!-- Category chips (max 2) -->
+                            {
+                                categories.length > 0 && (
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        {categories.slice(0, 2).map((category) => (
+                                            <span class="px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-gray-100 dark:bg-secondary-700 text-gray-700 dark:text-gray-300">
+                                                {formatCategoryName(category)}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )
+                            }
+
+                            <!-- Tags (scrollable on mobile) -->
+                            {
+                                tags && tags.length > 0 && (
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        {tags.slice(0, 8).map((tag) => (
+                                            <a
+                                                href={`/tags/${tag}`}
+                                                class="text-xs px-2.5 py-1 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors whitespace-nowrap"
+                                            >
+                                                #{tag}
+                                            </a>
+                                        ))}
+                                        {tags.length > 8 && (
+                                            <span class="text-xs py-1 text-gray-500 dark:text-gray-400">
+                                                +{tags.length - 8} more
+                                            </span>
+                                        )}
+                                    </div>
+                                )
+                            }
+                        </div>
+
+                        <!-- Column 3: Primary CTA (desktop only on same row, mobile below) -->
+                        <div
+                            class="flex-shrink-0 flex items-start justify-center md:justify-start lg:items-start mt-4 md:mt-0 lg:mt-0"
+                        >
+                            {
+                                primaryCTALabel && primaryCTAUrl && (
+                                    <div class="relative">
+                                        <a
+                                            href={primaryCTAUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="inline-flex items-center justify-center px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold rounded-xl transition-colors w-full sm:w-auto bg-primary-600 hover:bg-primary-700 text-white dark:bg-primary-500 dark:hover:bg-primary-400 shadow-md hover:shadow-lg"
+                                            data-cta-dropdown
+                                        >
+                                            {primaryCTALabel}
+                                            {ctaGroups.length > 0 &&
+                                            ctaGroups.reduce(
+                                                (total, group) => total + group.links.length,
+                                                0
+                                            ) > 1 ? (
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    class="w-4 h-4 ml-2"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M19 9l-7 7-7-7"
+                                                    />
+                                                </svg>
+                                            ) : (
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    class="w-4 h-4 ml-2"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </a>
+                                        {/* Dropdown Popup */}
+                                        {ctaGroups.length > 0 &&
+                                            ctaGroups.reduce(
+                                                (total, group) => total + group.links.length,
+                                                0
+                                            ) > 1 && (
+                                                <div
+                                                    class="absolute left-0 right-0 sm:left-auto sm:right-0 z-50 mt-2 w-64 p-3 bg-white dark:bg-secondary-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 hidden cta-dropdown"
+                                                    data-cta-menu
+                                                >
+                                                    <div class="flex flex-col gap-3">
+                                                        {ctaGroups.map((group) => (
+                                                            <div>
+                                                                <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                                                                    {group.label}
+                                                                </div>
+                                                                <div class="flex flex-col gap-1">
+                                                                    {group.links.map((link) => {
+                                                                        const isPlayStore =
+                                                                            link.label
+                                                                                .toLowerCase()
+                                                                                .includes(
+                                                                                    'play store'
+                                                                                ) ||
+                                                                            link.url.includes(
+                                                                                'play.google.com'
+                                                                            );
+                                                                        const isAppStore =
+                                                                            link.label
+                                                                                .toLowerCase()
+                                                                                .includes(
+                                                                                    'app store'
+                                                                                ) ||
+                                                                            link.url.includes(
+                                                                                'apps.apple.com'
+                                                                            );
+                                                                        const isFdroidStore =
+                                                                            link.label
+                                                                                .toLowerCase()
+                                                                                .includes(
+                                                                                    'fdroid'
+                                                                                ) ||
+                                                                            link.url.includes(
+                                                                                'f-droid.org'
+                                                                            );
+                                                                        const isGithub =
+                                                                            link.label
+                                                                                .toLowerCase()
+                                                                                .includes(
+                                                                                    'github'
+                                                                                ) ||
+                                                                            link.url.includes(
+                                                                                'github.com'
+                                                                            );
+                                                                        return (
+                                                                            <a
+                                                                                href={link.url}
+                                                                                target="_blank"
+                                                                                rel="noopener noreferrer"
+                                                                                class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                                            >
+                                                                                {isPlayStore ? (
+                                                                                    <Image
+                                                                                        src={
+                                                                                            googlePlayBadge
+                                                                                        }
+                                                                                        alt={
+                                                                                            link.label
+                                                                                        }
+                                                                                        class="h-8 w-auto"
+                                                                                        format="webp"
+                                                                                        loading="lazy"
+                                                                                    />
+                                                                                ) : isFdroidStore ? (
+                                                                                    <Image
+                                                                                        src={
+                                                                                            fdroidBadge
+                                                                                        }
+                                                                                        alt={
+                                                                                            link.label
+                                                                                        }
+                                                                                        class="h-8 w-auto"
+                                                                                        format="webp"
+                                                                                        loading="lazy"
+                                                                                    />
+                                                                                ) : isAppStore ? (
+                                                                                    <Image
+                                                                                        src={
+                                                                                            appStoreBadge
+                                                                                        }
+                                                                                        alt={
+                                                                                            link.label
+                                                                                        }
+                                                                                        class="h-8 w-auto"
+                                                                                        format="webp"
+                                                                                        loading="lazy"
+                                                                                    />
+                                                                                ) : isGithub ? (
+                                                                                    <Image
+                                                                                        src={
+                                                                                            githubBadge
+                                                                                        }
+                                                                                        alt={
+                                                                                            link.label
+                                                                                        }
+                                                                                        class="h-8 w-auto"
+                                                                                        format="webp"
+                                                                                        loading="lazy"
+                                                                                    />
+                                                                                ) : (
+                                                                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                                                        {link.label}
+                                                                                    </span>
+                                                                                )}
+                                                                            </a>
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                    </div>
+                                )
                             }
                         </div>
                     </div>
 
-                    <!-- Column 4: Tags -->
-                    {
-                        tags && tags.length > 0 && (
-                            <div class="min-w-0 flex items-start md:col-start-2 xl:col-start-4 xl:row-span-2 pt-2 line-clamp-2">
-                                <div class="w-full h-[60px] overflow-y-auto overflow-x-hidden flex flex-wrap gap-2 content-start scrollbar-hide">
-                                    {tags.map((tag) => (
-                                        <a
-                                            href={`/tags/${tag}`}
-                                            class="text-xs px-3 py-1 rounded-full bg-primary-600 dark:bg-primary-300 text-white dark:text-black hover:bg-primary-700 dark:hover:bg-primary-200 transition-colors whitespace-nowrap flex-shrink-0"
-                                        >
-                                            #{tag}
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        )
-                    }
+                    <!-- Badges row - below the main content on all screen sizes -->
+                    <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+                        <div class="flex flex-wrap gap-2 sm:gap-3">
+                            {/* Free/Paid badge */}
+                            <span
+                                class={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap ${
+                                    paid
+                                        ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300'
+                                        : 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
+                                }`}
+                            >
+                                {paid ? 'Paid' : 'Free'}
+                            </span>
+                            {/* Ads badge */}
+                            <span
+                                class={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap ${
+                                    ads
+                                        ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300'
+                                        : 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
+                                }`}
+                            >
+                                {ads ? 'Has Ads' : 'No Ads'}
+                            </span>
+                            {/* Source badge */}
+                            <span
+                                class={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap ${
+                                    source === 'open-source'
+                                        ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                                }`}
+                            >
+                                {source === 'open-source' ? 'Open Source' : 'Closed Source'}
+                            </span>
+                            {/* Offline badge */}
+                            <span
+                                class={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap ${
+                                    offline
+                                        ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                                }`}
+                            >
+                                {offline ? 'Works Offline' : 'Needs Internet'}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </header>
 
