@@ -46,7 +46,8 @@ export default {
                         },
                         'h1, h2, h3, h4, h5, h6': {
                             color: theme('colors.gray.900'),
-                            'font-family': "'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+                            'font-family':
+                                "'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                         },
                         code: {
                             color: theme('colors.pink.600'),
@@ -76,7 +77,8 @@ export default {
                         },
                         'h1, h2, h3, h4, h5, h6': {
                             color: theme('colors.gray.100'),
-                            'font-family': "'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+                            'font-family':
+                                "'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                         },
                         strong: {
                             color: theme('colors.gray.100'),
