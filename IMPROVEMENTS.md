@@ -580,29 +580,29 @@ The internal `getRelatedContent` function (returns scored results) is not export
 
 ## Priority Order
 
-| Priority | Item                                 | Effort | Impact |
-| -------- | ------------------------------------ | ------ | ------ |
-| P0       | 1.1 Right sidebar scroll fix         | XS     | High   |
-| P0       | 1.2 Wire up Footer                   | XS     | Medium |
-| P0       | 1.3 Fix footer copyright layout      | XS     | Low    |
-| P1       | 4.1 Primary CTA above the fold       | S      | High   |
-| P1       | 4.2 Redesign header card badges      | S      | High   |
-| P1       | 5.1 Listing page hero banner         | M      | High   |
-| P1       | 5.2 `ContentCardFull` component      | M      | High   |
-| P1       | 2.2 Load custom font                 | XS     | High   |
-| P1       | 2.1 Fix secondary color scale        | S      | Medium |
-| P2       | 3.1 Hero section visual weight       | S      | Medium |
-| P2       | 3.2 Homepage multi-section layout    | M      | Medium |
-| P2       | 4.3 Redesign Engage section          | S      | Medium |
-| P2       | 4.4 Extract StoreBadges component    | XS     | Low    |
-| P2       | 7.2 Fix YouMightLike grid            | XS     | Medium |
-| P2       | 7.3 Improve related content scoring  | S      | Medium |
-| P2       | 7.4 "By same author" sidebar section | S      | Medium |
-| P3       | 6.1 Tag landing pages                | L      | High   |
-| P3       | 6.2 Category landing pages           | L      | High   |
-| P3       | 8.3 Search (Pagefind)                | M      | High   |
-| P3       | 9.x New content type schemas         | L      | High   |
-| P3       | 1.4–1.6 Remaining bug fixes          | S      | Low    |
-| P3       | 10.x Code quality items              | S      | Low    |
+| Done | Priority | Item                                 | Effort | Impact |
+| ---- | -------- | ------------------------------------ | ------ | ------ |
+| [x]  | P0       | 1.1 Right sidebar scroll fix         | XS     | High   |
+| [x]  | P0       | 1.2 Wire up Footer                   | XS     | Medium |
+| [x]  | P0       | 1.3 Fix footer copyright layout      | XS     | Low    |
+| [x]  | P1       | 4.1 Primary CTA above the fold       | S      | High   |
+| [ ]  | P1       | 4.2 Redesign header card badges      | S      | High   |
+| [ ]  | P1       | 5.1 Listing page hero banner         | M      | High   |
+| [ ]  | P1       | 5.2 `ContentCardFull` component      | M      | High   |
+| [ ]  | P1       | 2.2 Load custom font                 | XS     | High   |
+| [ ]  | P1       | 2.1 Fix secondary color scale        | S      | Medium |
+| [ ]  | P2       | 3.1 Hero section visual weight       | S      | Medium |
+| [ ]  | P2       | 3.2 Homepage multi-section layout    | M      | Medium |
+| [ ]  | P2       | 4.3 Redesign Engage section          | S      | Medium |
+| [ ]  | P2       | 4.4 Extract StoreBadges component    | XS     | Low    |
+| [ ]  | P2       | 7.2 Fix YouMightLike grid            | XS     | Medium |
+| [ ]  | P2       | 7.3 Improve related content scoring  | S      | Medium |
+| [ ]  | P2       | 7.4 "By same author" sidebar section | S      | Medium |
+| [ ]  | P3       | 6.1 Tag landing pages                | L      | High   |
+| [ ]  | P3       | 6.2 Category landing pages           | L      | High   |
+| [ ]  | P3       | 8.3 Search (Pagefind)                | M      | High   |
+| [ ]  | P3       | 9.x New content type schemas         | L      | High   |
+| [ ]  | P3       | 1.4–1.6 Remaining bug fixes          | S      | Low    |
+| [ ]  | P3       | 10.x Code quality items              | S      | Low    |
 
 **Effort key:** XS = < 1 hour, S = half day, M = 1–2 days, L = 3+ days
