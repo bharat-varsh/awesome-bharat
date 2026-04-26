@@ -97,11 +97,13 @@ const apps = defineCollection({
 const persons = defineCollection({
     type: 'content',
     schema: z.object({
+        featured: z.boolean().default(false),
         name: z.string(),
         bio: z.string().optional(),
         email: z.string().email().optional(),
         website: z.string().url().optional(),
         socials: z.array(linkSchema).optional(),
+        tags: z.array(z.string()).default([]),
         avatar: z.string().optional(),
         draft: z.boolean().default(false),
     }),
@@ -110,12 +112,14 @@ const persons = defineCollection({
 const companies = defineCollection({
     type: 'content',
     schema: z.object({
+        featured: z.boolean().default(false),
         name: z.string(),
         description: z.string().optional(),
         founded: z.number().optional(),
         location: z.string().optional(),
         website: z.string().url().optional(),
         socials: z.array(linkSchema).optional(),
+        tags: z.array(z.string()).default([]),
         members: z
             .array(
                 z.object({
