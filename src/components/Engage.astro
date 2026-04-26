@@ -74,104 +74,109 @@ const contributionActions = gitHubUrl
 
     <div class="space-y-6">
         <!-- Contribute to development (Open source only) -->
-        {source === 'open-source' && contributionActions.length > 0 && (
-            <section>
-                <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                    Contribute to development
-                </h3>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {contributionActions.map((action) => (
-                        <a
-                            href={action.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="flex flex-col items-start p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-800"
-                        >
-                            <Image
-                                class="w-5 h-5 mb-2 text-primary-600 dark:text-primary-400"
-                                src={action.icon}
-                                alt={action.label}
-                                format="webp"
-                                widths={[140, 160, 180, 200, 220]}
-                                sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
-                            />
-                            <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                {action.label}
-                            </span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
-                                {action.description}
-                            </span>
-                        </a>
-                    ))}
-                </div>
-            </section>
-        )}
+        {
+            source === 'open-source' && contributionActions.length > 0 && (
+                <section>
+                    <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                        Contribute to development
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        {contributionActions.map((action) => (
+                            <a
+                                href={action.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="flex flex-col items-start p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-800"
+                            >
+                                <Image
+                                    class="w-5 h-5 mb-2 text-primary-600 dark:text-primary-400"
+                                    src={action.icon}
+                                    alt={action.label}
+                                    format="webp"
+                                    widths={[140, 160, 180, 200, 220]}
+                                    sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
+                                />
+                                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    {action.label}
+                                </span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+                                    {action.description}
+                                </span>
+                            </a>
+                        ))}
+                    </div>
+                </section>
+            )
+        }
 
         <!-- On the web (Website + Socials) -->
-        {(website || (socials && socials.length > 0)) && (
-            <section>
-                <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                    On the web
-                </h3>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <!-- Website -->
-                    {website && (
-                        <a
-                            href={website}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="flex flex-col items-start p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-800"
-                        >
-                            <Image
-                                class="w-5 h-5 mb-2 text-primary-600 dark:text-primary-400"
-                                src={websiteLink}
-                                alt="Website"
-                                format="webp"
-                                widths={[140, 160, 180, 200, 220]}
-                                sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
-                            />
-                            <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                Website
-                            </span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
-                                Visit official site
-                            </span>
-                        </a>
-                    )}
+        {
+            (website || (socials && socials.length > 0)) && (
+                <section>
+                    <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                        On the web
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        {/* Website */}
+                        {website && (
+                            <a
+                                href={website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="flex flex-col items-start p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-800"
+                            >
+                                <Image
+                                    class="w-5 h-5 mb-2 text-primary-600 dark:text-primary-400"
+                                    src={websiteLink}
+                                    alt="Website"
+                                    format="webp"
+                                    widths={[140, 160, 180, 200, 220]}
+                                    sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
+                                />
+                                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    Website
+                                </span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+                                    Visit official site
+                                </span>
+                            </a>
+                        )}
 
-                    <!-- Socials -->
-                    {socials &&
-                        socials.map((social: Link) => {
-                            const iconKey = normalizeSocialLabel(social.label);
-                            const iconPath = socialIconMap[iconKey] || socialIconMap['__DEFAULT'];
+                        {/* Socials */}
+                        {socials &&
+                            socials.map((social: Link) => {
+                                const iconKey = normalizeSocialLabel(social.label);
+                                const iconPath =
+                                    socialIconMap[iconKey] || socialIconMap['__DEFAULT'];
 
-                            return (
-                                <a
-                                    href={social.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="flex flex-col items-start p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-800"
-                                >
-                                    <Image
-                                        class="w-5 h-5 mb-2 text-primary-600 dark:text-primary-400"
-                                        src={iconPath}
-                                        alt={social.label}
-                                        format="webp"
-                                        widths={[140, 160, 180, 200, 220]}
-                                        sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
-                                    />
-                                    <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                        {social.label}
-                                    </span>
-                                    <span class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
-                                        Follow on {social.label}
-                                    </span>
-                                </a>
-                            );
-                        })}
-                </div>
-            </section>
-        )}
+                                return (
+                                    <a
+                                        href={social.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="flex flex-col items-start p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-800"
+                                    >
+                                        <Image
+                                            class="w-5 h-5 mb-2 text-primary-600 dark:text-primary-400"
+                                            src={iconPath}
+                                            alt={social.label}
+                                            format="webp"
+                                            widths={[140, 160, 180, 200, 220]}
+                                            sizes="(min-width:1024px) 200px, (min-width:640px) 180px, 160px"
+                                        />
+                                        <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                            {social.label}
+                                        </span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+                                            Follow on {social.label}
+                                        </span>
+                                    </a>
+                                );
+                            })}
+                    </div>
+                </section>
+            )
+        }
     </div>
 
     {(source === 'open-source' || socials || website) && <Divider />}
