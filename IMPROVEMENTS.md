@@ -583,26 +583,26 @@ The internal `getRelatedContent` function (returns scored results) is not export
 | Done | Priority | Item                                                                                        | Effort | Impact |
 | ---- | -------- | ------------------------------------------------------------------------------------------- | ------ | ------ |
 | [x]  | P0       | [1.1 Right sidebar scroll fix](#11-right-sidebar-does-not-scroll)                           | XS     | High   |
+| [x]  | P1       | [2.2 Load custom font](#22-load-a-custom-display-font)                                      | XS     | High   |
 | [x]  | P0       | [1.2 Wire up Footer](#12-footer-never-renders)                                              | XS     | Medium |
+| [x]  | P2       | [7.2 Fix YouMightLike grid](#72-fix-youmightlike-grid-conflict)                             | XS     | Medium |
 | [x]  | P0       | [1.3 Fix footer copyright layout](#13-footer-copyright-div-is-inside-the-grid)              | XS     | Low    |
+| [x]  | P2       | [4.4 Extract StoreBadges component](#44-fix-store-badges-duplication)                       | XS     | Low    |
 | [x]  | P1       | [4.1 Primary CTA above the fold](#41-add-a-clear-primary-cta-above-the-fold)                | S      | High   |
-| [ ]  | P1       | [4.2 Redesign header card badges](#42-redesign-the-header-card)                             | S      | High   |
-| [ ]  | P1       | [5.1 Listing page hero banner](#51-add-a-hero-banner-to-listing-pages)                      | M      | High   |
-| [ ]  | P1       | [5.2 `ContentCardFull` component](#52-richer-cards-in-the-listing-grid)                     | M      | High   |
-| [ ]  | P1       | [2.2 Load custom font](#22-load-a-custom-display-font)                                      | XS     | High   |
-| [ ]  | P1       | [2.1 Fix secondary color scale](#21-fix-the-secondary-color-scale-direction)                | S      | Medium |
-| [ ]  | P2       | [3.1 Hero section visual weight](#31-hero-section-needs-visual-weight)                      | S      | Medium |
-| [ ]  | P2       | [3.2 Homepage multi-section layout](#32-homepage-should-show-multiple-content-sections)     | M      | Medium |
-| [ ]  | P2       | [4.3 Redesign Engage section](#43-redesign-the-engage-section)                              | S      | Medium |
-| [ ]  | P2       | [4.4 Extract StoreBadges component](#44-fix-store-badges-duplication)                       | XS     | Low    |
-| [ ]  | P2       | [7.2 Fix YouMightLike grid](#72-fix-youmightlike-grid-conflict)                             | XS     | Medium |
+| [x]  | P1       | [4.2 Redesign header card badges](#42-redesign-the-header-card)                             | S      | High   |
+| [x]  | P1       | [2.1 Fix secondary color scale](#21-fix-the-secondary-color-scale-direction)                | S      | Medium |
+| [x]  | P2       | [3.1 Hero section visual weight](#31-hero-section-needs-visual-weight)                      | S      | Medium |
+| [x]  | P2       | [4.3 Redesign Engage section](#43-redesign-the-engage-section)                              | S      | Medium |
 | [ ]  | P2       | [7.3 Improve related content scoring](#73-improve-related-content-scoring)                  | S      | Medium |
 | [ ]  | P2       | [7.4 "By same author" sidebar section](#74-add-by-the-same-author-section-to-right-sidebar) | S      | Medium |
-| [ ]  | P3       | [6.1 Tag landing pages](#61-create-tag-landing-pages-tags-tag)                              | L      | High   |
-| [ ]  | P3       | [6.2 Category landing pages](#62-create-category-landing-pages-categories-category)         | L      | High   |
-| [ ]  | P3       | [8.3 Search (Pagefind)](#83-add-search)                                                     | M      | High   |
-| [ ]  | P3       | [9.x New content type schemas](#9-content-model-expansions)                                 | L      | High   |
 | [ ]  | P3       | [1.4–1.6 Remaining bug fixes](#14-inline-onclick-scroll-handlers-are-fragile)               | S      | Low    |
 | [ ]  | P3       | [10.x Code quality items](#10-code-quality--best-practices)                                 | S      | Low    |
+| [ ]  | P1       | [5.1 Listing page hero banner](#51-add-a-hero-banner-to-listing-pages)                      | M      | High   |
+| [ ]  | P1       | [5.2 `ContentCardFull` component](#52-richer-cards-in-the-listing-grid)                     | M      | High   |
+| [ ]  | P3       | [8.3 Search (Pagefind)](#83-add-search)                                                     | M      | High   |
+| [ ]  | P2       | [3.2 Homepage multi-section layout](#32-homepage-should-show-multiple-content-sections)     | M      | Medium |
+| [ ]  | P3       | [6.1 Tag landing pages](#61-create-tag-landing-pages-tags-tag)                              | L      | High   |
+| [ ]  | P3       | [6.2 Category landing pages](#62-create-category-landing-pages-categories-category)         | L      | High   |
+| [ ]  | P3       | [9.x New content type schemas](#9-content-model-expansions)                                 | L      | High   |
 
 **Effort key:** XS = < 1 hour, S = half day, M = 1–2 days, L = 3+ days
