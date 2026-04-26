@@ -1,0 +1,211 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CollectionHero from '@/components/CollectionHero.astro';
+import ContentCardFull from '@/components/ContentCardFull.astro';
+import { getPrimaryCTALabel } from '@/utils/ctaUtils.ts';
+
+type CategorizedApp = CollectionEntry<'apps'>;
+type CategorizedPerson = CollectionEntry<'persons'>;
+type CategorizedCompany = CollectionEntry<'companies'>;
+
+interface CategoryPageProps {
+    category: string;
+    apps: CategorizedApp[];
+    persons: CategorizedPerson[];
+    companies: CategorizedCompany[];
+}
+
+const formatCategoryTitle = (category: string): string => {
+    if (!category) return '';
+    const spaced = category
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
+    return spaced.charAt(0).toUpperCase() + spaced.slice(1).toLowerCase();
+};
+
+// Category emoji mapping
+const categoryEmojis: Record<string, string> = {
+    art: '🎨',
+    beauty: '💄',
+    booksAndReference: '📚',
+    business: '💼',
+    children: '👶',
+    comics: '📖',
+    communication: '💬',
+    dating: '💕',
+    education: '🎓',
+    entertainment: '🎬',
+    events: '📅',
+    finance: '💰',
+    foodAndDrinks: '🍽️',
+    games: '🎮',
+    healthAndFitness: '💪',
+    house: '🏠',
+    libraries: '📚',
+    lifestyle: '✨',
+    navigation: '🧭',
+    medical: '🏥',
+    musicAndAudio: '🎵',
+    newsAndMagazines: '📰',
+    parenting: '👪',
+    personalization: '🎨',
+    photography: '📷',
+    productivity: '🚀',
+    shopping: '🛍️',
+    social: '👥',
+    sports: '⚽',
+    tools: '🔧',
+    travel: '✈️',
+    vehicles: '🚗',
+    video: '🎥',
+    watchFaces: '⌚',
+    weather: '🌤️',
+};
+
+export const getStaticPaths = (async () => {
+    const publishedApps = (await getCollection('apps')).filter(
+        (item: CollectionEntry<'apps'>) => !item.data.draft
+    ) as CategorizedApp[];
+    const publishedPersons = (await getCollection('persons')).filter(
+        (item: CollectionEntry<'persons'>) => !item.data.draft
+    ) as CategorizedPerson[];
+    const publishedCompanies = (await getCollection('companies')).filter(
+        (item: CollectionEntry<'companies'>) => !item.data.draft
+    ) as CategorizedCompany[];
+
+    // Collect all unique categories from apps
+    const categories = new Set<string>();
+    for (const app of publishedApps) {
+        for (const category of app.data.categories ?? []) {
+            categories.add(category);
+        }
+    }
+
+    return [...categories].map((category) => {
+        const hasCategory = (cats: string[] = []) => cats.includes(category);
+
+        return {
+            params: { category },
+            props: {
+                category,
+                apps: publishedApps.filter((item) => hasCategory(item.data.categories)),
+                persons: publishedPersons,
+                companies: publishedCompanies,
+            },
+        };
+    });
+}) satisfies GetStaticPaths;
+
+const { category, apps, persons, companies } = Astro.props as CategoryPageProps;
+const categoryTitle = formatCategoryTitle(category);
+const categoryEmoji = categoryEmojis[category] || '📂';
+
+// Count items in each collection that have this category
+const appsInCategory = apps.length;
+const personsInCategory = persons.filter((p: CategorizedPerson) =>
+    (p.data.tags ?? []).some((t: string) => t.toLowerCase() === category.toLowerCase())
+).length;
+const companiesInCategory = companies.filter((c: CategorizedCompany) =>
+    (c.data.tags ?? []).some((t: string) => t.toLowerCase() === category.toLowerCase())
+).length;
+
+const totalItems = appsInCategory + personsInCategory + companiesInCategory;
+const countLabel = `${totalItems} ${totalItems === 1 ? 'item' : 'items'}`;
+const description = `Indian-made apps, people, and companies in ${categoryTitle.toLowerCase()} — tools, resources, and inspiration for your ${categoryTitle.toLowerCase()} journey.`;
+
+const groups = [
+    {
+        id: 'apps',
+        title: 'Apps',
+        items: apps,
+        count: appsInCategory,
+    },
+    {
+        id: 'people',
+        title: 'People',
+        items: persons.filter((p: CategorizedPerson) =>
+            (p.data.tags ?? []).some((t: string) => t.toLowerCase() === category.toLowerCase())
+        ),
+        count: personsInCategory,
+    },
+    {
+        id: 'companies',
+        title: 'Companies',
+        items: companies.filter((c: CategorizedCompany) =>
+            (c.data.tags ?? []).some((t: string) => t.toLowerCase() === category.toLowerCase())
+        ),
+        count: companiesInCategory,
+    },
+].filter((group) => group.count > 0);
+
+const getItemTitle = (item: CategorizedApp | CategorizedPerson | CategorizedCompany) =>
+    'title' in item.data ? item.data.title : item.data.name;
+
+const getItemDescription = (item: CategorizedApp | CategorizedPerson | CategorizedCompany) =>
+    'description' in item.data ? item.data.description : item.data.bio;
+
+const getItemImage = (item: CategorizedApp | CategorizedPerson | CategorizedCompany) =>
+    'logo' in item.data ? item.data.logo : item.data.avatar;
+
+const getCollectionPath = (collection: string) => {
+    if (collection === 'persons') return 'persons';
+    if (collection === 'companies') return 'companies';
+    return 'apps';
+};
+---
+
+<BaseLayout title={`${categoryTitle} | Awesome Bharat`} description={description} tags={[category]}>
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <CollectionHero
+            eyebrow="Category"
+            title={categoryTitle}
+            description={description}
+            countLabel={countLabel}
+            icon={categoryEmoji}
+            pills={groups.map((group) => ({
+                label: `${group.title} (${group.count})`,
+                href: `#${group.id}`,
+            }))}
+        />
+
+        <div class="mt-10 space-y-12">
+            {
+                groups.map((group) => (
+                    <section id={group.id} class="scroll-mt-24">
+                        <div class="mb-4 flex items-end justify-between gap-4">
+                            <div>
+                                <h2 class="font-display text-2xl font-extrabold text-gray-950 dark:text-white">
+                                    {group.title}
+                                </h2>
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    {group.count} {group.count === 1 ? 'match' : 'matches'} for{' '}
+                                    {categoryTitle}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 overflow-x-auto pb-4">
+                            {group.items.map((item) => (
+                                <ContentCardFull
+                                    title={getItemTitle(item)}
+                                    href={`/${getCollectionPath(item.collection)}/${item.slug}`}
+                                    slug={item.slug}
+                                    image={getItemImage(item)}
+                                    description={getItemDescription(item)}
+                                    tags={item.data.tags}
+                                    ctaLabel={
+                                        getPrimaryCTALabel(item.collection, item.data) ?? 'View'
+                                    }
+                                    badge={item.data.featured ? 'Featured' : undefined}
+                                />
+                            ))}
+                        </div>
+                    </section>
+                ))
+            }
+        </div>
+    </div>
+</BaseLayout>

@@ -2,7 +2,8 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import ContentCard from '@components/ContentCard.astro';
+import ContentCard from '@/components/ContentCard.astro';
+import CollectionHero from '@/components/CollectionHero.astro';
 
 const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
 const visibleApps = apps
@@ -15,12 +16,15 @@ const visibleApps = apps
     description="Amazing apps made by Indians, with love, for the globe"
 >
     <div class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
-        <header class="mb-8">
-            <h1 class="text-3xl font-bold mb-2">Apps</h1>
-            <p class="text-base text-gray-600 dark:text-gray-400">
-                Amazing apps made by Indians, with love, for the globe
-            </p>
-        </header>
+        <div class="mb-10">
+            <CollectionHero
+                title="Apps"
+                description="Amazing apps made by Indians, with love, for the globe"
+                countLabel={`${visibleApps.length} apps`}
+                icon="📱"
+                eyebrow="Collection"
+            />
+        </div>
 
         <div
             class="grid

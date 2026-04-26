@@ -5,7 +5,7 @@
 
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import ContentCard from '@components/ContentCard.astro';
+import ContentCard from '@/components/ContentCard.astro';
 
 const [apps, persons, companies] = await Promise.all([
     getCollection('apps'),
@@ -111,14 +111,15 @@ const latestApps = apps
                     aria-label="Scroll left"
                     class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
                  h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center"
-                    onclick="this.nextElementSibling.scrollBy({ left: -320, behavior: 'smooth' })"
+                 text-white items-center justify-center scroll-left"
+                    data-scroll-container="latest-apps"
                 >
                     ‹
                 </button>
 
                 <!-- Scroll container -->
                 <div
+                    id="latest-apps"
                     class="flex gap-5 overflow-x-auto scroll-smooth pb-2
                  snap-x snap-mandatory
                  px-10 md:px-12 scrollbar-hide"
@@ -147,12 +148,31 @@ const latestApps = apps
                     aria-label="Scroll right"
                     class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
                  h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center"
-                    onclick="this.previousElementSibling.scrollBy({ left: 320, behavior: 'smooth' })"
+                 text-white items-center justify-center scroll-right"
+                    data-scroll-container="latest-apps"
                 >
                     ›
                 </button>
             </div>
+
+            <script>
+                // Handle horizontal scroll with data attributes instead of fragile DOM traversal
+                document.querySelectorAll('.scroll-left, .scroll-right').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const containerId = button.getAttribute('data-scroll-container');
+                        if (!containerId) return;
+                        const container = document.getElementById(containerId);
+                        if (container) {
+                            const scrollAmount = 320;
+                            const direction = button.classList.contains('scroll-left') ? -1 : 1;
+                            container.scrollBy({
+                                left: scrollAmount * direction,
+                                behavior: 'smooth',
+                            });
+                        }
+                    });
+                });
+            </script>
 
             <!-- CTA -->
             <div class="mt-10 text-center">

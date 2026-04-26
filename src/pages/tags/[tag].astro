@@ -1,0 +1,172 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CollectionHero from '@/components/CollectionHero.astro';
+import ContentCardFull from '@/components/ContentCardFull.astro';
+import { getPrimaryCTALabel } from '@/utils/ctaUtils.ts';
+
+type TaggedApp = CollectionEntry<'apps'>;
+type TaggedPerson = CollectionEntry<'persons'>;
+type TaggedCompany = CollectionEntry<'companies'>;
+
+interface TagPageProps {
+    tag: string;
+    apps: TaggedApp[];
+    persons: TaggedPerson[];
+    companies: TaggedCompany[];
+}
+
+const formatTagTitle = (tag: string) =>
+    tag
+        .split('-')
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ');
+
+export const getStaticPaths = (async () => {
+    const normalizeTag = (tag: string) => tag.trim().toLowerCase();
+    const sortFeaturedFirst = <T extends { data: { featured?: boolean } }>(items: T[]) =>
+        [...items].sort(
+            (a, b) => Number(Boolean(b.data.featured)) - Number(Boolean(a.data.featured))
+        );
+
+    const [apps, persons, companies] = await Promise.all([
+        getCollection('apps'),
+        getCollection('persons'),
+        getCollection('companies'),
+    ] as const);
+
+    const publishedApps = (apps as TaggedApp[]).filter((item: TaggedApp) => !item.data.draft);
+    const publishedPersons = (persons as TaggedPerson[]).filter(
+        (item: TaggedPerson) => !item.data.draft
+    );
+    const publishedCompanies = (companies as TaggedCompany[]).filter(
+        (item: TaggedCompany) => !item.data.draft
+    );
+
+    const tags = new Set<string>();
+
+    for (const item of [...publishedApps, ...publishedPersons, ...publishedCompanies]) {
+        for (const tag of item.data.tags ?? []) {
+            tags.add(normalizeTag(tag));
+        }
+    }
+
+    return [...tags].map((tag) => {
+        const hasTag = (tags: string[] = []) => tags.map(normalizeTag).includes(tag);
+
+        return {
+            params: { tag },
+            props: {
+                tag,
+                apps: sortFeaturedFirst(
+                    publishedApps.filter((item: TaggedApp) => hasTag(item.data.tags))
+                ),
+                persons: sortFeaturedFirst(
+                    publishedPersons.filter((item: TaggedPerson) => hasTag(item.data.tags))
+                ),
+                companies: sortFeaturedFirst(
+                    publishedCompanies.filter((item: TaggedCompany) => hasTag(item.data.tags))
+                ),
+            },
+        };
+    });
+}) satisfies GetStaticPaths;
+
+const { tag, apps, persons, companies } = Astro.props as TagPageProps;
+const tagTitle = formatTagTitle(tag);
+const totalItems = apps.length + persons.length + companies.length;
+const countLabel = `${totalItems} ${totalItems === 1 ? 'item' : 'items'}`;
+const description = `Indian-made apps, people, and companies connected to ${tagTitle.toLowerCase()}.`;
+
+const groups = [
+    {
+        id: 'apps',
+        title: 'Apps',
+        items: apps,
+        count: apps.length,
+    },
+    {
+        id: 'people',
+        title: 'People',
+        items: persons,
+        count: persons.length,
+    },
+    {
+        id: 'companies',
+        title: 'Companies',
+        items: companies,
+        count: companies.length,
+    },
+].filter((group) => group.count > 0);
+
+const getItemTitle = (item: TaggedApp | TaggedPerson | TaggedCompany) =>
+    'title' in item.data ? item.data.title : item.data.name;
+
+const getItemDescription = (item: TaggedApp | TaggedPerson | TaggedCompany) =>
+    'description' in item.data ? item.data.description : item.data.bio;
+
+const getItemImage = (item: TaggedApp | TaggedPerson | TaggedCompany) =>
+    'logo' in item.data ? item.data.logo : item.data.avatar;
+
+const getCollectionPath = (collection: string) => {
+    if (collection === 'persons') return 'persons';
+    if (collection === 'companies') return 'companies';
+    return 'apps';
+};
+---
+
+<BaseLayout title={`#${tag} | Awesome Bharat`} description={description} tags={[tag]}>
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <CollectionHero
+            eyebrow="Tag"
+            title={`#${tag}`}
+            description={description}
+            countLabel={countLabel}
+            icon="#"
+            pills={groups.map((group) => ({
+                label: `${group.title} (${group.count})`,
+                href: `#${group.id}`,
+            }))}
+        />
+
+        <div class="mt-10 space-y-12">
+            {
+                groups.map((group) => (
+                    <section id={group.id} class="scroll-mt-24">
+                        <div class="mb-4 flex items-end justify-between gap-4">
+                            <div>
+                                <h2 class="font-display text-2xl font-extrabold text-gray-950 dark:text-white">
+                                    {group.title}
+                                </h2>
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    {group.count} {group.count === 1 ? 'match' : 'matches'} for #
+                                    {tag}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 overflow-x-auto pb-4">
+                            {group.items.map((item) => (
+                                <ContentCardFull
+                                    title={getItemTitle(item)}
+                                    href={`/${getCollectionPath(item.collection)}/${item.slug}`}
+                                    slug={item.slug}
+                                    image={getItemImage(item)}
+                                    description={getItemDescription(item)}
+                                    tags={item.data.tags}
+                                    ctaLabel={
+                                        getPrimaryCTALabel(item.collection, item.data) ?? 'View'
+                                    }
+                                    badge={item.data.featured ? 'Featured' : undefined}
+                                />
+                            ))}
+                        </div>
+                    </section>
+                ))
+            }
+        </div>
+    </div>
+</BaseLayout>

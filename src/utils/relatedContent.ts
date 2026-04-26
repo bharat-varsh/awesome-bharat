@@ -4,7 +4,7 @@ export type SupportedCollection = 'apps' | 'persons' | 'companies';
 type SupportedCollectionData = CollectionEntry<SupportedCollection>['data'];
 
 const MATCHING_FIELDS_CONFIG: Record<SupportedCollection, string[]> = {
-    apps: ['tags'],
+    apps: ['tags', 'categories', 'authors'],
     persons: ['tags'],
     companies: ['tags'],
 };
@@ -21,8 +21,26 @@ function calculateRelevanceScore<K extends readonly (keyof SupportedCollectionDa
         const candidateValue = candidateItem[field];
 
         if (Array.isArray(currentValue) && Array.isArray(candidateValue)) {
-            const matches = currentValue.filter((v) => candidateValue.includes(v));
-            score += matches.length;
+            // Check if arrays contain objects (like authors) or primitive values (like tags/categories)
+            const currentHasObjects =
+                currentValue.length > 0 && typeof currentValue[0] === 'object';
+            const candidateHasObjects =
+                candidateValue.length > 0 && typeof candidateValue[0] === 'object';
+
+            if (currentHasObjects && candidateHasObjects) {
+                // For object arrays (e.g., authors), compare by slug property
+                const currentSlugs = new Set(
+                    currentValue.map((v: Record<string, string>) => v.slug).filter(Boolean)
+                );
+                const matches = candidateValue.filter((v: Record<string, string>) =>
+                    currentSlugs.has(v.slug)
+                );
+                score += matches.length;
+            } else if (!currentHasObjects && !candidateHasObjects) {
+                // For primitive arrays (e.g., tags, categories), direct comparison
+                const matches = currentValue.filter((v) => candidateValue.includes(v));
+                score += matches.length;
+            }
         } else if (
             typeof currentValue === 'string' &&
             typeof candidateValue === 'string' &&
@@ -35,7 +53,7 @@ function calculateRelevanceScore<K extends readonly (keyof SupportedCollectionDa
     return score;
 }
 
-function getRelatedContent(
+export function getRelatedContent(
     currentItem: CollectionEntry<SupportedCollection>,
     allItems: Array<CollectionEntry<SupportedCollection>>,
     collectionName: SupportedCollection,

@@ -23,35 +23,3 @@ const { position = 'left', class: customClass = '' } = Astro.props;
         <slot />
     </div>
 </aside>
-
-<style is:global>
-    aside {
-        scrollbar-width: thin;
-        scrollbar-color: #d1d5db #f3f4f6;
-    }
-
-    aside::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    aside::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    aside::-webkit-scrollbar-thumb {
-        background: #d1d5db;
-        border-radius: 3px;
-    }
-
-    aside::-webkit-scrollbar-thumb:hover {
-        background: #9ca3af;
-    }
-
-    :root.dark aside::-webkit-scrollbar-thumb {
-        background: #4b5563;
-    }
-
-    :root.dark aside::-webkit-scrollbar-thumb:hover {
-        background: #6b7280;
-    }
-</style>

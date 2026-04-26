@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import ThemeToggle from './ThemeToggle.astro';
+import brandLogo from '@/assets/images/brand-logo.svg';
 
 // const socials = [
 //     {
@@ -27,14 +28,12 @@ import ThemeToggle from './ThemeToggle.astro';
     class="sticky top-0 z-50 bg-primary-100/80 dark:bg-secondary-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800"
 >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-            class="grid grid-cols-2 md:grid-cols-3 grid-rows-2 md:grid-rows-1 items-center h-auto md:h-16 gap-y-1"
-        >
+        <div class="flex justify-between items-center h-16">
             <!-- Left: Hamburger and Logo -->
-            <div class="flex items-center gap-1 justify-start row-start-1 col-start-1">
+            <div class="flex items-center gap-1 justify-start flex-1">
                 <button
                     id="mobile-nav-toggle"
-                    class="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray--0 focus-outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+                    class="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 dark:focus:bg-gray-800"
                     aria-label="Open menu"
                     aria-expanded="false"
                 >
@@ -67,11 +66,11 @@ import ThemeToggle from './ThemeToggle.astro';
                 </button>
                 <a href="/">
                     <Image
-                        src="/images/brand-logo.svg"
+                        src={brandLogo}
                         alt="Awesome Bharat Logo"
                         class="h-8 md:h-6 lg:h-8 w-auto"
-                        width={36}
-                        height={36}
+                        width={48}
+                        height={32}
                         loading="eager"
                     />
                 </a>
@@ -80,10 +79,7 @@ import ThemeToggle from './ThemeToggle.astro';
             <!-- Center: Title -->
             <a
                 href="/"
-                class="flex flex-col md:flex-row items-center gap-1 md:gap-2 justify-center
-            col-start-1 col-end-3 md:col-start-2 md:col-end-3
-            row-start-1 row-end-3 md:row-start-1
-            text-center my-1 md:my-0"
+                class="flex flex-col md:flex-row items-center gap-1 md:gap-2 justify-center text-center"
             >
                 <span
                     class="group text-lg md:text-xl lg:text-2xl
@@ -101,11 +97,7 @@ import ThemeToggle from './ThemeToggle.astro';
             </a>
 
             <!-- Right: Theme Toggle (single instance) -->
-            <div
-                class="flex items-center gap-1 justify-end
-                row-start-1 col-start-2
-                md:row-start-1 md:col-start-3"
-            >
+            <div class="flex items-center gap-1 justify-end flex-1">
                 <ThemeToggle />
             </div>
         </div>
