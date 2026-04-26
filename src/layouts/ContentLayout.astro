@@ -156,9 +156,12 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
                                 categories.length > 0 && (
                                     <div class="flex flex-wrap gap-2 mt-1">
                                         {categories.slice(0, 2).map((category) => (
-                                            <span class="px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-gray-300">
+                                            <a
+                                                href={`/categories/${category}`}
+                                                class="px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-secondary-700 transition-colors"
+                                            >
                                                 {formatCategoryName(category)}
-                                            </span>
+                                            </a>
                                         ))}
                                     </div>
                                 )
