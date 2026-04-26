@@ -21,16 +21,16 @@ export default {
                     900: '#7c2d12',
                 },
                 secondary: {
-                    50: '#02414E',
-                    100: '#023D49',
-                    200: '#023743',
-                    300: '#02313D',
-                    400: '#012B36',
-                    500: '#01252F',
-                    600: '#011F27',
-                    700: '#011820',
-                    800: '#010F16',
-                    900: '#000708',
+                    50: '#f0fdfa',
+                    100: '#ccfbf1',
+                    200: '#99f6e4',
+                    300: '#5eead4',
+                    400: '#2dd4bf',
+                    500: '#14b8a6',
+                    600: '#0d9488',
+                    700: '#0f766e',
+                    800: '#115e59',
+                    900: '#134e4a',
                 },
             },
             typography: (theme) => ({
@@ -46,6 +46,8 @@ export default {
                         },
                         'h1, h2, h3, h4, h5, h6': {
                             color: theme('colors.gray.900'),
+                            'font-family':
+                                "'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                         },
                         code: {
                             color: theme('colors.pink.600'),
@@ -75,6 +77,8 @@ export default {
                         },
                         'h1, h2, h3, h4, h5, h6': {
                             color: theme('colors.gray.100'),
+                            'font-family':
+                                "'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
                         },
                         strong: {
                             color: theme('colors.gray.100'),
