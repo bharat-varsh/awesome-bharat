@@ -2,8 +2,10 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import ContentCard from '@/components/ContentCard.astro';
+import ContentCardFull from '@/components/ContentCardFull.astro';
 import CollectionHero from '@/components/CollectionHero.astro';
+import { getPrimaryCTALabel, getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
+import { resolveLogo } from '@/utils/imageResolvers.ts';
 
 const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
 const visibleApps = apps
@@ -26,25 +28,33 @@ const visibleApps = apps
             />
         </div>
 
-        <div
-            class="grid
-            grid-cols-[repeat(auto-fit,minmax(140px,1fr))]
-            sm:grid-cols-[repeat(auto-fit,minmax(160px,1fr))]
-            md:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]
-            gap-x-2
-            gap-y-8
-            justify-items-center"
-        >
+        <div class="grid
+        grid-cols-[repeat(auto-fit,minmax(280px,1fr))]
+        gap-6">
             {
-                visibleApps.map((app) => (
-                    <ContentCard
-                        title={app.data.title}
-                        href={`/apps/${app.slug}`}
-                        image={app.data.logo}
-                        slug={app.slug}
-                        tags={app.data.tags}
-                    />
-                ))
+                visibleApps.map((app) => {
+                    const ctaLabel = getPrimaryCTALabel('apps', app.data);
+                    const ctaUrl = getPrimaryCTAUrl('apps', app.data);
+
+                    return (
+                        <ContentCardFull
+                            title={app.data.title}
+                            description={app.data.description}
+                            slug={app.slug}
+                            collection="apps"
+                            logoSrc={
+                                app.data.logo ? resolveLogo(app.slug, app.data.logo) : undefined
+                            }
+                            domains={app.data.tags
+                                ?.filter((tag: string) => tag.startsWith('domain:'))
+                                ?.map((tag: string) => tag.replace('domain:', ''))}
+                            categories={app.data.categories}
+                            ctaLabel={ctaLabel}
+                            ctaUrl={ctaUrl}
+                            featured={app.data.featured}
+                        />
+                    );
+                })
             }
         </div>
     </div>

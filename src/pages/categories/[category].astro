@@ -5,7 +5,9 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CollectionHero from '@/components/CollectionHero.astro';
 import ContentCardFull from '@/components/ContentCardFull.astro';
-import { getPrimaryCTALabel } from '@/utils/ctaUtils.ts';
+import { getPrimaryCTALabel, getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
+import { resolveLogo } from '@/utils/imageResolvers.ts';
+import { formatCategoryName } from '@/utils/textUtils.ts';
 
 type CategorizedApp = CollectionEntry<'apps'>;
 type CategorizedPerson = CollectionEntry<'persons'>;
@@ -18,13 +20,6 @@ interface CategoryPageProps {
     companies: CategorizedCompany[];
 }
 
-const formatCategoryTitle = (category: string): string => {
-    if (!category) return '';
-    const spaced = category
-        .replace(/([a-z])([A-Z])/g, '$1 $2')
-        .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
-    return spaced.charAt(0).toUpperCase() + spaced.slice(1).toLowerCase();
-};
 
 // Category emoji mapping
 const categoryEmojis: Record<string, string> = {
@@ -100,7 +95,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { category, apps, persons, companies } = Astro.props as CategoryPageProps;
-const categoryTitle = formatCategoryTitle(category);
+const categoryTitle = formatCategoryName(category);
 const categoryEmoji = categoryEmojis[category] || '📂';
 
 // Count items in each collection that have this category
@@ -149,12 +144,6 @@ const getItemDescription = (item: CategorizedApp | CategorizedPerson | Categoriz
 
 const getItemImage = (item: CategorizedApp | CategorizedPerson | CategorizedCompany) =>
     'logo' in item.data ? item.data.logo : item.data.avatar;
-
-const getCollectionPath = (collection: string) => {
-    if (collection === 'persons') return 'persons';
-    if (collection === 'companies') return 'companies';
-    return 'apps';
-};
 ---
 
 <BaseLayout title={`${categoryTitle} | Awesome Bharat`} description={description} tags={[category]}>
@@ -191,15 +180,27 @@ const getCollectionPath = (collection: string) => {
                             {group.items.map((item) => (
                                 <ContentCardFull
                                     title={getItemTitle(item)}
-                                    href={`/${getCollectionPath(item.collection)}/${item.slug}`}
-                                    slug={item.slug}
-                                    image={getItemImage(item)}
                                     description={getItemDescription(item)}
-                                    tags={item.data.tags}
+                                    slug={item.slug}
+                                    collection={item.collection}
+                                    logoSrc={
+                                        getItemImage(item)
+                                            ? resolveLogo(item.slug, getItemImage(item))
+                                            : undefined
+                                    }
+                                    domains={item.data.tags
+                                        ?.filter((tag: string) => tag.startsWith('domain:'))
+                                        ?.map((tag: string) => tag.replace('domain:', ''))}
+                                    categories={
+                                        item.collection === 'apps'
+                                            ? item.data.categories
+                                            : undefined
+                                    }
                                     ctaLabel={
                                         getPrimaryCTALabel(item.collection, item.data) ?? 'View'
                                     }
-                                    badge={item.data.featured ? 'Featured' : undefined}
+                                    ctaUrl={getPrimaryCTAUrl(item.collection, item.data)}
+                                    featured={item.data.featured}
                                 />
                             ))}
                         </div>
