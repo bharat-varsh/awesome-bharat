@@ -17,5 +17,4 @@ pnpm-debug.log*
 .astro/
 
 # Planning files
-planning/
 future-planning/
