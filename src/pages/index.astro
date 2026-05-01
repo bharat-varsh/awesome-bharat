@@ -157,7 +157,17 @@ function formatCategory(category: string) {
                                 href={`/apps/${app.slug}`}
                                 image={app.data.logo}
                                 slug={app.slug}
-                                tags={app.data.tags}
+                                tags={[
+                                    nonDraftPersons.find(
+                                        (p: CollectionEntry<'persons'>) =>
+                                            p.slug === app.data.authors?.[0]?.slug
+                                    )?.data.name ||
+                                        nonDraftCompanies.find(
+                                            (c: CollectionEntry<'companies'>) =>
+                                                c.slug === app.data.authors?.[0]?.slug
+                                        )?.data.name ||
+                                        'Unknown',
+                                ]}
                                 class="snap-start"
                             />
                         ))
