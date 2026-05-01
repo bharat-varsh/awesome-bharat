@@ -163,9 +163,7 @@ const getItemImage = (item: TaggedApp | TaggedPerson | TaggedCompany) =>
                                             ? item.data.categories
                                             : undefined
                                     }
-                                    ctaLabel={
-                                        getPrimaryCTALabel(item.collection, item.data) ?? 'View'
-                                    }
+                                        ctaLabel='View More'
                                     ctaUrl={getPrimaryCTAUrl(item.collection, item.data)}
                                     featured={item.data.featured}
                                 />
