@@ -24,65 +24,65 @@ This document defines the visual identity, component catalog, and layout pattern
 
 The brand color — used for CTAs, highlights, active states, and celebratory elements.
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `primary-50` | Lightest cream | Page background (light mode) |
-| `primary-100` | Light peach | Card backgrounds, hover states |
-| `primary-200` | Soft orange | Borders, dividers |
-| `primary-300` | Medium orange | Secondary text accents |
-| `primary-400` | Orange | Icons, badges |
-| `primary-500` | Vivid orange | Primary buttons, links |
-| `primary-600` | Deep orange | Button hover, active links |
-| `primary-700` | Dark orange | Headings accent |
-| `primary-800` | Very dark | High-contrast text on light |
-| `primary-900` | Near black | Body text alternative |
+| Token         | Hex            | Usage                          |
+| ------------- | -------------- | ------------------------------ |
+| `primary-50`  | Lightest cream | Page background (light mode)   |
+| `primary-100` | Light peach    | Card backgrounds, hover states |
+| `primary-200` | Soft orange    | Borders, dividers              |
+| `primary-300` | Medium orange  | Secondary text accents         |
+| `primary-400` | Orange         | Icons, badges                  |
+| `primary-500` | Vivid orange   | Primary buttons, links         |
+| `primary-600` | Deep orange    | Button hover, active links     |
+| `primary-700` | Dark orange    | Headings accent                |
+| `primary-800` | Very dark      | High-contrast text on light    |
+| `primary-900` | Near black     | Body text alternative          |
 
 ### Secondary Palette (Teal)
 
 The supporting color — used for dark mode backgrounds, information elements, and contrast.
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `secondary-50` | Lightest teal | Subtle backgrounds |
-| `secondary-100` | Light teal | Info badges |
-| `secondary-200` | Soft teal | Borders in dark mode |
-| `secondary-300` | Medium teal | Muted text (dark mode) |
-| `secondary-400` | Teal | Secondary buttons |
-| `secondary-500` | Vivid teal | Dark mode sidebar bg |
-| `secondary-600` | Deep teal | Dark mode card bg |
-| `secondary-700` | Dark teal | Dark mode surface |
-| `secondary-800` | Very dark teal | Dark mode base bg |
-| `secondary-900` | Near black | Dark mode body |
+| Token           | Hex            | Usage                  |
+| --------------- | -------------- | ---------------------- |
+| `secondary-50`  | Lightest teal  | Subtle backgrounds     |
+| `secondary-100` | Light teal     | Info badges            |
+| `secondary-200` | Soft teal      | Borders in dark mode   |
+| `secondary-300` | Medium teal    | Muted text (dark mode) |
+| `secondary-400` | Teal           | Secondary buttons      |
+| `secondary-500` | Vivid teal     | Dark mode sidebar bg   |
+| `secondary-600` | Deep teal      | Dark mode card bg      |
+| `secondary-700` | Dark teal      | Dark mode surface      |
+| `secondary-800` | Very dark teal | Dark mode base bg      |
+| `secondary-900` | Near black     | Dark mode body         |
 
 **Note**: The secondary scale follows standard Tailwind convention (50 = lightest, 900 = darkest). This was corrected in Phase 0.
 
 ### Semantic Colors
 
-| Purpose | Light Mode | Dark Mode |
-|---------|-----------|-----------|
-| Body background | `primary-50` | `secondary-900` |
-| Surface/Card | `white` | `secondary-800` |
-| Sidebar | `white` | `secondary-700` |
-| Primary text | `gray-900` | `gray-100` |
-| Secondary text | `gray-600` | `gray-400` |
-| Border | `gray-200` | `secondary-600` |
-| Success/Positive | `green-600` | `green-400` |
-| Warning | `amber-600` | `amber-400` |
-| Accent | `primary-500` | `primary-400` |
+| Purpose          | Light Mode    | Dark Mode       |
+| ---------------- | ------------- | --------------- |
+| Body background  | `primary-50`  | `secondary-900` |
+| Surface/Card     | `white`       | `secondary-800` |
+| Sidebar          | `white`       | `secondary-700` |
+| Primary text     | `gray-900`    | `gray-100`      |
+| Secondary text   | `gray-600`    | `gray-400`      |
+| Border           | `gray-200`    | `secondary-600` |
+| Success/Positive | `green-600`   | `green-400`     |
+| Warning          | `amber-600`   | `amber-400`     |
+| Accent           | `primary-500` | `primary-400`   |
 
 ### Badge Colors
 
-| Badge Type | Background | Text |
-|-----------|-----------|------|
-| Free / No Ads | `green-100` | `green-800` |
-| Open Source | `blue-100` | `blue-800` |
-| Works Offline | `purple-100` | `purple-800` |
-| Paid | `amber-100` | `amber-800` |
-| Has Ads | `red-100` | `red-800` |
-| Closed Source | `gray-100` | `gray-800` |
-| Domain tag | `primary-100` | `primary-800` |
-| Category | `secondary-100` | `secondary-800` |
-| Featured | `yellow-100` border `yellow-400` | `yellow-800` |
+| Badge Type    | Background                       | Text            |
+| ------------- | -------------------------------- | --------------- |
+| Free / No Ads | `green-100`                      | `green-800`     |
+| Open Source   | `blue-100`                       | `blue-800`      |
+| Works Offline | `purple-100`                     | `purple-800`    |
+| Paid          | `amber-100`                      | `amber-800`     |
+| Has Ads       | `red-100`                        | `red-800`       |
+| Closed Source | `gray-100`                       | `gray-800`      |
+| Domain tag    | `primary-100`                    | `primary-800`   |
+| Category      | `secondary-100`                  | `secondary-800` |
+| Featured      | `yellow-100` border `yellow-400` | `yellow-800`    |
 
 ---
 
@@ -96,14 +96,14 @@ The supporting color — used for dark mode backgrounds, information elements, a
 
 ### Scale
 
-| Element | Size | Weight | Line Height |
-|---------|------|--------|-------------|
-| h1 (page title) | `text-3xl` / `md:text-4xl` | `font-bold` (700) | `leading-tight` |
-| h2 (section heading) | `text-2xl` | `font-semibold` (600) | `leading-snug` |
-| h3 (card title) | `text-lg` / `text-xl` | `font-semibold` (600) | `leading-snug` |
-| Body | `text-base` (16px) | `font-normal` (400) | `leading-relaxed` |
-| Small/meta | `text-sm` (14px) | `font-normal` (400) | `leading-normal` |
-| Caption/label | `text-xs` (12px) | `font-medium` (500) | `leading-normal` |
+| Element              | Size                       | Weight                | Line Height       |
+| -------------------- | -------------------------- | --------------------- | ----------------- |
+| h1 (page title)      | `text-3xl` / `md:text-4xl` | `font-bold` (700)     | `leading-tight`   |
+| h2 (section heading) | `text-2xl`                 | `font-semibold` (600) | `leading-snug`    |
+| h3 (card title)      | `text-lg` / `text-xl`      | `font-semibold` (600) | `leading-snug`    |
+| Body                 | `text-base` (16px)         | `font-normal` (400)   | `leading-relaxed` |
+| Small/meta           | `text-sm` (14px)           | `font-normal` (400)   | `leading-normal`  |
+| Caption/label        | `text-xs` (12px)           | `font-medium` (500)   | `leading-normal`  |
 
 ### Heading Treatment
 
@@ -119,34 +119,36 @@ The supporting color — used for dark mode backgrounds, information elements, a
 
 Use Tailwind's default spacing scale. Key values:
 
-| Context | Spacing |
-|---------|---------|
-| Page padding (mobile) | `px-4` |
-| Page padding (desktop) | `px-8` |
-| Section gap | `space-y-12` or `gap-12` |
-| Card grid gap | `gap-4` or `gap-6` |
-| Card internal padding | `p-4` |
-| Badge/pill padding | `px-3 py-1` |
+| Context                | Spacing                  |
+| ---------------------- | ------------------------ |
+| Page padding (mobile)  | `px-4`                   |
+| Page padding (desktop) | `px-8`                   |
+| Section gap            | `space-y-12` or `gap-12` |
+| Card grid gap          | `gap-4` or `gap-6`       |
+| Card internal padding  | `p-4`                    |
+| Badge/pill padding     | `px-3 py-1`              |
 
 ### Grid System
 
-| Context | Grid Definition |
-|---------|-----------------|
-| Listing page grid | `grid-cols-[repeat(auto-fill,minmax(280px,1fr))]` |
-| Homepage scroll row | Flex row, `overflow-x-auto`, `gap-4` |
-| Domain page groups | Full-width sections, stacked vertically |
-| Right sidebar | Single column, `w-72` on desktop |
-| Footer | `grid-cols-1 md:grid-cols-3` |
+| Context             | Grid Definition                                   |
+| ------------------- | ------------------------------------------------- |
+| Listing page grid   | `grid-cols-[repeat(auto-fill,minmax(280px,1fr))]` |
+| Homepage scroll row | Flex row, `overflow-x-auto`, `gap-4`              |
+| Domain page groups  | Full-width sections, stacked vertically           |
+| Right sidebar       | Single column, `w-72` on desktop                  |
+| Footer              | `grid-cols-1 md:grid-cols-3`                      |
 
 ### Breakpoints
 
 Standard Tailwind breakpoints:
+
 - `sm`: 640px
 - `md`: 768px
 - `lg`: 1024px
 - `xl`: 1280px
 
 Key responsive behaviors:
+
 - Left sidebar: Hidden below `lg`, shown as fixed sidebar on `lg+`
 - Right sidebar: Hidden below `lg`, shown as scrollable aside on `lg+`
 - Mobile nav: Shown below `lg`, hidden on `lg+`
@@ -270,10 +272,10 @@ Design inspiration: Xbox achievements, GitHub contribution badges, Duolingo stre
 ```
 
 - Background: light tint of the action type color
-  - Volunteer: `green-50`
-  - Donate: `amber-50`
-  - Promote: `blue-50`
-  - Collaborate: `purple-50`
+    - Volunteer: `green-50`
+    - Donate: `amber-50`
+    - Promote: `blue-50`
+    - Collaborate: `purple-50`
 - Bold CTA button at bottom
 - Icon prominent and large (32px)
 - Border-radius: `rounded-xl`
@@ -464,12 +466,12 @@ Design inspiration: Xbox achievements, GitHub contribution badges, Duolingo stre
 
 ### Buttons
 
-| Variant | Style | Usage |
-|---------|-------|-------|
-| Primary | `bg-primary-500 text-white hover:bg-primary-600 rounded-lg px-6 py-2.5 font-medium` | Main CTA (Download, Subscribe) |
-| Secondary | `border border-primary-500 text-primary-600 hover:bg-primary-50 rounded-lg px-4 py-2` | Secondary actions |
-| Ghost | `text-primary-600 hover:bg-primary-50 rounded-lg px-3 py-1.5` | Tertiary, inline actions |
-| Pill/Badge | `bg-gray-100 text-gray-700 rounded-full px-3 py-1 text-sm` | Filters, tags |
+| Variant    | Style                                                                                 | Usage                          |
+| ---------- | ------------------------------------------------------------------------------------- | ------------------------------ |
+| Primary    | `bg-primary-500 text-white hover:bg-primary-600 rounded-lg px-6 py-2.5 font-medium`   | Main CTA (Download, Subscribe) |
+| Secondary  | `border border-primary-500 text-primary-600 hover:bg-primary-50 rounded-lg px-4 py-2` | Secondary actions              |
+| Ghost      | `text-primary-600 hover:bg-primary-50 rounded-lg px-3 py-1.5`                         | Tertiary, inline actions       |
+| Pill/Badge | `bg-gray-100 text-gray-700 rounded-full px-3 py-1 text-sm`                            | Filters, tags                  |
 
 ### Links
 
@@ -504,17 +506,17 @@ Implemented via class-based toggle (`dark` class on `<html>`).
 
 ### Dark Mode Color Mapping
 
-| Element | Light | Dark |
-|---------|-------|------|
-| Body bg | `bg-primary-50` | `bg-secondary-900` |
-| Card bg | `bg-white` | `bg-secondary-800` |
-| Card border | `border-gray-200` | `border-secondary-600` |
-| Text primary | `text-gray-900` | `text-gray-100` |
-| Text secondary | `text-gray-600` | `text-gray-400` |
-| Sidebar bg | `bg-white` | `bg-secondary-700` |
-| CTA button | `bg-primary-500` | `bg-primary-500` (unchanged) |
-| Badge bg | `[color]-100` | `[color]-900` with `text-[color]-200` |
-| Achievement card | Gradient stays vibrant | Slightly muted gradient |
+| Element          | Light                  | Dark                                  |
+| ---------------- | ---------------------- | ------------------------------------- |
+| Body bg          | `bg-primary-50`        | `bg-secondary-900`                    |
+| Card bg          | `bg-white`             | `bg-secondary-800`                    |
+| Card border      | `border-gray-200`      | `border-secondary-600`                |
+| Text primary     | `text-gray-900`        | `text-gray-100`                       |
+| Text secondary   | `text-gray-600`        | `text-gray-400`                       |
+| Sidebar bg       | `bg-white`             | `bg-secondary-700`                    |
+| CTA button       | `bg-primary-500`       | `bg-primary-500` (unchanged)          |
+| Badge bg         | `[color]-100`          | `[color]-900` with `text-[color]-200` |
+| Achievement card | Gradient stays vibrant | Slightly muted gradient               |
 
 ---
 
@@ -522,15 +524,15 @@ Implemented via class-based toggle (`dark` class on `<html>`).
 
 ### Sizes
 
-| Context | Dimensions | Format |
-|---------|-----------|--------|
-| Logo (detail header) | 96×96px | WebP (eager load) |
-| Logo (ContentCard) | 48×48px | WebP |
-| Logo (ContentCardFull) | 56×56px | WebP |
-| Logo (sidebar item) | 32×32px | WebP |
-| Screenshots | Original aspect | WebP (lazy load) |
-| OG/social cards | 1200×630px | PNG |
-| Milestone thumbnails | 160×90px | WebP |
+| Context                | Dimensions      | Format            |
+| ---------------------- | --------------- | ----------------- |
+| Logo (detail header)   | 96×96px         | WebP (eager load) |
+| Logo (ContentCard)     | 48×48px         | WebP              |
+| Logo (ContentCardFull) | 56×56px         | WebP              |
+| Logo (sidebar item)    | 32×32px         | WebP              |
+| Screenshots            | Original aspect | WebP (lazy load)  |
+| OG/social cards        | 1200×630px      | PNG               |
+| Milestone thumbnails   | 160×90px        | WebP              |
 
 ### Format Preferences
 
@@ -565,15 +567,15 @@ Implemented via class-based toggle (`dark` class on `<html>`).
 
 ### Standard Transitions
 
-| Interaction | Animation |
-|-------------|-----------|
-| Card hover | `transform: translateY(-2px)` + `box-shadow` increase, 200ms ease |
-| Button hover | Background color shift, 150ms ease |
-| Dropdown open | `opacity` 0→1 + `scale` 0.95→1, 200ms ease-out |
-| Dropdown close | `opacity` 1→0 + `scale` 1→0.95, 150ms ease-in |
-| Page load | Content fades in, 300ms |
-| Tab switch | Content cross-fades, 200ms |
-| Achievement card (first view) | Subtle glow pulse, 600ms, once |
+| Interaction                   | Animation                                                         |
+| ----------------------------- | ----------------------------------------------------------------- |
+| Card hover                    | `transform: translateY(-2px)` + `box-shadow` increase, 200ms ease |
+| Button hover                  | Background color shift, 150ms ease                                |
+| Dropdown open                 | `opacity` 0→1 + `scale` 0.95→1, 200ms ease-out                    |
+| Dropdown close                | `opacity` 1→0 + `scale` 1→0.95, 150ms ease-in                     |
+| Page load                     | Content fades in, 300ms                                           |
+| Tab switch                    | Content cross-fades, 200ms                                        |
+| Achievement card (first view) | Subtle glow pulse, 600ms, once                                    |
 
 ### Scroll Behavior
 

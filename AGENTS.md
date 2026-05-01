@@ -1,6 +1,7 @@
 # Awesome Bharat - Project Documentation
 
 > **Planning Documents**: For detailed project strategy, architecture, and guidelines, see the `planning/` folder:
+>
 > - [`planning/VISION.md`](planning/VISION.md) — Mission, philosophy, hard boundaries, success criteria
 > - [`planning/CONTENT-ARCHITECTURE.md`](planning/CONTENT-ARCHITECTURE.md) — All content types, schemas, dual taxonomy, Opportunities section
 > - [`planning/ROADMAP.md`](planning/ROADMAP.md) — Phased delivery plan (6 phases)
@@ -23,18 +24,18 @@ The site exists to break the notion that India has nothing noteworthy, to bring 
 
 ### Primary CTA by Content Type
 
-| Content type      | Primary CTA    | Source field                   |
-| ----------------- | -------------- | ------------------------------ |
-| App               | Download       | `storeLinks`                   |
-| Open-source repo  | Contribute     | `repositoryLinks`              |
-| Person            | Follow / Visit | `socials` or `website`         |
-| Company           | Visit          | `website`                      |
-| YouTube channel   | Subscribe      | `channelUrl`                   |
-| Product           | Buy            | `buyUrl` or `website`          |
-| Blog              | Read           | `url`                          |
-| Community         | Join           | `joinUrl`                      |
-| Podcast           | Listen         | `platforms[0]`                 |
-| Initiative        | Get Involved   | `howToHelp[0].url` or `website`|
+| Content type     | Primary CTA    | Source field                    |
+| ---------------- | -------------- | ------------------------------- |
+| App              | Download       | `storeLinks`                    |
+| Open-source repo | Contribute     | `repositoryLinks`               |
+| Person           | Follow / Visit | `socials` or `website`          |
+| Company          | Visit          | `website`                       |
+| YouTube channel  | Subscribe      | `channelUrl`                    |
+| Product          | Buy            | `buyUrl` or `website`           |
+| Blog             | Read           | `url`                           |
+| Community        | Join           | `joinUrl`                       |
+| Podcast          | Listen         | `platforms[0]`                  |
+| Initiative       | Get Involved   | `howToHelp[0].url` or `website` |
 
 ---
 

@@ -40,14 +40,14 @@ npm run preview      # Preview production build locally
 
 ## Commands
 
-| Command | Purpose | When to Use |
-|---------|---------|-------------|
-| `npm run dev` | Start dev server with hot reload | During active development |
-| `npm run build` | Full production build (format + lint + check + build) | Before committing ANY change |
-| `npm run preview` | Preview built site locally | After build, to visually verify |
-| `npm run lint` | ESLint check | Quick syntax/style check |
-| `npm run lint:fix` | ESLint auto-fix | Fix lint issues |
-| `npm run format` | Prettier formatting | Auto-format all files |
+| Command            | Purpose                                               | When to Use                     |
+| ------------------ | ----------------------------------------------------- | ------------------------------- |
+| `npm run dev`      | Start dev server with hot reload                      | During active development       |
+| `npm run build`    | Full production build (format + lint + check + build) | Before committing ANY change    |
+| `npm run preview`  | Preview built site locally                            | After build, to visually verify |
+| `npm run lint`     | ESLint check                                          | Quick syntax/style check        |
+| `npm run lint:fix` | ESLint auto-fix                                       | Fix lint issues                 |
+| `npm run format`   | Prettier formatting                                   | Auto-format all files           |
 
 **Critical**: Always run `npm run build` before considering any task complete. This catches TypeScript errors, schema validation failures, and broken imports.
 
@@ -83,8 +83,8 @@ import { formatDate } from '@/utils/dateUtils';
 
 // 2. Props interface
 interface Props {
-  title: string;
-  description?: string;
+    title: string;
+    description?: string;
 }
 
 // 3. Props destructuring
@@ -97,17 +97,17 @@ const sortedApps = apps.sort((a, b) => b.data.date.getTime() - a.data.date.getTi
 
 <!-- 5. Template markup -->
 <div class="...">
-  <h1>{title}</h1>
+    <h1>{title}</h1>
 </div>
 
 <!-- 6. Script (if needed) -->
 <script>
-  // Client-side interactivity
+    // Client-side interactivity
 </script>
 
 <!-- 7. Scoped styles (if needed, prefer Tailwind classes) -->
 <style>
-  /* Component-specific styles only */
+    /* Component-specific styles only */
 </style>
 ```
 
@@ -151,17 +151,18 @@ const logoSrc = resolveLogo(slug, data.logo);
 <button data-scroll-right>→</button>
 
 <script>
-  document.querySelectorAll('[data-scroll-left]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const container = btn.closest('[data-scroll-wrapper]')
-        ?.querySelector('[data-scroll-container]');
-      container?.scrollBy({ left: -300, behavior: 'smooth' });
+    document.querySelectorAll('[data-scroll-left]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const container = btn
+                .closest('[data-scroll-wrapper]')
+                ?.querySelector('[data-scroll-container]');
+            container?.scrollBy({ left: -300, behavior: 'smooth' });
+        });
     });
-  });
 </script>
 
 <!-- ❌ NEVER use inline onclick handlers -->
-<button onclick="this.nextElementSibling.scrollBy(...)">
+<button onclick="this.nextElementSibling.scrollBy(...)"></button>
 ```
 
 ---
@@ -266,6 +267,7 @@ npm run build
 ```
 
 Must pass with zero errors. Common failures:
+
 - Missing required frontmatter fields
 - Invalid enum values (typo in category/domain)
 - Slug reference to non-existent person/company
@@ -280,6 +282,7 @@ Use this workflow when building new features or UI components.
 ### Step 1: Check Roadmap
 
 Read `planning/ROADMAP.md` to identify:
+
 - Which phase is currently active
 - What task to work on next
 - Dependencies and prerequisites
@@ -287,6 +290,7 @@ Read `planning/ROADMAP.md` to identify:
 ### Step 2: Understand Requirements
 
 Read the task description in ROADMAP.md. Cross-reference:
+
 - `planning/DESIGN-SYSTEM.md` for visual patterns
 - `planning/CONTENT-ARCHITECTURE.md` for data structures
 - Existing similar components for implementation patterns
@@ -296,6 +300,7 @@ Read the task description in ROADMAP.md. Cross-reference:
 Follow these patterns:
 
 **New Component**:
+
 1. Create `src/components/ComponentName.astro`
 2. Define `Props` interface
 3. Implement markup with Tailwind classes
@@ -303,6 +308,7 @@ Follow these patterns:
 5. Add to relevant pages
 
 **New Page Type**:
+
 1. Create `src/pages/[type]/index.astro` (listing)
 2. Create `src/pages/[type]/[slug].astro` (detail)
 3. Implement `getStaticPaths()` for dynamic routes
@@ -310,6 +316,7 @@ Follow these patterns:
 5. Add to sidebar navigation
 
 **New Utility**:
+
 1. Create in `src/utils/` with descriptive name
 2. Export typed functions
 3. Add JSDoc for non-obvious logic
@@ -322,6 +329,7 @@ npm run build
 ```
 
 Additionally:
+
 - Check visually in dev mode (`npm run dev`)
 - Test responsive behavior (mobile, tablet, desktop)
 - Verify dark mode appearance
@@ -372,6 +380,7 @@ Before considering ANY task complete, verify all items:
 
 **Problem**: Build fails with cryptic Zod errors.
 **Fix**: Check `src/content/config.ts` for the exact field types. Common issues:
+
 - Using `"open"` instead of `"open-source"` for source
 - Missing `date` field (required for apps)
 - Using array for single-value field or vice versa
@@ -399,7 +408,8 @@ Before considering ANY task complete, verify all items:
 ### Astro Image Component
 
 **Problem**: `<Image>` renders broken or unoptimized.
-**Fix**: 
+**Fix**:
+
 - Never pass plain string paths (`"/images/foo.png"`)
 - Always use imported assets or the imageRegistry
 - Set explicit `width` and `height`
@@ -411,20 +421,21 @@ Before considering ANY task complete, verify all items:
 
 ### Content Entries (MDX)
 
-| Collection | Naming Pattern | Example |
-|-----------|----------------|---------|
-| Apps | `app-name.mdx` (lowercase, kebab-case) | `mindful.mdx`, `google-pay.mdx` |
-| Persons | `first-last.mdx` | `pawan-nagar.mdx`, `priya-sharma.mdx` |
-| Companies | `company-name.mdx` | `last-hope-devs.mdx`, `razorpay.mdx` |
-| Channels | `channel-name.mdx` | `fireship.mdx`, `code-with-harry.mdx` |
-| Products | `product-name.mdx` | `boat-rockerz.mdx` |
-| Blogs | `blog-name.mdx` | `daily-dev-tips.mdx` |
-| Projects | `project-name.mdx` | `upi-spec.mdx` |
-| Communities | `community-name.mdx` | `reactjs-india.mdx` |
-| Podcasts | `podcast-name.mdx` | `the-ken.mdx` |
-| Initiatives | `initiative-name.mdx` | `clean-india-movement.mdx` |
+| Collection  | Naming Pattern                         | Example                               |
+| ----------- | -------------------------------------- | ------------------------------------- |
+| Apps        | `app-name.mdx` (lowercase, kebab-case) | `mindful.mdx`, `google-pay.mdx`       |
+| Persons     | `first-last.mdx`                       | `pawan-nagar.mdx`, `priya-sharma.mdx` |
+| Companies   | `company-name.mdx`                     | `last-hope-devs.mdx`, `razorpay.mdx`  |
+| Channels    | `channel-name.mdx`                     | `fireship.mdx`, `code-with-harry.mdx` |
+| Products    | `product-name.mdx`                     | `boat-rockerz.mdx`                    |
+| Blogs       | `blog-name.mdx`                        | `daily-dev-tips.mdx`                  |
+| Projects    | `project-name.mdx`                     | `upi-spec.mdx`                        |
+| Communities | `community-name.mdx`                   | `reactjs-india.mdx`                   |
+| Podcasts    | `podcast-name.mdx`                     | `the-ken.mdx`                         |
+| Initiatives | `initiative-name.mdx`                  | `clean-india-movement.mdx`            |
 
 **Rules**:
+
 - Always lowercase
 - Use hyphens (kebab-case), never underscores or spaces
 - Keep short but descriptive
@@ -432,19 +443,19 @@ Before considering ANY task complete, verify all items:
 
 ### Components
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Layout | `PascalCase.astro` | `BaseLayout.astro`, `ContentLayout.astro` |
+| Type      | Pattern            | Example                                      |
+| --------- | ------------------ | -------------------------------------------- |
+| Layout    | `PascalCase.astro` | `BaseLayout.astro`, `ContentLayout.astro`    |
 | Component | `PascalCase.astro` | `ContentCard.astro`, `AchievementCard.astro` |
-| Utility | `camelCase.ts` | `ctaUtils.ts`, `domainUtils.ts` |
+| Utility   | `camelCase.ts`     | `ctaUtils.ts`, `domainUtils.ts`              |
 
 ### Images
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Logo | `{slug}.{ext}` | `mindful.png`, `neend.webp` |
-| Badge | `badge-{store}.svg` | `badge-playstore.svg` |
-| Generic | `descriptive-name.{ext}` | `brand-logo.svg` |
+| Type    | Pattern                  | Example                     |
+| ------- | ------------------------ | --------------------------- |
+| Logo    | `{slug}.{ext}`           | `mindful.png`, `neend.webp` |
+| Badge   | `badge-{store}.svg`      | `badge-playstore.svg`       |
+| Generic | `descriptive-name.{ext}` | `brand-logo.svg`            |
 
 ---
 
@@ -453,36 +464,40 @@ Before considering ANY task complete, verify all items:
 ### Person ↔ App
 
 The app references the person via `authors`:
+
 ```yaml
 # In apps/mindful.mdx
 authors:
-    - slug: pawan-nagar        # Must match persons/pawan-nagar.mdx filename
+    - slug: pawan-nagar # Must match persons/pawan-nagar.mdx filename
       type: person
 ```
 
 ### Company ↔ Person
 
 The company references members:
+
 ```yaml
 # In companies/last-hope-devs.mdx
 members:
-    - slug: pawan-nagar        # Must match persons/pawan-nagar.mdx filename
+    - slug: pawan-nagar # Must match persons/pawan-nagar.mdx filename
       role: owner
 ```
 
 ### App ↔ Company
 
 The app references the company as author:
+
 ```yaml
 # In apps/neend.mdx
 authors:
-    - slug: purple-bot         # Must match companies/purple-bot.mdx filename
+    - slug: purple-bot # Must match companies/purple-bot.mdx filename
       type: company
 ```
 
 ### Cross-Type via Tags
 
 Entries across different collections connect through shared tags:
+
 ```yaml
 # All these entries share the tag 'digital-detox' and will appear together on /tags/digital-detox/
 # apps/mindful.mdx → tags: [digital-detox, focus]
@@ -493,6 +508,7 @@ Entries across different collections connect through shared tags:
 ### Cross-Type via Domains
 
 Entries connect through shared domains:
+
 ```yaml
 # All these appear together on /domains/health/
 # apps/neend.mdx → domains: [health]
@@ -504,12 +520,12 @@ Entries connect through shared domains:
 
 ## Reference Documents
 
-| Document | When to Reference |
-|----------|-------------------|
-| `planning/VISION.md` | Understanding project mission and boundaries |
-| `planning/CONTENT-ARCHITECTURE.md` | Schema details, taxonomy, Opportunities spec |
-| `planning/ROADMAP.md` | What to work on next, phase dependencies |
-| `planning/DESIGN-SYSTEM.md` | UI patterns, colors, card designs, layouts |
-| `planning/CONTENT-GUIDELINES.md` | How to write content, editorial voice, inclusion criteria |
-| `src/content/config.ts` | Source of truth for Zod schemas |
-| `AGENTS.md` | Quick project overview (entry point) |
+| Document                           | When to Reference                                         |
+| ---------------------------------- | --------------------------------------------------------- |
+| `planning/VISION.md`               | Understanding project mission and boundaries              |
+| `planning/CONTENT-ARCHITECTURE.md` | Schema details, taxonomy, Opportunities spec              |
+| `planning/ROADMAP.md`              | What to work on next, phase dependencies                  |
+| `planning/DESIGN-SYSTEM.md`        | UI patterns, colors, card designs, layouts                |
+| `planning/CONTENT-GUIDELINES.md`   | How to write content, editorial voice, inclusion criteria |
+| `src/content/config.ts`            | Source of truth for Zod schemas                           |
+| `AGENTS.md`                        | Quick project overview (entry point)                      |

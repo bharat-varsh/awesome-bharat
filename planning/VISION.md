@@ -44,27 +44,27 @@ The site is a **launchpad, not a destination**. Every page sparks interest, then
 
 These decisions are permanent and non-negotiable:
 
-| Rule | Rationale |
-|------|-----------|
-| No user accounts | Keeps the site simple, static, and privacy-respecting |
-| No advertisements | Preserves editorial independence and trust |
-| No monetization | This is a public good, not a business |
-| No user-generated content | Curation quality requires editorial control |
-| No paid/sponsored listings | Every entry earns its place on merit alone |
-| No public API | The site is for humans, not scrapers |
-| No paywalls or gated content | Everything is free and accessible |
+| Rule                         | Rationale                                             |
+| ---------------------------- | ----------------------------------------------------- |
+| No user accounts             | Keeps the site simple, static, and privacy-respecting |
+| No advertisements            | Preserves editorial independence and trust            |
+| No monetization              | This is a public good, not a business                 |
+| No user-generated content    | Curation quality requires editorial control           |
+| No paid/sponsored listings   | Every entry earns its place on merit alone            |
+| No public API                | The site is for humans, not scrapers                  |
+| No paywalls or gated content | Everything is free and accessible                     |
 
 ---
 
 ## Target Audience
 
-| Audience | What they get |
-|----------|---------------|
-| **Indian developers & tech community** | Discover Indian open-source, apps, and tools worth using and contributing to |
-| **General Indian internet users** | Learn about incredible Indian achievements they never knew about |
-| **Global audience curious about India** | A curated window into what India is building across every field |
-| **Creators & makers themselves** | Visibility, backlinks, and traffic to their work |
-| **People who want to contribute to India's growth** | Opportunities, organizations to join, initiatives to support |
+| Audience                                            | What they get                                                                |
+| --------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **Indian developers & tech community**              | Discover Indian open-source, apps, and tools worth using and contributing to |
+| **General Indian internet users**                   | Learn about incredible Indian achievements they never knew about             |
+| **Global audience curious about India**             | A curated window into what India is building across every field              |
+| **Creators & makers themselves**                    | Visibility, backlinks, and traffic to their work                             |
+| **People who want to contribute to India's growth** | Opportunities, organizations to join, initiatives to support                 |
 
 ---
 

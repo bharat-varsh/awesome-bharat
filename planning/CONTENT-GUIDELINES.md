@@ -35,17 +35,18 @@ Every entry must pass ALL of the following:
 
 Rate on these dimensions (must score well on at least 2):
 
-| Dimension | What qualifies |
-|-----------|---------------|
-| **Impact** | Has real users, solves a real problem, or created measurable change |
-| **Quality** | Well-crafted, polished, demonstrates skill and care |
-| **Uniqueness** | Does something novel, approaches a problem differently, or fills a gap |
-| **Accessibility** | Open to all, free or affordable, reduces barriers |
-| **Inspiration** | The story behind it is compelling, motivating, or instructive |
+| Dimension         | What qualifies                                                         |
+| ----------------- | ---------------------------------------------------------------------- |
+| **Impact**        | Has real users, solves a real problem, or created measurable change    |
+| **Quality**       | Well-crafted, polished, demonstrates skill and care                    |
+| **Uniqueness**    | Does something novel, approaches a problem differently, or fills a gap |
+| **Accessibility** | Open to all, free or affordable, reduces barriers                      |
+| **Inspiration**   | The story behind it is compelling, motivating, or instructive          |
 
 ### Must Have a Clear CTA
 
 The entry must have at least one actionable link:
+
 - An app must have a download link or repository
 - A person must have a website or social profile
 - A company must have a website
@@ -80,18 +81,19 @@ Do NOT include entries that:
 
 ### Tone Attributes
 
-| Attribute | Description | Example |
-|-----------|-------------|---------|
-| **Celebratory** | We're proud of what Indians build | "India's answer to..." → "A remarkable Indian creation that..." |
-| **Concise** | Get to the point fast | Not a 500-word essay. 150-400 words max. |
-| **Action-oriented** | Every word points toward doing something | End with urgency, not a whimper |
-| **Specific** | Concrete facts over vague praise | "Used by 500K+ users" not "Very popular" |
-| **Inclusive** | All domains, all backgrounds, all of India | Not just tech-bro culture |
-| **Honest** | No sycophancy, no hype | Praise what deserves it. Don't oversell. |
+| Attribute           | Description                                | Example                                                         |
+| ------------------- | ------------------------------------------ | --------------------------------------------------------------- |
+| **Celebratory**     | We're proud of what Indians build          | "India's answer to..." → "A remarkable Indian creation that..." |
+| **Concise**         | Get to the point fast                      | Not a 500-word essay. 150-400 words max.                        |
+| **Action-oriented** | Every word points toward doing something   | End with urgency, not a whimper                                 |
+| **Specific**        | Concrete facts over vague praise           | "Used by 500K+ users" not "Very popular"                        |
+| **Inclusive**       | All domains, all backgrounds, all of India | Not just tech-bro culture                                       |
+| **Honest**          | No sycophancy, no hype                     | Praise what deserves it. Don't oversell.                        |
 
 ### Voice Do's and Don'ts
 
 **DO:**
+
 - Lead with the most interesting fact
 - Use numbers and specifics ("30% reduction in screen time")
 - Name what makes it different from alternatives
@@ -99,6 +101,7 @@ Do NOT include entries that:
 - Use active voice ("Mindful blocks distracting content" not "Distracting content is blocked by Mindful")
 
 **DON'T:**
+
 - Use generic marketing language ("revolutionary", "game-changing", "best-in-class")
 - Write encyclopedia-style neutral prose
 - Include the full feature list (that's what their website is for)
@@ -127,6 +130,7 @@ Every available field should be filled. Don't leave optional fields empty if the
 ### MDX Body: 150–400 Words
 
 Structure:
+
 1. **Hook** (1-2 sentences) — Why should I care?
 2. **Key Sections** (2-4 bullet groups with bold headings) — What does it do / what did they achieve?
 3. **Closer** (1 sentence) — Punchy sign-off or CTA reinforcement
@@ -145,18 +149,18 @@ Structure:
 
 ### Required Fields (must be present for all entries)
 
-| Collection | Required Fields |
-|-----------|----------------|
-| Apps | title, description, authors, type, devices, source, paid, ads, offline, categories, tags, date |
-| Persons | name |
-| Companies | name |
-| Channels | name, description, channelUrl, topics, tags |
-| Products | name, description, tags |
-| Blogs | name, description, url, topics, tags |
-| Projects | name, description, repositoryUrl, tags |
-| Communities | name, description, platform, joinUrl, tags |
-| Podcasts | name, description, platforms, topics, tags |
-| Initiatives | name, description, tags |
+| Collection  | Required Fields                                                                                |
+| ----------- | ---------------------------------------------------------------------------------------------- |
+| Apps        | title, description, authors, type, devices, source, paid, ads, offline, categories, tags, date |
+| Persons     | name                                                                                           |
+| Companies   | name                                                                                           |
+| Channels    | name, description, channelUrl, topics, tags                                                    |
+| Products    | name, description, tags                                                                        |
+| Blogs       | name, description, url, topics, tags                                                           |
+| Projects    | name, description, repositoryUrl, tags                                                         |
+| Communities | name, description, platform, joinUrl, tags                                                     |
+| Podcasts    | name, description, platforms, topics, tags                                                     |
+| Initiatives | name, description, tags                                                                        |
 
 ### Strongly Recommended (fill if info is available)
 
@@ -169,6 +173,7 @@ Structure:
 ### Description Field Standards
 
 The `description` frontmatter field (not the MDX body) should be:
+
 - 1-3 sentences
 - Factual summary of what the thing IS
 - No marketing language
@@ -199,15 +204,18 @@ description: "Mindful is a revolutionary app built by a passionate Indian develo
 [App Name] [what it does differently in 1-2 sentences].
 
 #### **[Key Feature Category 1]**
+
 - [Specific feature with benefit]
 - [Another specific feature]
 - [Quantified impact if available]
 
 #### **[Key Feature Category 2]**
+
 - [Feature]
 - [Feature with differentiation]
 
 #### **[Key Feature Category 3]** (optional)
+
 - [Feature]
 
 [Punchy closer: why this matters or who it's for]
@@ -223,11 +231,13 @@ description: "Mindful is a revolutionary app built by a passionate Indian develo
 [Name] [brief background — 1-2 sentences on their journey].
 
 #### **Key Achievements**
+
 - [Achievement 1 with specifics]
 - [Achievement 2]
 - [Achievement 3]
 
 #### **Current Work**
+
 [What they're doing now — 1-2 sentences]
 
 [Inspirational closer or call to follow their work]
@@ -241,11 +251,13 @@ description: "Mindful is a revolutionary app built by a passionate Indian develo
 [Initiative name] [what they do + how they do it — 2 sentences].
 
 #### **Impact So Far**
+
 - [Specific metric: "Cleaned 500 tons of waste from Mumbai beaches"]
 - [Specific metric]
 - [Specific metric]
 
 #### **How You Can Help**
+
 - 🤝 [Volunteer opportunity]
 - 💰 [Donation link/info]
 - 📢 [How to spread the word]
@@ -271,14 +283,15 @@ The Opportunities section on domain pages is editorial content. It requires rese
 
 ```yaml
 achievements:
-  - title: "Short, punchy title (5-8 words)"
-    description: "One sentence explaining why this matters"
-    date: 2023-08-23
-    source: "https://credible-source-url"
-    badge: "🏆 Category — e.g., 'Historic First', 'World Record', 'Breakthrough'"
+    - title: 'Short, punchy title (5-8 words)'
+      description: 'One sentence explaining why this matters'
+      date: 2023-08-23
+      source: 'https://credible-source-url'
+      badge: "🏆 Category — e.g., 'Historic First', 'World Record', 'Breakthrough'"
 ```
 
 **Rules:**
+
 - Title must be immediately understandable
 - Description adds context, not just repeats the title
 - Source must be a credible URL (news outlet, official site, Wikipedia)
@@ -288,15 +301,16 @@ achievements:
 
 ```yaml
 comparisons:
-  - metric: "Clear, specific metric name"
-    india: 60
-    leaders:
-      - country: "USA"
-        value: 3400
-    gap: "Neutral framing of the gap + growth if applicable"
+    - metric: 'Clear, specific metric name'
+      india: 60
+      leaders:
+          - country: 'USA'
+            value: 3400
+      gap: 'Neutral framing of the gap + growth if applicable'
 ```
 
 **Tone rules for comparisons:**
+
 - ✅ "India has 60 satellites; the opportunity is to grow 10x in the next decade"
 - ✅ "Growing rapidly — 3x growth since 2020"
 - ❌ "India is way behind the US"
@@ -309,13 +323,14 @@ comparisons:
 
 ```yaml
 actions:
-  - type: volunteer | donate | promote | collaborate | learn
-    title: "Verb + specific target (e.g., 'Join ISRO citizen science program')"
-    description: "One sentence on what this involves"  # optional
-    url: "https://specific-link-to-take-action"
+    - type: volunteer | donate | promote | collaborate | learn
+      title: "Verb + specific target (e.g., 'Join ISRO citizen science program')"
+      description: 'One sentence on what this involves' # optional
+      url: 'https://specific-link-to-take-action'
 ```
 
 **Rules:**
+
 - Every action must have a working URL
 - Title starts with a verb: Join, Contribute, Share, Donate, Learn
 - Be specific: "Volunteer with [Org Name] in [City]" not "Help the environment"
@@ -329,11 +344,13 @@ actions:
 ### When to Create a New Tag
 
 Create a new tag when:
+
 - It applies to 3+ entries across multiple content types
 - It represents a cross-cutting theme not captured by domains or categories
 - It helps users discover related content they wouldn't find otherwise
 
 Don't create a tag if:
+
 - It would only apply to 1-2 entries (too specific)
 - It duplicates a domain name (use the domain field instead)
 - It's too generic to be useful ("good", "popular", "indian")
@@ -347,13 +364,13 @@ Don't create a tag if:
 
 ### Tag Categories
 
-| Type | Examples | Purpose |
-|------|---------|---------|
-| **People traits** | `women-in-tech`, `student-founders`, `rural-innovators` | Group by maker demographics |
-| **Tech stack** | `made-with-flutter`, `built-with-react`, `python` | Group by technology |
-| **Attributes** | `open-source`, `bootstrapped`, `award-winning`, `government-backed` | Group by project characteristics |
-| **Themes** | `digital-detox`, `climate-action`, `accessibility` | Group by subject matter |
-| **Action tags** | `volunteer-friendly`, `accepting-contributions`, `hiring` | Group by available actions |
+| Type              | Examples                                                            | Purpose                          |
+| ----------------- | ------------------------------------------------------------------- | -------------------------------- |
+| **People traits** | `women-in-tech`, `student-founders`, `rural-innovators`             | Group by maker demographics      |
+| **Tech stack**    | `made-with-flutter`, `built-with-react`, `python`                   | Group by technology              |
+| **Attributes**    | `open-source`, `bootstrapped`, `award-winning`, `government-backed` | Group by project characteristics |
+| **Themes**        | `digital-detox`, `climate-action`, `accessibility`                  | Group by subject matter          |
+| **Action tags**   | `volunteer-friendly`, `accepting-contributions`, `hiring`           | Group by available actions       |
 
 ---
 
@@ -383,6 +400,7 @@ An app can be `domain: health` and `category: healthAndFitness` — they serve d
 ### Example: Well-Written App Entry
 
 See `src/content/apps/mindful.mdx` — demonstrates:
+
 - Compelling description
 - Complete frontmatter
 - Hook opening
@@ -394,6 +412,7 @@ See `src/content/apps/mindful.mdx` — demonstrates:
 ### Example: Minimal Person Entry
 
 See `src/content/persons/pawan-nagar.mdx` — demonstrates minimum viable entry. Should be expanded with:
+
 - Bio
 - Tags
 - Domains
