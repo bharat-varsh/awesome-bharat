@@ -3,7 +3,7 @@
  * Homepage – Main landing page
  */
 
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
 
@@ -13,26 +13,52 @@ const [apps, persons, companies] = await Promise.all([
     getCollection('companies'),
 ]);
 
+const nonDraftApps = apps.filter((app: CollectionEntry<'apps'>) => !app.data.draft);
+const nonDraftPersons = persons.filter((p: CollectionEntry<'persons'>) => !p.data.draft);
+const nonDraftCompanies = companies.filter((c: CollectionEntry<'companies'>) => !c.data.draft);
+
 const stats = {
-    apps: apps.filter((app: { data: { draft: boolean } }) => !app.data.draft).length,
-    persons: persons.filter((p: { data: { draft: boolean } }) => !p.data.draft).length,
-    companies: companies.filter((c: { data: { draft: boolean } }) => !c.data.draft).length,
+    apps: nonDraftApps.length,
+    persons: nonDraftPersons.length,
+    companies: nonDraftCompanies.length,
 };
 
-const latestApps = apps
-    .filter((app: { data: { draft: boolean; date: { valueOf: () => number } } }) => !app.data.draft)
+const latestApps = [...nonDraftApps]
     .sort(
-        (
-            a: { data: { date: { valueOf: () => number } } },
-            b: { data: { date: { valueOf: () => number } } }
-        ) => b.data.date.valueOf() - a.data.date.valueOf()
+        (a: CollectionEntry<'apps'>, b: CollectionEntry<'apps'>) =>
+            b.data.date.valueOf() - a.data.date.valueOf()
     )
     .slice(0, 20);
+
+const featuredPersons = [...nonDraftPersons]
+    .sort(
+        (a: CollectionEntry<'persons'>, b: CollectionEntry<'persons'>) =>
+            (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0)
+    )
+    .slice(0, 20);
+
+const featuredCompanies = [...nonDraftCompanies]
+    .sort(
+        (a: CollectionEntry<'companies'>, b: CollectionEntry<'companies'>) =>
+            (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0)
+    )
+    .slice(0, 20);
+
+const allCategories = [
+    ...new Set(nonDraftApps.flatMap((app: CollectionEntry<'apps'>) => app.data.categories)),
+].sort() as string[];
+
+function formatCategory(category: string) {
+    return category
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/^./, (str) => str.toUpperCase())
+        .trim();
+}
 ---
 
 <BaseLayout
     title="Home | Awesome Bharat"
-    description="A curated collection of awesome made by Indians!"
+    description="A curated collection of awesome made by Indians! Discover your inspiration and the great people who made that possible!"
 >
     <!-- Hero -->
     <section class="py-12 relative overflow-hidden">
@@ -45,14 +71,16 @@ const latestApps = apps
         <div class="max-w-7xl mx-auto px-4 text-center relative">
             <h1 class="font-bold tracking-tight mb-6">
                 <!-- Desktop -->
-                <span class="hidden md:block text-5xl lg:text-6xl">
+                <span class="hidden md:block text-5xl lg:text-6xl text-gray-900 dark:text-gray-100">
                     Welcome to
                     <span class="text-primary-600 dark:text-primary-400"> Awesome</span>
                     <span class="font-extrabold"> Bharat</span>
                 </span>
 
                 <!-- Mobile -->
-                <span class="block md:hidden text-4xl lg:text-5xl leading-tight">
+                <span
+                    class="block md:hidden text-4xl lg:text-5xl leading-tight text-gray-900 dark:text-gray-100"
+                >
                     <span class="block">Welcome to</span>
                     <span class="block text-primary-600 dark:text-primary-400">Awesome</span>
                     <span class="block font-extrabold">Bharat</span>
@@ -94,14 +122,12 @@ const latestApps = apps
         </div>
     </section>
 
-    <!-- Latest Apps -->
-    <section class="py-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-semibold">Latest Apps</h2>
-                <a href="/apps" class="text-sm font-medium text-primary-600 dark:text-primary-400">
-                    View all
-                </a>
+    <div class="max-w-7xl mx-auto px-4 py-12 space-y-12">
+        <!-- Latest Apps -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Latest Apps</h2>
+                <a href="/apps" class="text-sm text-primary-500 hover:text-primary-600">View all</a>
             </div>
 
             <!-- Horizontal scroll row -->
@@ -125,21 +151,16 @@ const latestApps = apps
                  px-10 md:px-12 scrollbar-hide"
                 >
                     {
-                        latestApps.map(
-                            (app: {
-                                data: { title: string; logo?: string; tags: string[] };
-                                slug: string;
-                            }) => (
-                                <ContentCard
-                                    title={app.data.title}
-                                    href={`/apps/${app.slug}`}
-                                    image={app.data.logo}
-                                    slug={app.slug}
-                                    tags={app.data.tags}
-                                    class="snap-start"
-                                />
-                            )
-                        )
+                        latestApps.map((app) => (
+                            <ContentCard
+                                title={app.data.title}
+                                href={`/apps/${app.slug}`}
+                                image={app.data.logo}
+                                slug={app.slug}
+                                tags={app.data.tags}
+                                class="snap-start"
+                            />
+                        ))
                     }
                 </div>
 
@@ -154,37 +175,174 @@ const latestApps = apps
                     ›
                 </button>
             </div>
+        </section>
 
-            <script>
-                // Handle horizontal scroll with data attributes instead of fragile DOM traversal
-                document.querySelectorAll('.scroll-left, .scroll-right').forEach((button) => {
-                    button.addEventListener('click', () => {
-                        const containerId = button.getAttribute('data-scroll-container');
-                        if (!containerId) return;
-                        const container = document.getElementById(containerId);
-                        if (container) {
-                            const scrollAmount = 320;
-                            const direction = button.classList.contains('scroll-left') ? -1 : 1;
-                            container.scrollBy({
-                                left: scrollAmount * direction,
-                                behavior: 'smooth',
-                            });
-                        }
-                    });
-                });
-            </script>
-
-            <!-- CTA -->
-            <div class="mt-10 text-center">
-                <a
-                    href="/apps"
-                    class="inline-block px-8 py-3 rounded-lg
-                 bg-primary-600 text-white font-medium
-                 hover:bg-primary-700 transition-colors"
+        <!-- Featured People -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    Featured People
+                </h2>
+                <a href="/people" class="text-sm text-primary-500 hover:text-primary-600"
+                    >View all</a
                 >
-                    Explore everything
-                </a>
             </div>
+
+            <!-- Horizontal scroll row -->
+            <div class="relative">
+                <!-- Left arrow -->
+                <button
+                    aria-label="Scroll left"
+                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
+                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
+                 text-white items-center justify-center scroll-left"
+                    data-scroll-container="featured-people"
+                >
+                    ‹
+                </button>
+
+                <!-- Scroll container -->
+                <div
+                    id="featured-people"
+                    class="flex gap-5 overflow-x-auto scroll-smooth pb-2
+                 snap-x snap-mandatory
+                 px-10 md:px-12 scrollbar-hide"
+                >
+                    {
+                        featuredPersons.map((person) => (
+                            <ContentCard
+                                title={person.data.name}
+                                href={`/people/${person.slug}`}
+                                image={person.data.avatar}
+                                slug={person.slug}
+                                tags={person.data.tags}
+                                class="snap-start"
+                            />
+                        ))
+                    }
+                </div>
+
+                <!-- Right arrow -->
+                <button
+                    aria-label="Scroll right"
+                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
+                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
+                 text-white items-center justify-center scroll-right"
+                    data-scroll-container="featured-people"
+                >
+                    ›
+                </button>
+            </div>
+        </section>
+
+        <!-- Featured Companies -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    Featured Companies
+                </h2>
+                <a href="/companies" class="text-sm text-primary-500 hover:text-primary-600"
+                    >View all</a
+                >
+            </div>
+
+            <!-- Horizontal scroll row -->
+            <div class="relative">
+                <!-- Left arrow -->
+                <button
+                    aria-label="Scroll left"
+                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
+                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
+                 text-white items-center justify-center scroll-left"
+                    data-scroll-container="featured-companies"
+                >
+                    ‹
+                </button>
+
+                <!-- Scroll container -->
+                <div
+                    id="featured-companies"
+                    class="flex gap-5 overflow-x-auto scroll-smooth pb-2
+                 snap-x snap-mandatory
+                 px-10 md:px-12 scrollbar-hide"
+                >
+                    {
+                        featuredCompanies.map((company) => (
+                            <ContentCard
+                                title={company.data.name}
+                                href={`/companies/${company.slug}`}
+                                image={company.data.logo}
+                                slug={company.slug}
+                                tags={company.data.tags}
+                                class="snap-start"
+                            />
+                        ))
+                    }
+                </div>
+
+                <!-- Right arrow -->
+                <button
+                    aria-label="Scroll right"
+                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
+                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
+                 text-white items-center justify-center scroll-right"
+                    data-scroll-container="featured-companies"
+                >
+                    ›
+                </button>
+            </div>
+        </section>
+
+        <!-- Explore by Category -->
+        <section class="space-y-4">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                Explore by Category
+            </h2>
+            <div class="flex flex-wrap gap-2">
+                {
+                    allCategories.map((category) => (
+                        <a
+                            href={`/categories/${category}`}
+                            class="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-100
+                                 rounded-full px-4 py-2 text-sm font-medium
+                                 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors"
+                        >
+                            {formatCategory(category)}
+                        </a>
+                    ))
+                }
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <div class="pt-8 text-center">
+            <a
+                href="/apps"
+                class="inline-block px-8 py-3 rounded-lg
+             bg-primary-600 text-white font-medium
+             hover:bg-primary-700 transition-colors"
+            >
+                Explore everything
+            </a>
         </div>
-    </section>
+    </div>
+
+    <script>
+        // Handle horizontal scroll with data attributes instead of fragile DOM traversal
+        document.querySelectorAll('.scroll-left, .scroll-right').forEach((button) => {
+            button.addEventListener('click', () => {
+                const containerId = button.getAttribute('data-scroll-container');
+                if (!containerId) return;
+                const container = document.getElementById(containerId);
+                if (container) {
+                    const scrollAmount = 320;
+                    const direction = button.classList.contains('scroll-left') ? -1 : 1;
+                    container.scrollBy({
+                        left: scrollAmount * direction,
+                        behavior: 'smooth',
+                    });
+                }
+            });
+        });
+    </script>
 </BaseLayout>
