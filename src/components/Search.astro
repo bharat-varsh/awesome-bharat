@@ -1,112 +1,102 @@
 ---
-/* Search component using Pagefind */
+/* Search component using Pagefind Component UI (Modular/Accessible) */
 ---
 
-<div class="search-container pagefind-search">
+<div class="search-container">
+    <pagefind-config bundle-path="/pagefind/"></pagefind-config>
+    <pagefind-searchbox
+        autofocus="false"
+        show-images="true"
+        show-sub-results="true"
+        placeholder="Search..."></pagefind-searchbox>
+
+    <!-- Fallback for dev mode -->
     <div
         class="pagefind-ui-placeholder animate-pulse bg-gray-200 dark:bg-gray-800 h-10 w-full rounded-lg hidden"
     >
     </div>
 </div>
 
-<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
-<script src="/pagefind/pagefind-ui.js" is:inline></script>
+<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet" />
+<script src="/pagefind/pagefind-component-ui.js" type="module" is:inline></script>
 
 <script is:inline>
-    function initSearch() {
-        if (typeof PagefindUI !== 'undefined') {
-            const containers = document.querySelectorAll('.pagefind-search');
-            containers.forEach((container) => {
-                if (!container.querySelector('.pagefind-ui')) {
-                    new PagefindUI({
-                        element: container,
-                        showSubResults: true,
-                        showImages: true,
-                        translations: {
-                            placeholder: 'Search...',
-                        },
-                        bundlePath: '/pagefind/',
-                    });
+    // Show fallback in dev mode if Pagefind assets are missing
+    window.addEventListener('DOMContentLoaded', () => {
+        // Checking for a specific component's existence or just a timeout
+        setTimeout(() => {
+            const searchbox = document.querySelector('pagefind-searchbox');
+            // If the custom element hasn't been upgraded or the script didn't load
+            if (!searchbox || !searchbox.shadowRoot) {
+                // If we are in dev mode (check for localhost or something, or just if script failed)
+                if (
+                    window.location.hostname === 'localhost' ||
+                    window.location.hostname === '127.0.0.1'
+                ) {
+                    const placeholder = document.querySelector('.pagefind-ui-placeholder');
+                    if (placeholder) {
+                        placeholder.classList.remove('hidden');
+                        placeholder.textContent = 'Search not available in dev';
+                        placeholder.classList.remove('animate-pulse');
+                        placeholder.classList.add(
+                            'flex',
+                            'items-center',
+                            'justify-center',
+                            'text-xs',
+                            'text-gray-500'
+                        );
+
+                        if (searchbox) searchbox.style.display = 'none';
+                    }
                 }
-            });
-        } else {
-            console.warn('PagefindUI not loaded. This is expected in development mode.');
-            const placeholder = document.querySelector('.pagefind-ui-placeholder');
-            if (placeholder) {
-                placeholder.classList.remove('hidden');
-                placeholder.textContent = 'Search not available in dev';
-                placeholder.classList.remove('animate-pulse');
-                placeholder.classList.add(
-                    'flex',
-                    'items-center',
-                    'justify-center',
-                    'text-xs',
-                    'text-gray-500'
-                );
             }
-        }
-    }
-
-    // Initialize on page load
-    window.addEventListener('DOMContentLoaded', initSearch);
-
-    // Handle Astro view transitions if they were enabled (though not currently)
-    document.addEventListener('astro:after-swap', initSearch);
+        }, 1000);
+    });
 </script>
 
 <style is:global>
+    /* Styling the new Pagefind Component UI */
     :root {
-        --pagefind-ui-primary: #ea580c; /* primary-600 */
-        --pagefind-ui-text: #111827; /* gray-900 */
+        --pagefind-ui-primary: #ea580c;
+        --pagefind-ui-text: #111827;
         --pagefind-ui-background: #ffffff;
-        --pagefind-ui-border: #e5e7eb; /* gray-200 */
-        --pagefind-ui-tag: #f3f4f6; /* gray-100 */
-        --pagefind-ui-font: 'Plus Jakarta Sans', sans-serif;
+        --pagefind-ui-border: #e5e7eb;
+        --pagefind-ui-tag: #f3f4f6;
     }
 
     .dark {
-        --pagefind-ui-primary: #fb923c; /* primary-400 */
-        --pagefind-ui-text: #f9fafb; /* gray-50 */
-        --pagefind-ui-background: #111827; /* secondary-900 or gray-900 */
-        --pagefind-ui-border: #374151; /* gray-700 */
-        --pagefind-ui-tag: #1f2937; /* gray-800 */
+        --pagefind-ui-primary: #fb923c;
+        --pagefind-ui-text: #f9fafb;
+        --pagefind-ui-background: #111827;
+        --pagefind-ui-border: #374151;
+        --pagefind-ui-tag: #1f2937;
     }
 
     .search-container {
         width: 100%;
+        position: relative;
     }
 
-    /* Customize Pagefind UI to match our design */
-    .pagefind-search .pagefind-ui__search-input {
-        @apply !rounded-xl !border-gray-300 dark:!border-gray-700 !bg-white dark:!bg-secondary-900 !text-sm !transition-all;
+    /* Target the custom elements directly if needed, but Pagefind uses Shadow DOM */
+    /* Most customization happens via CSS variables */
+
+    pagefind-searchbox {
+        --pagefind-ui-font: 'Plus Jakarta Sans', sans-serif;
     }
 
-    .pagefind-search .pagefind-ui__search-input:focus {
-        @apply !ring-2 !ring-primary-500 !border-transparent;
+    /* Fix the z-index of the results dropdown if it exists */
+    pagefind-searchbox::part(drawer) {
+        z-index: 60;
+        border-radius: 1rem;
+        box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
     }
 
-    .pagefind-search .pagefind-ui__drawer {
-        @apply !absolute !top-full !right-0 !mt-2 !w-[90vw] md:!w-[400px] lg:!w-[500px] !max-h-[60vh] !overflow-y-auto !rounded-2xl !shadow-2xl !border !border-gray-200 dark:!border-gray-800 !bg-white dark:!bg-secondary-900 !z-[60] !p-4;
-    }
-
-    .pagefind-search .pagefind-ui__result {
-        @apply !border-b !border-gray-100 dark:!border-gray-800 !py-3 last:!border-0;
-    }
-
-    .pagefind-search .pagefind-ui__result-link {
-        @apply !text-primary-600 dark:!text-primary-400 !font-semibold hover:!underline;
-    }
-
-    .pagefind-search .pagefind-ui__result-excerpt {
-        @apply !text-sm !text-gray-600 dark:!text-gray-400 !mt-1;
-    }
-
-    .pagefind-search .pagefind-ui__result-thumb {
-        @apply !rounded-lg !overflow-hidden;
-    }
-
-    /* Ensure the search bar doesn't look weird in the header */
-    .pagefind-search .pagefind-ui__search-clear {
-        @apply !rounded-lg;
+    /* Ensure it doesn't overflow on small screens */
+    @media (max-width: 640px) {
+        pagefind-searchbox::part(drawer) {
+            width: calc(100vw - 2rem);
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+        }
     }
 </style>
