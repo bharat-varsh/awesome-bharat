@@ -5,7 +5,7 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CollectionHero from '@/components/CollectionHero.astro';
 import ContentCardFull from '@/components/ContentCardFull.astro';
-import { getPrimaryCTALabel, getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
+import { getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
 import { resolveLogo } from '@/utils/imageResolvers.ts';
 
 type TaggedApp = CollectionEntry<'apps'>;
@@ -163,7 +163,7 @@ const getItemImage = (item: TaggedApp | TaggedPerson | TaggedCompany) =>
                                             ? item.data.categories
                                             : undefined
                                     }
-                                        ctaLabel='View More'
+                                    ctaLabel="View More"
                                     ctaUrl={getPrimaryCTAUrl(item.collection, item.data)}
                                     featured={item.data.featured}
                                 />

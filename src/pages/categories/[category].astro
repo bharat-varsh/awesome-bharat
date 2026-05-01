@@ -5,7 +5,7 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CollectionHero from '@/components/CollectionHero.astro';
 import ContentCardFull from '@/components/ContentCardFull.astro';
-import { getPrimaryCTALabel, getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
+import { getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
 import { resolveLogo } from '@/utils/imageResolvers.ts';
 import { formatCategoryName } from '@/utils/textUtils.ts';
 
@@ -19,7 +19,6 @@ interface CategoryPageProps {
     persons: CategorizedPerson[];
     companies: CategorizedCompany[];
 }
-
 
 // Category emoji mapping
 const categoryEmojis: Record<string, string> = {
@@ -196,7 +195,7 @@ const getItemImage = (item: CategorizedApp | CategorizedPerson | CategorizedComp
                                             ? item.data.categories
                                             : undefined
                                     }
-                                    ctaLabel='View More'
+                                    ctaLabel="View More"
                                     ctaUrl={getPrimaryCTAUrl(item.collection, item.data)}
                                     featured={item.data.featured}
                                 />

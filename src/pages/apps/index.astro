@@ -4,7 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ContentCardFull from '@/components/ContentCardFull.astro';
 import CollectionHero from '@/components/CollectionHero.astro';
-import { getPrimaryCTALabel, getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
+import { getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
 import { resolveLogo } from '@/utils/imageResolvers.ts';
 
 const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;

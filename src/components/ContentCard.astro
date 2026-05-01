@@ -20,8 +20,8 @@ const resolvedImage = resolveLogo(slug, image) as ImageMetadata;
     href={href}
     class={`group flex-shrink-0 w-[60px] sm:w-[80px] md:w-[100px] lg:w-[120px] ${extraClass}`}
 >
-    <div class="rounded-xl p-1">
-        <div class="rounded-lg overflow-hidden">
+    <div class="p-1">
+        <div class="overflow-hidden">
             <Image
                 class="aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
                 src={resolvedImage}
