@@ -21,37 +21,7 @@
 <script src="/pagefind/pagefind-component-ui.js" type="module" is:inline></script>
 
 <script is:inline>
-    // Show fallback in dev mode if Pagefind assets are missing
-    window.addEventListener('DOMContentLoaded', () => {
-        // Checking for a specific component's existence or just a timeout
-        setTimeout(() => {
-            const searchbox = document.querySelector('pagefind-searchbox');
-            // If the custom element hasn't been upgraded or the script didn't load
-            if (!searchbox || !searchbox.shadowRoot) {
-                // If we are in dev mode (check for localhost or something, or just if script failed)
-                if (
-                    window.location.hostname === 'localhost' ||
-                    window.location.hostname === '127.0.0.1'
-                ) {
-                    const placeholder = document.querySelector('.pagefind-ui-placeholder');
-                    if (placeholder) {
-                        placeholder.classList.remove('hidden');
-                        placeholder.textContent = 'Search not available in dev';
-                        placeholder.classList.remove('animate-pulse');
-                        placeholder.classList.add(
-                            'flex',
-                            'items-center',
-                            'justify-center',
-                            'text-xs',
-                            'text-gray-500'
-                        );
-
-                        if (searchbox) searchbox.style.display = 'none';
-                    }
-                }
-            }
-        }, 1000);
-    });
+    // Pagefind search initialization is handled by the custom element itself
 </script>
 
 <style is:global>
