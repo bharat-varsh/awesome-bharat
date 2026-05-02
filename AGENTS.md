@@ -1,10 +1,19 @@
 # Awesome Bharat - Project Documentation
 
+> **Planning Documents**: For detailed project strategy, architecture, and guidelines, see the `planning/` folder:
+>
+> - [`planning/VISION.md`](planning/VISION.md) — Mission, philosophy, hard boundaries, success criteria
+> - [`planning/CONTENT-ARCHITECTURE.md`](planning/CONTENT-ARCHITECTURE.md) — All content types, schemas, dual taxonomy, Opportunities section
+> - [`planning/ROADMAP.md`](planning/ROADMAP.md) — Phased delivery plan (6 phases)
+> - [`planning/DESIGN-SYSTEM.md`](planning/DESIGN-SYSTEM.md) — Colors, typography, card components, page layouts
+> - [`planning/AI-AGENT-GUIDE.md`](planning/AI-AGENT-GUIDE.md) — Code conventions, workflows, quality checklists
+> - [`planning/CONTENT-GUIDELINES.md`](planning/CONTENT-GUIDELINES.md) — Editorial voice, inclusion criteria, writing templates
+
 ## What This Site Is
 
-**Awesome Bharat** is a curated discovery portal that showcases remarkable things made by Indians — apps, products, companies, people, open-source projects, YouTube channels, blogs, and more. It is not a Wikipedia or an encyclopedia. It is a **teaser + action portal**: each page contains just enough information to spark interest, then gives the visitor a clear, context-appropriate call-to-action that sends them to the actual content.
+**Awesome Bharat** is a curated discovery platform that celebrates remarkable things made or led by Indians — across every domain: apps, products, companies, people, open-source projects, YouTube channels, blogs, podcasts, communities, and social initiatives. It is not a Wikipedia or an encyclopedia. It is a **teaser + action portal**: each page sparks interest, then sends the visitor to the actual content via a clear, context-appropriate call-to-action.
 
-The site celebrates Indian creativity and talent across all domains. Content is hand-curated and editorially selected.
+The site exists to break the notion that India has nothing noteworthy, to bring into public limelight even the smallest genuine effort, and to inspire people to act. Content is hand-curated and editorially vetted.
 
 ### Core Philosophy
 
@@ -15,15 +24,18 @@ The site celebrates Indian creativity and talent across all domains. Content is 
 
 ### Primary CTA by Content Type
 
-| Content type     | Primary CTA    | Source field                   |
-| ---------------- | -------------- | ------------------------------ |
-| App              | Download       | `storeLinks`                   |
-| Open-source repo | Contribute     | `repositoryLinks`              |
-| Person           | Follow / Visit | `socials` or `website`         |
-| Company          | Visit          | `website`                      |
-| YouTube channel  | Subscribe      | `socials` with label `youtube` |
-| Product          | Buy            | `storeLinks` or `website`      |
-| Blog             | Read           | `website`                      |
+| Content type     | Primary CTA    | Source field                    |
+| ---------------- | -------------- | ------------------------------- |
+| App              | Download       | `storeLinks`                    |
+| Open-source repo | Contribute     | `repositoryLinks`               |
+| Person           | Follow / Visit | `socials` or `website`          |
+| Company          | Visit          | `website`                       |
+| YouTube channel  | Subscribe      | `channelUrl`                    |
+| Product          | Buy            | `buyUrl` or `website`           |
+| Blog             | Read           | `url`                           |
+| Community        | Join           | `joinUrl`                       |
+| Podcast          | Listen         | `platforms[0]`                  |
+| Initiative       | Get Involved   | `howToHelp[0].url` or `website` |
 
 ---
 
@@ -39,6 +51,7 @@ The site celebrates Indian creativity and talent across all domains. Content is 
 ## Project Structure
 
 ```
+planning/              # Strategy & architecture docs (see links above)
 src/
 ├── content/
 │   ├── apps/          # App entries (MDX)
@@ -47,17 +60,23 @@ src/
 │   └── config.ts      # Content collection schemas (Zod)
 ├── components/        # Astro components
 │   ├── ContentCard.astro      # Compact card for scroll rows
+│   ├── ContentCardFull.astro  # Rich card for listing grids
 │   ├── ContentLayout.astro    # Detail page layout
+│   ├── CollectionHero.astro   # Hero banner for listing pages
 │   ├── Engage.astro           # Contribute / community / web links
 │   ├── Header.astro
-│   ├── Footer.astro           # NOTE: not yet wired into BaseLayout
+│   ├── Footer.astro
 │   ├── LeftSidebar.astro      # Navigation sidebar
+│   ├── MobileNav.astro        # Mobile navigation drawer
 │   ├── RightSidebar.astro     # Related content sidebar
 │   ├── SidebarNav.astro       # Nav links with collection counts
+│   ├── StoreBadges.astro      # Store download badges
 │   ├── YouMightLike.astro     # Related items grid
 │   ├── RelatedItem.astro      # Single related item card
 │   ├── Screenshots.astro
+│   ├── SEO.astro
 │   ├── YouTubeEmbed.astro
+│   └── ThemeToggle.astro
 │   └── ThemeToggle.astro
 ├── layouts/
 │   ├── BaseLayout.astro       # Shell: header + left sidebar + main slot
@@ -67,10 +86,15 @@ src/
 │   ├── apps/
 │   │   ├── index.astro        # Apps listing
 │   │   └── [slug].astro       # App detail
+│   ├── categories/
+│   │   └── [category].astro   # Category landing pages
+│   ├── tags/
+│   │   └── [tag].astro        # Tag landing pages
 │   └── rss.xml.ts
 ├── styles/
 │   └── global.css
 └── utils/
+    ├── ctaUtils.ts            # CTA label/URL resolution per content type
     ├── dateUtils.ts
     ├── imageRegistry.ts       # Maps slug/filename → ImageMetadata
     ├── imageResolvers.ts      # resolveLogo(), resolvePageImages()

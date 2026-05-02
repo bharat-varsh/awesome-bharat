@@ -5,6 +5,7 @@ import type { CollectionEntry } from 'astro:content';
 import type { Author } from '@/content/config.ts';
 import ContentLayout from '@/layouts/ContentLayout.astro';
 import YouMightLike from '@/components/YouMightLike.astro';
+import RelatedItem from '@/components/RelatedItem.astro';
 import { getRelatedContentSimple } from '@/utils/relatedContent.ts';
 
 export const getStaticPaths = (async () => {
@@ -37,6 +38,15 @@ const relatedAppsEnriched = relatedApps.map((app) => ({
             : null,
     },
 }));
+
+const currentAuthors = app.data.authors.map((a: Author) => a.slug);
+const byAuthor = allApps
+    .filter(
+        (a) =>
+            a.id !== app.id && a.data.authors.some((a2: Author) => currentAuthors.includes(a2.slug))
+    )
+    .slice(0, 4);
+const authorName = resolvedAuthors?.[0]?.name || 'this author';
 ---
 
 <ContentLayout
@@ -73,5 +83,19 @@ const relatedAppsEnriched = relatedApps.map((app) => ({
             title="You might also like"
             maxItems={8}
         />
+        {
+            byAuthor.length > 0 && (
+                <div class="mt-8">
+                    <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                        More by {authorName}
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        {byAuthor.map((item) => (
+                            <RelatedItem item={item} collection="apps" />
+                        ))}
+                    </div>
+                </div>
+            )
+        }
     </div>
 </ContentLayout>

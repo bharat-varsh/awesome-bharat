@@ -1,0 +1,72 @@
+---
+/* Search component using Pagefind Component UI (Modular/Accessible) */
+---
+
+<div class="search-container">
+    <pagefind-config bundle-path="/pagefind/"></pagefind-config>
+    <pagefind-searchbox
+        autofocus="false"
+        show-images="true"
+        show-sub-results="true"
+        placeholder="Search..."></pagefind-searchbox>
+
+    <!-- Fallback for dev mode -->
+    <div
+        class="pagefind-ui-placeholder animate-pulse bg-gray-200 dark:bg-gray-800 h-10 w-full rounded-lg hidden"
+    >
+    </div>
+</div>
+
+<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet" />
+<script src="/pagefind/pagefind-component-ui.js" type="module" is:inline></script>
+
+<script is:inline>
+    // Pagefind search initialization is handled by the custom element itself
+</script>
+
+<style is:global>
+    /* Styling the new Pagefind Component UI */
+    :root {
+        --pagefind-ui-primary: #ea580c;
+        --pagefind-ui-text: #111827;
+        --pagefind-ui-background: #ffffff;
+        --pagefind-ui-border: #e5e7eb;
+        --pagefind-ui-tag: #f3f4f6;
+    }
+
+    .dark {
+        --pagefind-ui-primary: #fb923c;
+        --pagefind-ui-text: #f9fafb;
+        --pagefind-ui-background: #111827;
+        --pagefind-ui-border: #374151;
+        --pagefind-ui-tag: #1f2937;
+    }
+
+    .search-container {
+        width: 100%;
+        position: relative;
+    }
+
+    /* Target the custom elements directly if needed, but Pagefind uses Shadow DOM */
+    /* Most customization happens via CSS variables */
+
+    pagefind-searchbox {
+        --pagefind-ui-font: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Fix the z-index of the results dropdown if it exists */
+    pagefind-searchbox::part(drawer) {
+        z-index: 60;
+        border-radius: 1rem;
+        box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    }
+
+    /* Ensure it doesn't overflow on small screens */
+    @media (max-width: 640px) {
+        pagefind-searchbox::part(drawer) {
+            width: calc(100vw - 2rem);
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+        }
+    }
+</style>

@@ -101,6 +101,7 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
     <div class="flex flex-col lg:flex-row gap-0 justify-center items-start">
         <article
             class="max-w-6xl px-10 py-8 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto scrollbar-hide"
+            data-pagefind-body
         >
             <header class="mb-12">
                 <!-- Main header card with responsive layout -->
@@ -115,7 +116,7 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
                         {
                             resolvedImage && (
                                 <div class="flex-shrink-0 mx-auto md:mx-0">
-                                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-secondary-800">
+                                    <div class="w-20 h-20 sm:w-24 sm:h-24 overflow-hidden">
                                         <Image
                                             class="w-full h-full object-contain"
                                             src={resolvedImage}

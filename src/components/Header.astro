@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import ThemeToggle from './ThemeToggle.astro';
+import Search from './Search.astro';
 import brandLogo from '@/assets/images/brand-logo.svg';
 
 // const socials = [
@@ -97,7 +98,10 @@ import brandLogo from '@/assets/images/brand-logo.svg';
             </a>
 
             <!-- Right: Theme Toggle (single instance) -->
-            <div class="flex items-center gap-1 justify-end flex-1">
+            <div class="flex items-center gap-2 sm:gap-4 justify-end flex-1">
+                <div class="hidden sm:block w-full max-w-[160px] md:max-w-[200px] lg:max-w-[280px]">
+                    <Search />
+                </div>
                 <ThemeToggle />
             </div>
         </div>

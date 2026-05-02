@@ -78,7 +78,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
             <MobileNav />
             <div class="flex flex-1">
                 <LeftSidebar />
-                <main class="flex-1 overflow-x-hidden">
+                <main class="flex-1 overflow-x-hidden" data-pagefind-body>
                     <slot />
                 </main>
             </div>
