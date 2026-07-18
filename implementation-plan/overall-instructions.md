@@ -25,7 +25,7 @@ This is a **self-contained, followable** execution guide. Each task lists the ex
 - **Do not** introduce hardcoded hex colors in components. Use token classes (`primary-*`, `neutral-*`/`gray-*`, `secondary-*`, `accent-*`) which are defined in Phase 0.
 - **Do not** change any content files (`src/content/**`) — this is a visual redesign only.
 - Preserve all existing `id`, `data-*`, and `<script>` behavior unless a task explicitly says to change it.
-- After each task, run `npm run dev` and confirm no console/build errors.
+- After each task, run `npm run build` and confirm no console/build errors.
 
 ### Design tokens available after Phase 0 (reference)
 
