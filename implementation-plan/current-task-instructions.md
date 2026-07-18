@@ -1,63 +1,62 @@
-## Task 1.4 — Sidebar + SidebarNav: neutral surface, refined active state, fix route 🟡
+## Task 1.5 — ThemeToggle: replace heavyweight SVGs with clean line icons 🔵
 
-**Files:** `src/components/Sidebar.astro`, `src/components/SidebarNav.astro`
+**File:** `src/components/ThemeToggle.astro`
 
-### 1.4a — `src/components/Sidebar.astro`
+Replace the **entire file** with:
 
-**Find** (~line 13):
+```astro
+---
 
+---
+
+<button
+    id="theme-toggle"
+    type="button"
+    class="p-2 rounded-lg text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+    aria-label="Toggle theme"
+>
+    <!-- Sun icon (shown in dark mode) -->
+    <svg
+        class="w-5 h-5 hidden dark:block"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.8"
+    >
+        <circle cx="12" cy="12" r="4"></circle>
+        <path
+            stroke-linecap="round"
+            d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+        ></path>
+    </svg>
+
+    <!-- Moon icon (shown in light mode) -->
+    <svg
+        class="w-5 h-5 block dark:hidden"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.8"
+    >
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+</button>
+
+<script>
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+    });
+</script>
 ```
-'bg-primary-50 dark:bg-secondary-800',
-```
 
-**Replace with:**
+(Clean `currentColor` line icons; fixes the duplicate `id` bug; persistence still handled by the `MutationObserver` in `BaseLayout.astro`.)
 
-```
-'bg-neutral-50 dark:bg-neutral-900',
-```
-
-### 1.4b — `src/components/SidebarNav.astro`
-
-This file has the active-state highlight repeated twice (Home link ~line 53, and collection links ~line 80). In **both** places:
-
-**Find (each occurrence):**
-
-```
-                ? 'bg-primary-300 dark:bg-primary-700/30 text-primary-800 dark:text-primary-300'
-```
-
-**Replace with:**
-
-```
-                ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 font-semibold'
-```
-
-(Subtle accent wash instead of a saturated orange block.)
-
-**Route fix:** In the `collections` array (~lines 24–29), the "Persons" entry uses `href: '/persons'`, but the homepage links people to `/people`. Standardize on `/people` everywhere. **Find:**
-
-```js
-    {
-        name: 'Persons',
-        href: '/persons',
-        icon: 'persons',
-        count: publishedPersons.length,
-    },
-```
-
-**Replace with:**
-
-```js
-    {
-        name: 'People',
-        href: '/people',
-        icon: 'persons',
-        count: publishedPersons.length,
-    },
-```
-
-> ⚠️ **Prerequisite check:** confirm a `/people` route exists (look for `src/pages/people/`). If only `src/pages/persons/` exists and `/people` 404s, do the **opposite** instead — keep `/persons` here and change the homepage links in `src/pages/index.astro` (Task 3.1) from `/people/...` → `/persons/...` and the "View all" `href="/people"` → `href="/persons"`. Pick whichever directory actually exists and make the other side match. Do not create new routes (out of scope). If unsure, leave `/persons` and fix the homepage side.
-
-**Test:** `npm run build` (desktop width ≥1024px) → left sidebar is warm neutral; active page has a soft saffron highlight (not a solid block); clicking "Apps"/"People"/"Companies" navigates without 404.
+**Test:** `npm run build` → toggle shows a moon in light mode, sun in dark mode; clicking flips the theme; reload preserves choice.
 
 ---
