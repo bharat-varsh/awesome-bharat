@@ -1,62 +1,49 @@
-## Task 1.5 — ThemeToggle: replace heavyweight SVGs with clean line icons 🔵
+## Task 1.6 — Search: swap hardcoded Pagefind hex for token values 🟢
 
-**File:** `src/components/ThemeToggle.astro`
+**File:** `src/components/Search.astro`
 
-Replace the **entire file** with:
+**Find** (~lines 29–43):
 
-```astro
----
+```css
+:root {
+    --pagefind-ui-primary: #ea580c;
+    --pagefind-ui-text: #111827;
+    --pagefind-ui-background: #ffffff;
+    --pagefind-ui-border: #e5e7eb;
+    --pagefind-ui-tag: #f3f4f6;
+}
 
----
-
-<button
-    id="theme-toggle"
-    type="button"
-    class="p-2 rounded-lg text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-    aria-label="Toggle theme"
->
-    <!-- Sun icon (shown in dark mode) -->
-    <svg
-        class="w-5 h-5 hidden dark:block"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="1.8"
-    >
-        <circle cx="12" cy="12" r="4"></circle>
-        <path
-            stroke-linecap="round"
-            d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
-        ></path>
-    </svg>
-
-    <!-- Moon icon (shown in light mode) -->
-    <svg
-        class="w-5 h-5 block dark:hidden"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="1.8"
-    >
-        <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
-</button>
-
-<script>
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle?.addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-    });
-</script>
+.dark {
+    --pagefind-ui-primary: #fb923c;
+    --pagefind-ui-text: #f9fafb;
+    --pagefind-ui-background: #111827;
+    --pagefind-ui-border: #374151;
+    --pagefind-ui-tag: #1f2937;
+}
 ```
 
-(Clean `currentColor` line icons; fixes the duplicate `id` bug; persistence still handled by the `MutationObserver` in `BaseLayout.astro`.)
+**Replace with:**
 
-**Test:** `npm run build` → toggle shows a moon in light mode, sun in dark mode; clicking flips the theme; reload preserves choice.
+```css
+:root {
+    --pagefind-ui-primary: #b8541f;
+    --pagefind-ui-text: #1c1917;
+    --pagefind-ui-background: #ffffff;
+    --pagefind-ui-border: #e7e5e4;
+    --pagefind-ui-tag: #f5f5f4;
+}
+
+.dark {
+    --pagefind-ui-primary: #e08445;
+    --pagefind-ui-text: #fafaf9;
+    --pagefind-ui-background: #1c1917;
+    --pagefind-ui-border: #292524;
+    --pagefind-ui-tag: #292524;
+}
+```
+
+(These hex values equal `primary-600`/`neutral-*` tokens; Pagefind's shadow-DOM can't read Tailwind classes, so hex is required here.)
+
+**Test:** `npm run build`
 
 ---

@@ -657,7 +657,7 @@ Replace the **entire file** with:
 
 (These hex values equal `primary-600`/`neutral-*` tokens; Pagefind's shadow-DOM can't read Tailwind classes, so hex is required here.)
 
-**Test:** `npm run build && npm run preview` (search only indexes after a build). Open the site, use the search box → results dropdown uses warm neutral surfaces and saffron accent in both themes.
+**Test:** `npm run build`
 
 ---
 
@@ -1373,7 +1373,7 @@ grep -rn "shadow-primary" src/ || true
 npm run build
 ```
 
-Must pass. Then `npm run preview` and click through: homepage (all rows + arrows + search), `/apps`, an app detail page, theme toggle + reload persistence, mobile drawer nav. Confirm no orange washes, no bracket brand, no teal, serif headings throughout, cards rounded with neutral shadows, and no console errors.
+Must pass.
 
 ---
 
