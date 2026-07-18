@@ -1,346 +1,41 @@
-# PHASE 0 — Foundation (BLOCKING) 🔴 Large
+## Task 1.1 — BaseLayout: neutral page background + intrinsic `main` container 🔵
 
-> One task, done by a **Large** model, because it combines a framework migration with token-system design and requires build debugging. Do NOT split or parallelize. When this task is complete and `npm run build` passes, the whole site will already look dramatically better (warm neutral + saffron, serif headings) even before later phases.
+**File:** `src/layouts/BaseLayout.astro`
 
-## Task 0.1 — Migrate to Tailwind v4 + install design tokens + self-hosted fonts 🔴
-
-### Step A — Dependencies
-
-Run:
-
-```bash
-npm install tailwindcss@^4 @tailwindcss/vite@^4 @fontsource-variable/inter @fontsource-variable/fraunces
-npm install -D @tailwindcss/typography@latest
-npm uninstall @astrojs/tailwind
-```
-
-### Step B — `astro.config.mjs`
-
-Replace the whole file with:
-
-```js
-import { defineConfig } from 'astro/config';
-import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
-import tailwindcss from '@tailwindcss/vite';
-import { fileURLToPath } from 'url';
-import { resolve } from 'path';
-
-export default defineConfig({
-    site: 'https://awesomebharat.com',
-    integrations: [mdx(), sitemap()],
-    markdown: {
-        shikiConfig: {
-            theme: 'github-dark',
-            wrap: true,
-        },
-    },
-    vite: {
-        plugins: [tailwindcss()],
-        resolve: {
-            alias: {
-                '@': resolve(fileURLToPath(new URL('.', import.meta.url)), 'src'),
-            },
-        },
-        build: {
-            cssMinify: 'lightningcss',
-        },
-    },
-});
-```
-
-> Note: the old `tailwind({ applyBaseStyles: false })` integration is removed; v4 works via the Vite plugin.
-
-### Step C — Delete the old config
-
-Delete `tailwind.config.mjs` entirely (v4 is CSS-first; theme now lives in `global.css`).
-
-### Step D — Replace `src/styles/global.css` with the full token system
-
-Replace the **entire** file with:
-
-```css
-@import 'tailwindcss';
-@plugin '@tailwindcss/typography';
-
-/* Class-based dark mode (Tailwind v4 syntax) */
-@custom-variant dark (&:where(.dark, .dark *));
-
-@theme {
-    /* ---------- Typography ---------- */
-    --font-sans:
-        'Inter Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-        'Helvetica Neue', Arial, sans-serif;
-    --font-serif: 'Fraunces Variable', ui-serif, Georgia, Cambria, 'Times New Roman', serif;
-
-    /* ---------- Warm neutral (stone) ramp ---------- */
-    --color-neutral-50: #fafaf9;
-    --color-neutral-100: #f5f5f4;
-    --color-neutral-200: #e7e5e4;
-    --color-neutral-300: #d6d3d1;
-    --color-neutral-400: #a8a29e;
-    --color-neutral-500: #78716c;
-    --color-neutral-600: #57534e;
-    --color-neutral-700: #44403c;
-    --color-neutral-800: #292524;
-    --color-neutral-900: #1c1917;
-    --color-neutral-950: #0c0a09;
-
-    /* Override Tailwind's default gray to the warm ramp (cohesion, adds 950) */
-    --color-gray-50: #fafaf9;
-    --color-gray-100: #f5f5f4;
-    --color-gray-200: #e7e5e4;
-    --color-gray-300: #d6d3d1;
-    --color-gray-400: #a8a29e;
-    --color-gray-500: #78716c;
-    --color-gray-600: #57534e;
-    --color-gray-700: #44403c;
-    --color-gray-800: #292524;
-    --color-gray-900: #1c1917;
-    --color-gray-950: #0c0a09;
-
-    /* Legacy "secondary" name → warm neutral ramp (keeps existing classes working) */
-    --color-secondary-50: #fafaf9;
-    --color-secondary-100: #f5f5f4;
-    --color-secondary-200: #e7e5e4;
-    --color-secondary-300: #d6d3d1;
-    --color-secondary-400: #a8a29e;
-    --color-secondary-500: #78716c;
-    --color-secondary-600: #57534e;
-    --color-secondary-700: #44403c;
-    --color-secondary-800: #292524;
-    --color-secondary-900: #1c1917;
-    --color-secondary-950: #0c0a09;
-
-    /* ---------- Accent (refined saffron / terracotta) ---------- */
-    --color-accent-50: #fdf5ef;
-    --color-accent-100: #fae7d5;
-    --color-accent-200: #f4cba9;
-    --color-accent-300: #eca873;
-    --color-accent-400: #e08445;
-    --color-accent-500: #cf6a2b;
-    --color-accent-600: #b8541f;
-    --color-accent-700: #98411c;
-    --color-accent-800: #7c361c;
-    --color-accent-900: #662e1a;
-    --color-accent-950: #37160b;
-
-    /* Legacy "primary" name → accent ramp (keeps existing classes working) */
-    --color-primary-50: #fdf5ef;
-    --color-primary-100: #fae7d5;
-    --color-primary-200: #f4cba9;
-    --color-primary-300: #eca873;
-    --color-primary-400: #e08445;
-    --color-primary-500: #cf6a2b;
-    --color-primary-600: #b8541f;
-    --color-primary-700: #98411c;
-    --color-primary-800: #7c361c;
-    --color-primary-900: #662e1a;
-    --color-primary-950: #37160b;
-
-    /* ---------- Radii ---------- */
-    --radius-card: 1rem;
-
-    /* ---------- Layered neutral shadows (replace orange glows) ---------- */
-    --shadow-card: 0 1px 2px rgb(28 25 23 / 0.04), 0 6px 16px rgb(28 25 23 / 0.06);
-    --shadow-card-hover: 0 4px 8px rgb(28 25 23 / 0.06), 0 14px 32px rgb(28 25 23 / 0.1);
-}
-
-/* ---------- Semantic surface variables (theme-switched) ---------- */
-:root {
-    --surface: #ffffff;
-    --surface-page: #fafaf9;
-    --surface-elevated: #ffffff;
-    --border-subtle: #e7e5e4;
-    --ink: #1c1917;
-    --ink-muted: #78716c;
-}
-.dark {
-    --surface: #1c1917;
-    --surface-page: #0c0a09;
-    --surface-elevated: #1c1917;
-    --border-subtle: #292524;
-    --ink: #fafaf9;
-    --ink-muted: #a8a29e;
-}
-
-@layer base {
-    * {
-        font-feature-settings:
-            'rlig' 1,
-            'calt' 1;
-    }
-    html {
-        font-family: var(--font-sans);
-    }
-    /* Editorial: display headings use the serif */
-    h1,
-    h2,
-    h3 {
-        font-family: var(--font-serif);
-        font-optical-sizing: auto;
-        letter-spacing: -0.01em;
-    }
-    ::-webkit-scrollbar {
-        width: 10px;
-    }
-    ::-webkit-scrollbar-track {
-        @apply bg-neutral-100 dark:bg-neutral-900;
-    }
-    ::-webkit-scrollbar-thumb {
-        @apply bg-neutral-300 dark:bg-neutral-700 rounded;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        @apply bg-neutral-400 dark:bg-neutral-600;
-    }
-}
-
-*:focus-visible {
-    @apply outline-2 outline-offset-2 outline-primary-600 dark:outline-primary-400;
-}
-
-html {
-    @apply transition-colors duration-200;
-}
-
-body {
-    @apply antialiased;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-@layer components {
-    .container-narrow {
-        @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
-    }
-    .container-wide {
-        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-    }
-}
-
-@layer utilities {
-    .text-balance {
-        text-wrap: balance;
-    }
-    .animate-fade-in {
-        animation: fadeIn 0.5s ease-out both;
-    }
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-}
-
-/* ---------- Prose (Tailwind Typography v4 via CSS variables) ---------- */
-.prose {
-    max-width: none;
-    --tw-prose-body: var(--color-neutral-700);
-    --tw-prose-headings: var(--color-neutral-900);
-    --tw-prose-links: var(--color-primary-600);
-    --tw-prose-bold: var(--color-neutral-900);
-    --tw-prose-code: var(--color-neutral-900);
-    --tw-prose-quotes: var(--color-neutral-700);
-    --tw-prose-quote-borders: var(--color-primary-500);
-    --tw-prose-hr: var(--color-neutral-300);
-    --tw-prose-th-borders: var(--color-neutral-300);
-    --tw-prose-td-borders: var(--color-neutral-200);
-}
-.dark .prose {
-    --tw-prose-body: var(--color-neutral-300);
-    --tw-prose-headings: var(--color-neutral-100);
-    --tw-prose-links: var(--color-primary-400);
-    --tw-prose-bold: var(--color-neutral-100);
-    --tw-prose-code: var(--color-neutral-100);
-    --tw-prose-quotes: var(--color-neutral-300);
-    --tw-prose-quote-borders: var(--color-primary-400);
-    --tw-prose-hr: var(--color-neutral-700);
-    --tw-prose-th-borders: var(--color-neutral-700);
-    --tw-prose-td-borders: var(--color-neutral-800);
-}
-.prose :is(h1, h2, h3, h4) {
-    font-family: var(--font-serif);
-}
-.prose a {
-    text-decoration: none;
-}
-.prose a:hover {
-    text-decoration: underline;
-}
-.prose pre {
-    @apply bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg;
-}
-.prose img {
-    @apply rounded-lg shadow-card;
-}
-```
-
-### Step E — Fonts + remove Google Fonts from `src/layouts/BaseLayout.astro`
-
-1. At the **top of the frontmatter** (after the existing imports, around line 6), add:
-
-```js
-import '@fontsource-variable/inter';
-import '@fontsource-variable/fraunces';
-```
-
-2. **Delete** these lines from `<head>` (lines 29–34):
+**Find** (the `<body>` open tag, ~line 73):
 
 ```html
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-/>
+<body
+    class="bg-primary-100/30 dark:bg-secondary-900 text-gray-900 dark:text-gray-100 transition-colors"
+></body>
 ```
 
-(Leave the `<meta name="generator">` and everything else intact. The body-background change is a separate task — 1.1.)
+**Replace with:**
 
-### Step F — Fix the font var in `src/components/Search.astro`
-
-Find (line 54):
-
-```css
---pagefind-ui-font: 'Plus Jakarta Sans', sans-serif;
+```html
+<body
+    class="bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors"
+></body>
 ```
 
-Replace with:
+**Find** the `<main>` (~line 81):
 
-```css
---pagefind-ui-font: 'Inter Variable', system-ui, sans-serif;
+```html
+<main class="flex-1 overflow-x-hidden" data-pagefind-body>
+    <slot />
+</main>
 ```
 
-(The hardcoded Pagefind color hex values are updated in Task 1.6 — leave them for now.)
+**Replace with:**
 
-### Test (Phase 0 gate — MUST pass before any other phase)
-
-```bash
-npm run dev
+```html
+<main class="flex-1 overflow-x-hidden min-w-0" data-pagefind-body>
+    <slot />
+</main>
 ```
 
-- Open http://localhost:4321 — the site should render with **serif headings**, a **warm off-white** background feel, and **saffron/terracotta** accents (links, buttons) instead of bright orange, and **no teal**.
-- No build/console errors about Tailwind, `@theme`, or missing fonts.
-- Toggle dark mode (button top-right) — surfaces should be **warm charcoal**, not teal-black.
-- Then confirm a production build:
+(`min-w-0` prevents flex children from forcing horizontal overflow. Page-level max-width stays per-page for now; ContentLayout/homepage tasks handle their own spacing.)
 
-```bash
-npm run build
-```
-
-Must complete with no errors. **If the build fails, fix it before proceeding.** Common v4 gotchas: `@plugin` path must be quoted; `@custom-variant` must appear before use; ensure no leftover `@tailwind base/components/utilities` directives remain.
+**Test:** `npm run dev` → homepage and `/apps` have a clean near-white (light) / near-black warm (dark) background with no orange tint. No horizontal scrollbar.
 
 ---
