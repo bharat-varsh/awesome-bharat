@@ -1,3 +1,65 @@
+# PHASE 0 — Foundation (BLOCKING) 🔴 Large
+
+> One task, done by a **Large** model, because it combines a framework migration with token-system design and requires build debugging. Do NOT split or parallelize. When this task is complete and `npm run build` passes, the whole site will already look dramatically better (warm neutral + saffron, serif headings) even before later phases.
+
+## Task 0.1 — Migrate to Tailwind v4 + install design tokens + self-hosted fonts 🔴
+
+### Step A — Dependencies
+
+Run:
+
+```bash
+npm install tailwindcss@^4 @tailwindcss/vite@^4 @fontsource-variable/inter @fontsource-variable/fraunces
+npm install -D @tailwindcss/typography@latest
+npm uninstall @astrojs/tailwind
+```
+
+### Step B — `astro.config.mjs`
+
+Replace the whole file with:
+
+```js
+import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
+import { fileURLToPath } from 'url';
+import { resolve } from 'path';
+
+export default defineConfig({
+    site: 'https://awesomebharat.com',
+    integrations: [mdx(), sitemap()],
+    markdown: {
+        shikiConfig: {
+            theme: 'github-dark',
+            wrap: true,
+        },
+    },
+    vite: {
+        plugins: [tailwindcss()],
+        resolve: {
+            alias: {
+                '@': resolve(fileURLToPath(new URL('.', import.meta.url)), 'src'),
+            },
+        },
+        build: {
+            cssMinify: 'lightningcss',
+        },
+    },
+});
+```
+
+> Note: the old `tailwind({ applyBaseStyles: false })` integration is removed; v4 works via the Vite plugin.
+
+### Step C — Delete the old config
+
+Delete `tailwind.config.mjs` entirely (v4 is CSS-first; theme now lives in `global.css`).
+
+### Step D — Replace `src/styles/global.css` with the full token system
+
+Replace the **entire** file with:
+
+```css
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
@@ -6,8 +68,9 @@
 
 @theme {
     /* ---------- Typography ---------- */
-    --font-sans: 'Inter Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-        Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-sans:
+        'Inter Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif;
     --font-serif: 'Fraunces Variable', ui-serif, Georgia, Cambria, 'Times New Roman', serif;
 
     /* ---------- Warm neutral (stone) ramp ---------- */
@@ -103,7 +166,9 @@
 
 @layer base {
     * {
-        font-feature-settings: 'rlig' 1, 'calt' 1;
+        font-feature-settings:
+            'rlig' 1,
+            'calt' 1;
     }
     html {
         font-family: var(--font-sans);
@@ -221,3 +286,61 @@ body {
 .prose img {
     @apply rounded-lg shadow-card;
 }
+```
+
+### Step E — Fonts + remove Google Fonts from `src/layouts/BaseLayout.astro`
+
+1. At the **top of the frontmatter** (after the existing imports, around line 6), add:
+
+```js
+import '@fontsource-variable/inter';
+import '@fontsource-variable/fraunces';
+```
+
+2. **Delete** these lines from `<head>` (lines 29–34):
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+/>
+```
+
+(Leave the `<meta name="generator">` and everything else intact. The body-background change is a separate task — 1.1.)
+
+### Step F — Fix the font var in `src/components/Search.astro`
+
+Find (line 54):
+
+```css
+--pagefind-ui-font: 'Plus Jakarta Sans', sans-serif;
+```
+
+Replace with:
+
+```css
+--pagefind-ui-font: 'Inter Variable', system-ui, sans-serif;
+```
+
+(The hardcoded Pagefind color hex values are updated in Task 1.6 — leave them for now.)
+
+### Test (Phase 0 gate — MUST pass before any other phase)
+
+```bash
+npm run dev
+```
+
+- Open http://localhost:4321 — the site should render with **serif headings**, a **warm off-white** background feel, and **saffron/terracotta** accents (links, buttons) instead of bright orange, and **no teal**.
+- No build/console errors about Tailwind, `@theme`, or missing fonts.
+- Toggle dark mode (button top-right) — surfaces should be **warm charcoal**, not teal-black.
+- Then confirm a production build:
+
+```bash
+npm run build
+```
+
+Must complete with no errors. **If the build fails, fix it before proceeding.** Common v4 gotchas: `@plugin` path must be quoted; `@custom-variant` must appear before use; ensure no leftover `@tailwind base/components/utilities` directives remain.
+
+---
