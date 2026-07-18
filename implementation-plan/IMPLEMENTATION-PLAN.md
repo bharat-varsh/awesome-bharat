@@ -329,7 +329,7 @@ Replace with:
 ### Test (Phase 0 gate — MUST pass before any other phase)
 
 ```bash
-npm run dev
+npm run build
 ```
 
 - Open http://localhost:4321 — the site should render with **serif headings**, a **warm off-white** background feel, and **saffron/terracotta** accents (links, buttons) instead of bright orange, and **no teal**.
@@ -385,7 +385,7 @@ Must complete with no errors. **If the build fails, fix it before proceeding.** 
 
 (`min-w-0` prevents flex children from forcing horizontal overflow. Page-level max-width stays per-page for now; ContentLayout/homepage tasks handle their own spacing.)
 
-**Test:** `npm run dev` → homepage and `/apps` have a clean near-white (light) / near-black warm (dark) background with no orange tint. No horizontal scrollbar.
+**Test:** `npm run build` → homepage and `/apps` have a clean near-white (light) / near-black warm (dark) background with no orange tint. No horizontal scrollbar.
 
 ---
 
@@ -446,7 +446,7 @@ Must complete with no errors. **If the build fails, fix it before proceeding.** 
 
 (Serif wordmark, no brackets, accent on the second word.)
 
-**Test:** `npm run dev` → header reads "AwesomeBharat" in serif, "Bharat" in saffron; bar is neutral translucent. Hamburger + search + theme toggle still work.
+**Test:** `npm run build` → header reads "AwesomeBharat" in serif, "Bharat" in saffron; bar is neutral translucent. Hamburger + search + theme toggle still work.
 
 ---
 
@@ -480,7 +480,7 @@ Must complete with no errors. **If the build fails, fix it before proceeding.** 
 © {currentYear} AwesomeBharat. All rights reserved.
 ```
 
-**Test:** `npm run dev` → footer renders (it is already wired into `BaseLayout`), neutral background, copyright reads "AwesomeBharat" with no brackets.
+**Test:** `npm run build` → footer renders (it is already wired into `BaseLayout`), neutral background, copyright reads "AwesomeBharat" with no brackets.
 
 ---
 
@@ -544,7 +544,7 @@ This file has the active-state highlight repeated twice (Home link ~line 53, and
 
 > ⚠️ **Prerequisite check:** confirm a `/people` route exists (look for `src/pages/people/`). If only `src/pages/persons/` exists and `/people` 404s, do the **opposite** instead — keep `/persons` here and change the homepage links in `src/pages/index.astro` (Task 3.1) from `/people/...` → `/persons/...` and the "View all" `href="/people"` → `href="/persons"`. Pick whichever directory actually exists and make the other side match. Do not create new routes (out of scope). If unsure, leave `/persons` and fix the homepage side.
 
-**Test:** `npm run dev` (desktop width ≥1024px) → left sidebar is warm neutral; active page has a soft saffron highlight (not a solid block); clicking "Apps"/"People"/"Companies" navigates without 404.
+**Test:** `npm run build` (desktop width ≥1024px) → left sidebar is warm neutral; active page has a soft saffron highlight (not a solid block); clicking "Apps"/"People"/"Companies" navigates without 404.
 
 ---
 
@@ -607,7 +607,7 @@ Replace the **entire file** with:
 
 (Clean `currentColor` line icons; fixes the duplicate `id` bug; persistence still handled by the `MutationObserver` in `BaseLayout.astro`.)
 
-**Test:** `npm run dev` → toggle shows a moon in light mode, sun in dark mode; clicking flips the theme; reload preserves choice.
+**Test:** `npm run build` → toggle shows a moon in light mode, sun in dark mode; clicking flips the theme; reload preserves choice.
 
 ---
 
@@ -706,7 +706,7 @@ Key changes: wider card (140–160px), rounded container + border + `shadow-card
 
 > **Coordination note:** the homepage scroll rows (Task 3.1) reference these cards. The wider card still works in the existing `flex gap-5 overflow-x-auto snap-x` rows — no change needed there beyond Task 3.1's own edits. If doing 2.1 before 3.1, the rows simply show larger cards.
 
-**Test:** `npm run dev` → homepage carousels show rounded, bordered cards with soft shadows that lift on hover; logos are fully visible (not cropped). Both themes look clean.
+**Test:** `npm run build` → homepage carousels show rounded, bordered cards with soft shadows that lift on hover; logos are fully visible (not cropped). Both themes look clean.
 
 ---
 
@@ -776,7 +776,7 @@ Also wrap the logo tile with rounding — **find** (~line 47):
 </span>
 ```
 
-**Test:** `npm run dev` → `/apps` grid cards are rounded with soft shadows, logos uncropped on a subtle tile; featured cards get a tasteful saffron ring (no yellow); hover lifts.
+**Test:** `npm run build` → `/apps` grid cards are rounded with soft shadows, logos uncropped on a subtle tile; featured cards get a tasteful saffron ring (no yellow); hover lifts.
 
 ---
 
@@ -868,7 +868,7 @@ Also wrap the logo tile with rounding — **find** (~line 47):
 
 Optionally tokenize the `pills` block (~lines 63, 68): replace `ring-primary-200` → `ring-neutral-200`, `bg-white/90` → `bg-neutral-50`, `dark:bg-secondary-800` → `dark:bg-neutral-800`, `dark:ring-secondary-700` → `dark:ring-neutral-700`. Keep `hover:bg-primary-600 hover:text-white`.
 
-**Test:** `npm run dev` → `/apps` hero is a clean white/neutral card with a large **serif** title, tasteful saffron eyebrow + count pill; no orange-to-teal gradient.
+**Test:** `npm run build` → `/apps` hero is a clean white/neutral card with a large **serif** title, tasteful saffron eyebrow + count pill; no orange-to-teal gradient.
 
 ---
 
@@ -920,7 +920,7 @@ For the `alt`, write `alt={'title' in item.data ? item.data.title : item.data.na
 <h4 class="mt-2 text-xs font-medium text-neutral-900 dark:text-neutral-100 line-clamp-2"></h4>
 ```
 
-**Test:** `npm run dev` → open an app detail page (`/apps/mindful`); the "More by …" tiles in the right sidebar are neutral rounded cards that lift on hover (no orange glow, no shrink), and their titles render.
+**Test:** `npm run build` → open an app detail page (`/apps/mindful`); the "More by …" tiles in the right sidebar are neutral rounded cards that lift on hover (no orange glow, no shrink), and their titles render.
 
 ---
 
@@ -952,7 +952,7 @@ shadow-card hover:shadow-card-hover transition-shadow duration-200 border border
 
 (Screenshots has 1 occurrence ~line 29; YouTubeEmbed has 2 ~lines 28 and 103.)
 
-**Test:** `npm run dev` → on an app detail page with screenshots/videos (e.g. `/apps/mindful`), media tiles have subtle neutral shadows; no visual regressions; arrows still scroll.
+**Test:** `npm run build` → on an app detail page with screenshots/videos (e.g. `/apps/mindful`), media tiles have subtle neutral shadows; no visual regressions; arrows still scroll.
 
 ---
 
@@ -1194,7 +1194,7 @@ Also update the section `<h2>` (~line 308) to serif: replace `class="text-xl fon
 
 Leave the `<script>` at the bottom (lines 341–358) unchanged — it already drives `.scroll-left/.scroll-right` via `data-scroll-container`.
 
-**Test:** `npm run dev` → homepage has a large serif editorial hero, three carousels with clean circular icon-button arrows (which scroll on click), rounded category tiles, and a saffron CTA. Verify at mobile, tablet, desktop widths, in both themes. No horizontal page overflow.
+**Test:** `npm run build` → homepage has a large serif editorial hero, three carousels with clean circular icon-button arrows (which scroll on click), rounded category tiles, and a saffron CTA. Verify at mobile, tablet, desktop widths, in both themes. No horizontal page overflow.
 
 ---
 
@@ -1318,7 +1318,7 @@ And the description `<p>` (~lines 423–425) — swap `text-gray-700 dark:text-g
 
 The store badges render **twice** (once as the inline dropdown, and once via `<StoreBadges>` at line 458). Keep both — they serve different purposes (dropdown = quick action; `<StoreBadges>` block = full badges below content). **No change needed** unless you see a literal duplicate `<StoreBadges>` — there is only one, so leave it. (This sub-task exists to confirm; the CLAUDE.md "duplicated" note refers to the dropdown+block pattern, which is intentional here.)
 
-**Test:** `npm run dev` → open `/apps/mindful`: header card has a clean neutral border + soft shadow (no orange glow), logo sits on a rounded tile, status chips are neutral outlined with a small dot, page scrolls naturally as one column (no trapped inner scroll), right sidebar sticks. CTA dropdown still opens/closes. Check both themes.
+**Test:** `npm run build` → open `/apps/mindful`: header card has a clean neutral border + soft shadow (no orange glow), logo sits on a rounded tile, status chips are neutral outlined with a small dot, page scrolls naturally as one column (no trapped inner scroll), right sidebar sticks. CTA dropdown still opens/closes. Check both themes.
 
 ---
 
@@ -1328,7 +1328,7 @@ The store badges render **twice** (once as the inline dropdown, and once via `<S
 
 These consume the now-refactored `CollectionHero`, `ContentCardFull`, and `ContentLayout`, so they inherit the new look. Only change needed: in `src/pages/apps/index.astro`, the grid wrapper (~lines 31–33) is fine. Verify no `primary-`/`secondary-` literals remain that imply the old palette — none do here.
 
-**Test:** `npm run dev` → `/apps` listing shows the new hero + cards; clicking an app shows the new detail layout. No errors.
+**Test:** `npm run build` → `/apps` listing shows the new hero + cards; clicking an app shows the new detail layout. No errors.
 
 ---
 

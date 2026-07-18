@@ -1,41 +1,60 @@
-## Task 1.1 — BaseLayout: neutral page background + intrinsic `main` container 🔵
+## Task 1.2 — Header: replace `[ Awesome ] Bharat` bracket wordmark + neutral bar 🔵
 
-**File:** `src/layouts/BaseLayout.astro`
+**File:** `src/components/Header.astro`
 
-**Find** (the `<body>` open tag, ~line 73):
+**Find** the header open tag (~line 28):
 
 ```html
-<body
-    class="bg-primary-100/30 dark:bg-secondary-900 text-gray-900 dark:text-gray-100 transition-colors"
-></body>
+<header
+    class="sticky top-0 z-50 bg-primary-100/80 dark:bg-secondary-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800"
+></header>
 ```
 
 **Replace with:**
 
 ```html
-<body
-    class="bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors"
-></body>
+<header
+    class="sticky top-0 z-50 bg-neutral-50/80 dark:bg-neutral-950/80 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800"
+></header>
 ```
 
-**Find** the `<main>` (~line 81):
+**Find** the center title block (~lines 81–98):
 
 ```html
-<main class="flex-1 overflow-x-hidden" data-pagefind-body>
-    <slot />
-</main>
+<a
+    href="/"
+    class="flex flex-col md:flex-row items-center gap-1 md:gap-2 justify-center text-center"
+>
+    <span
+        class="group text-lg md:text-xl lg:text-2xl
+            font-bold md:font-semibold lg:font-bold
+            hover:text-primary-600 dark:hover:text-primary-400"
+    >
+        <span
+            class="text-primary-600 dark:text-primary-400
+            group-hover:text-gray-950 dark:group-hover:text-primary-100"
+        >
+            [ Awesome ]
+        </span>
+        Bharat
+    </span>
+</a>
 ```
 
 **Replace with:**
 
 ```html
-<main class="flex-1 overflow-x-hidden min-w-0" data-pagefind-body>
-    <slot />
-</main>
+<a href="/" class="flex items-center justify-center text-center">
+    <span
+        class="font-serif text-xl md:text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50 transition-colors"
+    >
+        Awesome<span class="text-primary-600 dark:text-primary-400">Bharat</span>
+    </span>
+</a>
 ```
 
-(`min-w-0` prevents flex children from forcing horizontal overflow. Page-level max-width stays per-page for now; ContentLayout/homepage tasks handle their own spacing.)
+(Serif wordmark, no brackets, accent on the second word.)
 
-**Test:** `npm run dev` → homepage and `/apps` have a clean near-white (light) / near-black warm (dark) background with no orange tint. No horizontal scrollbar.
+**Test:** `npm run build` → header reads "AwesomeBharat" in serif, "Bharat" in saffron; bar is neutral translucent. Hamburger + search + theme toggle still work.
 
 ---
