@@ -6,6 +6,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
+import CardRow from '@/components/CardRow.astro';
 
 const [apps, persons, companies] = await Promise.all([
     getCollection('apps'),
@@ -112,184 +113,62 @@ function formatCategory(category: string) {
 
     <div class="max-w-7xl mx-auto px-4 py-12 space-y-12">
         <!-- Latest Apps -->
-        <section class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Latest Apps</h2>
-                <a href="/apps" class="text-sm text-primary-500 hover:text-primary-600">View all</a>
-            </div>
-
-            <!-- Horizontal scroll row -->
-            <div class="relative">
-                <!-- Left arrow -->
-                <button
-                    aria-label="Scroll left"
-                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-left"
-                    data-scroll-container="latest-apps"
-                >
-                    ‹
-                </button>
-
-                <!-- Scroll container -->
-                <div
-                    id="latest-apps"
-                    class="flex gap-5 overflow-x-auto scroll-smooth pb-2
-                 snap-x snap-mandatory
-                 px-10 md:px-12 scrollbar-hide"
-                >
-                    {
-                        latestApps.map((app) => (
-                            <ContentCard
-                                title={app.data.title}
-                                href={`/apps/${app.slug}`}
-                                image={app.data.logo}
-                                slug={app.slug}
-                                tags={[
-                                    nonDraftPersons.find(
-                                        (p: CollectionEntry<'persons'>) =>
-                                            p.slug === app.data.authors?.[0]?.slug
-                                    )?.data.name ||
-                                        nonDraftCompanies.find(
-                                            (c: CollectionEntry<'companies'>) =>
-                                                c.slug === app.data.authors?.[0]?.slug
-                                        )?.data.name ||
-                                        'Unknown',
-                                ]}
-                                class="snap-start"
-                            />
-                        ))
-                    }
-                </div>
-
-                <!-- Right arrow -->
-                <button
-                    aria-label="Scroll right"
-                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-right"
-                    data-scroll-container="latest-apps"
-                >
-                    ›
-                </button>
-            </div>
-        </section>
+        <CardRow title="Latest Apps" viewAllHref="/apps" id="latest-apps">
+            {
+                latestApps.map((app) => (
+                    <ContentCard
+                        title={app.data.title}
+                        href={`/apps/${app.slug}`}
+                        image={app.data.logo}
+                        slug={app.slug}
+                        tags={[
+                            nonDraftPersons.find(
+                                (p: CollectionEntry<'persons'>) =>
+                                    p.slug === app.data.authors?.[0]?.slug
+                            )?.data.name ||
+                                nonDraftCompanies.find(
+                                    (c: CollectionEntry<'companies'>) =>
+                                        c.slug === app.data.authors?.[0]?.slug
+                                )?.data.name ||
+                                'Unknown',
+                        ]}
+                        class="snap-start"
+                    />
+                ))
+            }
+        </CardRow>
 
         <!-- Featured People -->
-        <section class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Featured People
-                </h2>
-                <a href="/people" class="text-sm text-primary-500 hover:text-primary-600"
-                    >View all</a
-                >
-            </div>
-
-            <!-- Horizontal scroll row -->
-            <div class="relative">
-                <!-- Left arrow -->
-                <button
-                    aria-label="Scroll left"
-                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-left"
-                    data-scroll-container="featured-people"
-                >
-                    ‹
-                </button>
-
-                <!-- Scroll container -->
-                <div
-                    id="featured-people"
-                    class="flex gap-5 overflow-x-auto scroll-smooth pb-2
-                 snap-x snap-mandatory
-                 px-10 md:px-12 scrollbar-hide"
-                >
-                    {
-                        featuredPersons.map((person) => (
-                            <ContentCard
-                                title={person.data.name}
-                                href={`/people/${person.slug}`}
-                                image={person.data.avatar}
-                                slug={person.slug}
-                                tags={person.data.tags}
-                                class="snap-start"
-                            />
-                        ))
-                    }
-                </div>
-
-                <!-- Right arrow -->
-                <button
-                    aria-label="Scroll right"
-                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-right"
-                    data-scroll-container="featured-people"
-                >
-                    ›
-                </button>
-            </div>
-        </section>
+        <CardRow title="Featured People" viewAllHref="/people" id="featured-people">
+            {
+                featuredPersons.map((person) => (
+                    <ContentCard
+                        title={person.data.name}
+                        href={`/people/${person.slug}`}
+                        image={person.data.avatar}
+                        slug={person.slug}
+                        tags={person.data.tags}
+                        class="snap-start"
+                    />
+                ))
+            }
+        </CardRow>
 
         <!-- Featured Companies -->
-        <section class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Featured Companies
-                </h2>
-                <a href="/companies" class="text-sm text-primary-500 hover:text-primary-600"
-                    >View all</a
-                >
-            </div>
-
-            <!-- Horizontal scroll row -->
-            <div class="relative">
-                <!-- Left arrow -->
-                <button
-                    aria-label="Scroll left"
-                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-left"
-                    data-scroll-container="featured-companies"
-                >
-                    ‹
-                </button>
-
-                <!-- Scroll container -->
-                <div
-                    id="featured-companies"
-                    class="flex gap-5 overflow-x-auto scroll-smooth pb-2
-                 snap-x snap-mandatory
-                 px-10 md:px-12 scrollbar-hide"
-                >
-                    {
-                        featuredCompanies.map((company) => (
-                            <ContentCard
-                                title={company.data.name}
-                                href={`/companies/${company.slug}`}
-                                image={company.data.logo}
-                                slug={company.slug}
-                                tags={company.data.tags}
-                                class="snap-start"
-                            />
-                        ))
-                    }
-                </div>
-
-                <!-- Right arrow -->
-                <button
-                    aria-label="Scroll right"
-                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-right"
-                    data-scroll-container="featured-companies"
-                >
-                    ›
-                </button>
-            </div>
-        </section>
+        <CardRow title="Featured Companies" viewAllHref="/companies" id="featured-companies">
+            {
+                featuredCompanies.map((company) => (
+                    <ContentCard
+                        title={company.data.name}
+                        href={`/companies/${company.slug}`}
+                        image={company.data.logo}
+                        slug={company.slug}
+                        tags={company.data.tags}
+                        class="snap-start"
+                    />
+                ))
+            }
+        </CardRow>
 
         <!-- Explore by Category -->
         <section class="space-y-4">

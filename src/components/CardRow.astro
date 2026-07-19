@@ -1,8 +1,3 @@
-### 3.1b — Extract a reusable carousel (removes 3× duplicated markup)
-
-Create a new file `src/components/CardRow.astro`:
-
-```astro
 ---
 export interface Props {
     title: string;
@@ -62,6 +57,3 @@ const { title, viewAllHref, id } = Astro.props;
         </button>
     </div>
 </section>
-```
-
-(Icon-button arrows replace the `‹`/`›` glyphs; the `.scroll-left/.scroll-right` + `data-scroll-container` contract matches the existing `<script>` at the bottom of `index.astro`, so it keeps working.)
