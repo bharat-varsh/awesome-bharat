@@ -188,7 +188,9 @@ const getItemImage = (item: CategorizedApp | CategorizedPerson | CategorizedComp
                                             ? resolveLogo(item.slug, getItemImage(item))
                                             : undefined
                                     }
-domains={(item.data.domains ?? []).map((d) => getDomainMeta(d).label)}
+                                    domains={(item.data.domains ?? []).map(
+                                        (d) => getDomainMeta(d).label
+                                    )}
                                     categories={
                                         item.collection === 'apps'
                                             ? item.data.categories

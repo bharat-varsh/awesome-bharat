@@ -1,16 +1,16 @@
 ## Task list overview
 
-| # | Task | New/Edit | File |
-|---|------|----------|------|
-| 1 | Create the domain metadata util | New | `src/utils/domainMeta.ts` |
-| 2 | Create a shared "collections to scan" registry | New | `src/utils/collectionsToScan.ts` |
-| 3 | Build the domain detail page `/domains/[domain]` | New | `src/pages/domains/[domain].astro` |
-| 4 | Build the domain index page `/domains` | New | `src/pages/domains/index.astro` |
-| 5 | Migrate existing cards to the real `domains` field | Edit | 3 existing pages |
-| 6 | Add "Domains" to the sidebar navigation | Edit | `src/components/SidebarNav.astro` |
-| 7 | Link domains from the detail page header | Edit | `src/layouts/ContentLayout.astro` + `[slug].astro` |
-| 8 | (Optional) Per-domain RSS feed | New | `src/pages/domains/[domain]/rss.xml.ts` |
-| 9 | Build, verify, and add seed data | — | commands below |
+| #   | Task                                               | New/Edit | File                                               |
+| --- | -------------------------------------------------- | -------- | -------------------------------------------------- |
+| 1   | Create the domain metadata util                    | New      | `src/utils/domainMeta.ts`                          |
+| 2   | Create a shared "collections to scan" registry     | New      | `src/utils/collectionsToScan.ts`                   |
+| 3   | Build the domain detail page `/domains/[domain]`   | New      | `src/pages/domains/[domain].astro`                 |
+| 4   | Build the domain index page `/domains`             | New      | `src/pages/domains/index.astro`                    |
+| 5   | Migrate existing cards to the real `domains` field | Edit     | 3 existing pages                                   |
+| 6   | Add "Domains" to the sidebar navigation            | Edit     | `src/components/SidebarNav.astro`                  |
+| 7   | Link domains from the detail page header           | Edit     | `src/layouts/ContentLayout.astro` + `[slug].astro` |
+| 8   | (Optional) Per-domain RSS feed                     | New      | `src/pages/domains/[domain]/rss.xml.ts`            |
+| 9   | Build, verify, and add seed data                   | —        | commands below                                     |
 
 ---
 
@@ -37,23 +37,79 @@ export interface DomainMeta {
  * If you add a value to domainEnum, add it here too (and vice versa).
  */
 export const DOMAIN_META: Record<string, DomainMeta> = {
-    technology: { label: 'Technology', icon: '💻', blurb: 'Indian-built technology across the stack.' },
-    space: { label: 'Space', icon: '🚀', blurb: "India's reach for the stars — space tech and exploration." },
-    defense: { label: 'Defense', icon: '🛡️', blurb: 'Defense and strategic technology made in India.' },
-    artificialIntelligence: { label: 'Artificial Intelligence', icon: '🤖', blurb: 'AI research, models, and products from India.' },
+    technology: {
+        label: 'Technology',
+        icon: '💻',
+        blurb: 'Indian-built technology across the stack.',
+    },
+    space: {
+        label: 'Space',
+        icon: '🚀',
+        blurb: "India's reach for the stars — space tech and exploration.",
+    },
+    defense: {
+        label: 'Defense',
+        icon: '🛡️',
+        blurb: 'Defense and strategic technology made in India.',
+    },
+    artificialIntelligence: {
+        label: 'Artificial Intelligence',
+        icon: '🤖',
+        blurb: 'AI research, models, and products from India.',
+    },
     health: { label: 'Health', icon: '🏥', blurb: 'Healthcare innovation improving Indian lives.' },
-    mentalHealth: { label: 'Mental Health', icon: '🧠', blurb: 'Tools and voices supporting mental wellbeing.' },
-    environment: { label: 'Environment', icon: '🌱', blurb: 'Protecting and restoring the environment.' },
-    agriculture: { label: 'Agriculture', icon: '🌾', blurb: 'Feeding the nation — agri-tech and farming.' },
-    cleanEnergy: { label: 'Clean Energy', icon: '⚡', blurb: 'Renewable and clean energy from India.' },
-    education: { label: 'Education', icon: '🎓', blurb: 'Learning, teaching, and knowledge for all.' },
-    research: { label: 'Research', icon: '🔬', blurb: 'Frontier research and scientific discovery.' },
+    mentalHealth: {
+        label: 'Mental Health',
+        icon: '🧠',
+        blurb: 'Tools and voices supporting mental wellbeing.',
+    },
+    environment: {
+        label: 'Environment',
+        icon: '🌱',
+        blurb: 'Protecting and restoring the environment.',
+    },
+    agriculture: {
+        label: 'Agriculture',
+        icon: '🌾',
+        blurb: 'Feeding the nation — agri-tech and farming.',
+    },
+    cleanEnergy: {
+        label: 'Clean Energy',
+        icon: '⚡',
+        blurb: 'Renewable and clean energy from India.',
+    },
+    education: {
+        label: 'Education',
+        icon: '🎓',
+        blurb: 'Learning, teaching, and knowledge for all.',
+    },
+    research: {
+        label: 'Research',
+        icon: '🔬',
+        blurb: 'Frontier research and scientific discovery.',
+    },
     startups: { label: 'Startups', icon: '🚀', blurb: "India's startup ecosystem and founders." },
     finance: { label: 'Finance', icon: '💰', blurb: 'Fintech, payments, and financial services.' },
-    manufacturing: { label: 'Manufacturing', icon: '🏭', blurb: 'Making things — Indian manufacturing.' },
-    socialImpact: { label: 'Social Impact', icon: '🤝', blurb: 'Work that changes lives for the better.' },
-    governance: { label: 'Governance', icon: '🏛️', blurb: 'Public systems, policy, and civic tech.' },
-    ruralDevelopment: { label: 'Rural Development', icon: '🏘️', blurb: "Uplifting India's villages and rural economy." },
+    manufacturing: {
+        label: 'Manufacturing',
+        icon: '🏭',
+        blurb: 'Making things — Indian manufacturing.',
+    },
+    socialImpact: {
+        label: 'Social Impact',
+        icon: '🤝',
+        blurb: 'Work that changes lives for the better.',
+    },
+    governance: {
+        label: 'Governance',
+        icon: '🏛️',
+        blurb: 'Public systems, policy, and civic tech.',
+    },
+    ruralDevelopment: {
+        label: 'Rural Development',
+        icon: '🏘️',
+        blurb: "Uplifting India's villages and rural economy.",
+    },
     arts: { label: 'Arts', icon: '🎨', blurb: "India's creative and visual arts." },
     music: { label: 'Music', icon: '🎵', blurb: 'Indian sound — artists, composers, and labels.' },
     cinema: { label: 'Cinema', icon: '🎬', blurb: 'Film and storytelling made by Indians.' },
@@ -61,9 +117,21 @@ export const DOMAIN_META: Record<string, DomainMeta> = {
     heritage: { label: 'Heritage', icon: '🏯', blurb: "Celebrating India's culture and heritage." },
     sports: { label: 'Sports', icon: '🏅', blurb: 'Athletes and sporting excellence.' },
     fitness: { label: 'Fitness', icon: '💪', blurb: 'Movement, health, and physical wellbeing.' },
-    infrastructure: { label: 'Infrastructure', icon: '🏗️', blurb: 'Roads, grids, and the backbone of India.' },
-    transportation: { label: 'Transportation', icon: '🚆', blurb: 'Moving people and goods across India.' },
-    digitalIndia: { label: 'Digital India', icon: '📲', blurb: 'The digital public infrastructure story.' },
+    infrastructure: {
+        label: 'Infrastructure',
+        icon: '🏗️',
+        blurb: 'Roads, grids, and the backbone of India.',
+    },
+    transportation: {
+        label: 'Transportation',
+        icon: '🚆',
+        blurb: 'Moving people and goods across India.',
+    },
+    digitalIndia: {
+        label: 'Digital India',
+        icon: '📲',
+        blurb: 'The digital public infrastructure story.',
+    },
     cybersecurity: { label: 'Cybersecurity', icon: '🔒', blurb: 'Defending the digital frontier.' },
     gaming: { label: 'Gaming', icon: '🎮', blurb: 'Games and studios made in India.' },
 };
@@ -382,22 +450,27 @@ const totalDomains = domains.length;
 Three existing pages pass domains to `ContentCardFull` using the `domain:`-tag hack. Replace those with the real `domains` field so cards show consistent domain badges everywhere.
 
 Import `getDomainMeta` at the top of each file:
+
 ```ts
 import { getDomainMeta } from '@/utils/domainMeta.ts';
 ```
 
 **5a — [src/pages/apps/index.astro](../src/pages/apps/index.astro):** find
+
 ```ts
 domains={app.data.tags
     ?.filter((tag: string) => tag.startsWith('domain:'))
     ?.map((tag: string) => tag.replace('domain:', ''))}
 ```
+
 replace with
+
 ```ts
 domains={(app.data.domains ?? []).map((d) => getDomainMeta(d).label)}
 ```
 
 **5b — [src/pages/categories/[category].astro:190](../src/pages/categories/[category].astro):** find the same `tags?.filter(...startsWith('domain:'))` block passed to `domains=` and replace with
+
 ```ts
 domains={(item.data.domains ?? []).map((d) => getDomainMeta(d).label)}
 ```
@@ -440,6 +513,7 @@ The `collections` array (around line 17) drives the nav. Add a standalone "Explo
 Make each detail page's header show its domains as clickable chips linking to the domain pages. The app detail page renders via [src/layouts/ContentLayout.astro](../src/layouts/ContentLayout.astro).
 
 **7a — Pass domains into the layout.** In [src/pages/apps/[slug].astro](../src/pages/apps/[slug].astro), add a prop to the `<ContentLayout ...>` tag:
+
 ```astro
 domains={app.data.domains}
 ```
@@ -447,38 +521,38 @@ domains={app.data.domains}
 **7b — Accept and render it.** In [src/layouts/ContentLayout.astro](../src/layouts/ContentLayout.astro):
 
 1. Add to `Props` interface (after `tags?: string[];`):
-   ```ts
-   domains?: string[];
-   ```
+    ```ts
+    domains?: string[];
+    ```
 2. Add to the destructuring (after `tags,`):
-   ```ts
-   domains = [],
-   ```
+    ```ts
+    domains = [],
+    ```
 3. Import the helper at the top of the frontmatter:
-   ```ts
-   import { getDomainMeta } from '../utils/domainMeta.ts';
-   ```
+    ```ts
+    import { getDomainMeta } from '../utils/domainMeta.ts';
+    ```
 4. Render domain chips. Immediately **before** the existing category-chips block (the `categories.length > 0 && (...)` block near line 153), insert:
-   ```astro
-   {
-       domains.length > 0 && (
-           <div class="flex flex-wrap gap-2 mt-1">
-               {domains.map((domain) => {
-                   const dm = getDomainMeta(domain);
-                   return (
-                       <a
-                           href={`/domains/${domain}`}
-                           class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors"
-                       >
-                           <span aria-hidden="true">{dm.icon}</span>
-                           {dm.label}
-                       </a>
-                   );
-               })}
-           </div>
-       )
-   }
-   ```
+    ```astro
+    {
+        domains.length > 0 && (
+            <div class="flex flex-wrap gap-2 mt-1">
+                {domains.map((domain) => {
+                    const dm = getDomainMeta(domain);
+                    return (
+                        <a
+                            href={`/domains/${domain}`}
+                            class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors"
+                        >
+                            <span aria-hidden="true">{dm.icon}</span>
+                            {dm.label}
+                        </a>
+                    );
+                })}
+            </div>
+        )
+    }
+    ```
 
 ---
 
@@ -492,7 +566,12 @@ Only do this if per-domain feeds are desired. Model it on the existing [src/page
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
-import { SCANNED_COLLECTIONS, getEntryTitle, getEntryDescription, type ScannedEntry } from '@/utils/collectionsToScan.ts';
+import {
+    SCANNED_COLLECTIONS,
+    getEntryTitle,
+    getEntryDescription,
+    type ScannedEntry,
+} from '@/utils/collectionsToScan.ts';
 import { getDomainMeta } from '@/utils/domainMeta.ts';
 
 export async function getStaticPaths() {
@@ -540,24 +619,30 @@ export async function GET(context: APIContext) {
 ## Task 9 — Build, verify, and seed data
 
 **9a — Seed domains on existing content.** The domain pages only generate for domains present in content. Add `domains` to the existing app frontmatter so real pages exist. Edit the two files in `src/content/apps/*.mdx` and add (values must be from the 29-key enum):
+
 ```yaml
 domains:
     - mentalHealth
     - digitalIndia
 ```
+
 Also add `domains` to `src/content/persons/*.mdx` and `src/content/companies/*.mdx` frontmatter (these currently have none) so the People/Companies groups appear on a domain page:
+
 ```yaml
 domains:
     - technology
 ```
 
 **9b — Build.**
+
 ```bash
 npm run build
 ```
+
 Expected: build succeeds, and the terminal shows generated routes like `/domains/index.html`, `/domains/mentalHealth/index.html`, `/domains/technology/index.html`.
 
 **9d — Lint/format.**
+
 ```bash
 npm run lint && npm run format
 ```
@@ -579,6 +664,7 @@ npm run lint && npm run format
 ## Notes for when the 7 new collections land
 
 The domain pages are already forward-compatible. When the collections in `COLLECTIONS-IMPLEMENTATION-GUIDE.md` are built:
+
 1. Add each new collection name to `SCANNED_COLLECTIONS` in `src/utils/collectionsToScan.ts`.
 2. Add a matching entry to `COLLECTION_GROUP_META` (e.g. `channels: { title: 'Channels', id: 'channels' }`).
 3. Confirm the new collection's title/description/image field is handled by `getEntryTitle` / `getEntryDescription` / `getEntryImage` (all seven use `name` / `description` / `logo`, which are already covered).

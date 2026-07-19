@@ -1,26 +1,47 @@
-## Task 6 — Add "Domains" to the sidebar navigation
+## Task 7 — Link domains from the detail page header
 
-**File (edit):** [src/components/SidebarNav.astro](../src/components/SidebarNav.astro)
+Make each detail page's header show its domains as clickable chips linking to the domain pages. The app detail page renders via [src/layouts/ContentLayout.astro](../src/layouts/ContentLayout.astro).
 
-The `collections` array (around line 17) drives the nav. Add a standalone "Explore by Domain" link. Insert this **static** link right after the closing `</Divider>` that precedes the dynamic collections (around line 70), before the `{collections.map(...)}` block:
+**7a — Pass domains into the layout.** In [src/pages/apps/[slug].astro](../src/pages/apps/[slug].astro), add a prop to the `<ContentLayout ...>` tag:
 
 ```astro
-<a
-    href="/domains"
-    class:list={[
-        'flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors',
-        isActive('/domains')
-            ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 font-semibold'
-            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800',
-    ]}
->
-    <div class="flex items-center gap-3">
-        <span class="w-5 h-5 grid place-items-center text-base" aria-hidden="true">🧭</span>
-        <span>Domains</span>
-    </div>
-</a>
+domains={app.data.domains}
 ```
 
-`isActive` is already defined in the file (line 40) and already matches by prefix, so `/domains/space` will also highlight this link.
+**7b — Accept and render it.** In [src/layouts/ContentLayout.astro](../src/layouts/ContentLayout.astro):
+
+1. Add to `Props` interface (after `tags?: string[];`):
+    ```ts
+    domains?: string[];
+    ```
+2. Add to the destructuring (after `tags,`):
+    ```ts
+    domains = [],
+    ```
+3. Import the helper at the top of the frontmatter:
+    ```ts
+    import { getDomainMeta } from '../utils/domainMeta.ts';
+    ```
+4. Render domain chips. Immediately **before** the existing category-chips block (the `categories.length > 0 && (...)` block near line 153), insert:
+    ```astro
+    {
+        domains.length > 0 && (
+            <div class="flex flex-wrap gap-2 mt-1">
+                {domains.map((domain) => {
+                    const dm = getDomainMeta(domain);
+                    return (
+                        <a
+                            href={`/domains/${domain}`}
+                            class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors"
+                        >
+                            <span aria-hidden="true">{dm.icon}</span>
+                            {dm.label}
+                        </a>
+                    );
+                })}
+            </div>
+        )
+    }
+    ```
 
 ---
