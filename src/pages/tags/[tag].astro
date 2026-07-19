@@ -7,6 +7,7 @@ import CollectionHero from '@/components/CollectionHero.astro';
 import ContentCardFull from '@/components/ContentCardFull.astro';
 import { getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
 import { resolveLogo } from '@/utils/imageResolvers.ts';
+import { getDomainMeta } from '@/utils/domainMeta.ts';
 
 type TaggedApp = CollectionEntry<'apps'>;
 type TaggedPerson = CollectionEntry<'persons'>;
@@ -155,9 +156,7 @@ const getItemImage = (item: TaggedApp | TaggedPerson | TaggedCompany) =>
                                             ? resolveLogo(item.slug, getItemImage(item))
                                             : undefined
                                     }
-                                    domains={item.data.tags
-                                        ?.filter((tag: string) => tag.startsWith('domain:'))
-                                        ?.map((tag: string) => tag.replace('domain:', ''))}
+                                    domains={(item.data.domains ?? []).map((d) => getDomainMeta(d).label)}
                                     categories={
                                         item.collection === 'apps'
                                             ? item.data.categories

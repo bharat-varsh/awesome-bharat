@@ -1,78 +1,30 @@
-## Task 4 — Build the domain index page
+## Task 5 — Migrate existing cards to the real `domains` field
 
-**File (new):** `src/pages/domains/index.astro`
+Three existing pages pass domains to `ContentCardFull` using the `domain:`-tag hack. Replace those with the real `domains` field so cards show consistent domain badges everywhere.
 
-A directory of all domains **that have content**, shown as a grid of cards with live counts. Links to each `/domains/[domain]`.
-
-```astro
----
-import { getCollection } from 'astro:content';
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import CollectionHero from '@/components/CollectionHero.astro';
+Import `getDomainMeta` at the top of each file:
+```ts
 import { getDomainMeta } from '@/utils/domainMeta.ts';
-import { SCANNED_COLLECTIONS, type ScannedEntry } from '@/utils/collectionsToScan.ts';
-
-// Count how many non-draft entries (across all scanned collections) use each domain.
-const counts = new Map<string, number>();
-
-for (const name of SCANNED_COLLECTIONS) {
-    const entries = (await getCollection(name)) as ScannedEntry[];
-    for (const entry of entries) {
-        if (entry.data.draft) continue;
-        for (const domain of entry.data.domains ?? []) {
-            counts.set(domain, (counts.get(domain) ?? 0) + 1);
-        }
-    }
-}
-
-// Only show domains that have at least one item; sort by count desc, then label.
-const domains = [...counts.entries()]
-    .map(([key, count]) => ({ key, count, meta: getDomainMeta(key) }))
-    .sort((a, b) => b.count - a.count || a.meta.label.localeCompare(b.meta.label));
-
-const totalDomains = domains.length;
----
-
-<BaseLayout
-    title="Explore by Domain | Awesome Bharat"
-    description="Browse remarkable Indian work by domain — space, AI, cinema, finance, and more."
->
-    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <CollectionHero
-            eyebrow="Explore"
-            title="Domains"
-            description="Every domain of Indian excellence, from space and AI to cinema and rural development."
-            countLabel={`${totalDomains} ${totalDomains === 1 ? 'domain' : 'domains'}`}
-            icon="🧭"
-        />
-
-        <div class="mt-10 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
-            {
-                domains.map(({ key, count, meta }) => (
-                    <a
-                        href={`/domains/${key}`}
-                        class="group flex items-center gap-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover dark:border-neutral-800 dark:bg-neutral-900"
-                    >
-                        <span
-                            class="grid h-12 w-12 flex-none place-items-center rounded-xl bg-neutral-100 text-2xl ring-1 ring-neutral-200 dark:bg-neutral-800 dark:ring-neutral-700"
-                            aria-hidden="true"
-                        >
-                            {meta.icon}
-                        </span>
-                        <div class="min-w-0">
-                            <h2 class="truncate text-base font-semibold text-neutral-900 dark:text-neutral-100">
-                                {meta.label}
-                            </h2>
-                            <p class="text-sm text-neutral-500 dark:text-neutral-400">
-                                {count} {count === 1 ? 'item' : 'items'}
-                            </p>
-                        </div>
-                    </a>
-                ))
-            }
-        </div>
-    </div>
-</BaseLayout>
 ```
+
+**5a — [src/pages/apps/index.astro](../src/pages/apps/index.astro):** find
+```ts
+domains={app.data.tags
+    ?.filter((tag: string) => tag.startsWith('domain:'))
+    ?.map((tag: string) => tag.replace('domain:', ''))}
+```
+replace with
+```ts
+domains={(app.data.domains ?? []).map((d) => getDomainMeta(d).label)}
+```
+
+**5b — [src/pages/categories/[category].astro:190](../src/pages/categories/[category].astro):** find the same `tags?.filter(...startsWith('domain:'))` block passed to `domains=` and replace with
+```ts
+domains={(item.data.domains ?? []).map((d) => getDomainMeta(d).label)}
+```
+
+**5c — [src/pages/tags/[tag].astro:158](../src/pages/tags/[tag].astro):** same replacement as 5b.
+
+> After this task, the `domain:`-prefixed tag convention is fully retired. If any seed content used `tags: ["domain:space"]`, move that to `domains: [space]` in the frontmatter (Task 9 covers seeding correctly).
 
 ---
