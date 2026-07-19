@@ -1,10 +1,3 @@
-## Task 2 — Create a shared "collections to scan" registry
-
-**File (new):** `src/utils/collectionsToScan.ts`
-
-The domain page must scan multiple collections and normalize their differing field names (`title` vs `name`, `logo` vs `avatar`). Centralize that here so every cross-collection page stays consistent and so adding the seven new collections later is a one-line change.
-
-```ts
 import type { CollectionEntry } from 'astro:content';
 
 /**
@@ -45,8 +38,3 @@ export const COLLECTION_GROUP_META: Record<ScannedCollection, { title: string; i
     persons: { title: 'People', id: 'people' },
     companies: { title: 'Companies', id: 'companies' },
 };
-```
-
-> **Note on the `domains` field:** every scanned collection has `domains: string[]` (defaulting to `[]`). So `item.data.domains` is always safe to read across all of them.
-
----
