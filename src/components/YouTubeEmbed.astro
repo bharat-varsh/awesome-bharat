@@ -24,8 +24,8 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                             class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
                         >
                             {youtubeShortsIds.map((id) => (
-                                <div class="flex-shrink-0 snap-center overflow-hideen shorts-loader">
-                                    <div class="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                                <div class="flex-shrink-0 snap-center overflow-hidden shorts-loader">
+                                    <div class="rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
                                         <div class="aspect-[9/16] w-full">
                                             <iframe
                                                 class="w-full h-full rounded-lg"
@@ -100,7 +100,7 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                         >
                             {youtubeVideoIds.map((id) => (
                                 <div class="flex-shrink-0 snap-center overflow-hidden long-form-loader">
-                                    <div class="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                                    <div class="rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
                                         <div class="aspect-video w-full h-full">
                                             <iframe
                                                 class="w-full h-full rounded-lg"

@@ -1,51 +1,31 @@
-## Task 2.4 — RelatedItem: remove orange glow + weird hover-shrink; fix title field 🔵
+## Task 2.5 — Screenshots / YouTubeEmbed / StoreBadges: typo + shadow token cleanup 🟢
 
-**File:** `src/components/RelatedItem.astro`
+**Files:** `src/components/Screenshots.astro`, `src/components/YouTubeEmbed.astro`, `src/components/StoreBadges.astro`
 
-**Find** the `<a>` (~line 20):
+### 2.5a — `StoreBadges.astro`: fix typo (~line 87)
 
-```
-    class="w-24 h-30 group block m-2 p-3 overflow-hidden rounded-lg hover:scale-95 shadow-xl shadow-primary-200 dark:shadow-primary-800/50 hover:shadow-primary-400/50 dark:hover:shadow-primary-900/50 transition-all duration-200"
-```
+**Find:** `whitespace-nowwrap` **Replace with:** `whitespace-nowrap`
 
-**Replace with:**
+### 2.5b — `YouTubeEmbed.astro`: fix typo (~line 27)
 
-```
-    class="group block w-full overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-3 shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover"
-```
+**Find:** `overflow-hideen` **Replace with:** `overflow-hidden`
 
-**Fix the title field.** For `persons`/`companies` the data field is `name`, not `title`, so `item.data.title` is `undefined` for them. **Find** (~lines 27, 34):
+### 2.5c — Card shadows → token (both `Screenshots.astro` and `YouTubeEmbed.astro`)
+
+In both files, the media card wrapper uses `shadow-lg hover:shadow-xl ... border-gray-200 dark:border-gray-700`. Replace **each occurrence** of:
 
 ```
-                alt={item.data.title}
+shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900
 ```
 
-```
-        {item.data.title}
-```
-
-Replace both `item.data.title` with:
+with:
 
 ```
-{('title' in item.data ? item.data.title : item.data.name)}
+shadow-card hover:shadow-card-hover transition-shadow duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900
 ```
 
-For the `alt`, write `alt={'title' in item.data ? item.data.title : item.data.name}`.
+(Screenshots has 1 occurrence ~line 29; YouTubeEmbed has 2 ~lines 28 and 103.)
 
-**Find** the `<h4>` (~lines 34–37) and remove the duplicated `line-clamp-2`:
-
-```html
-<h4
-    class="text-xs font-small text-gray-900 dark:text-gray-100 line-clamp-2 transition-colors line-clamp-2"
-></h4>
-```
-
-**Replace with:**
-
-```html
-<h4 class="mt-2 text-xs font-medium text-neutral-900 dark:text-neutral-100 line-clamp-2"></h4>
-```
-
-**Test:** `npm run build` → open an app detail page (`/apps/mindful`); the "More by …" tiles in the right sidebar are neutral rounded cards that lift on hover (no orange glow, no shrink), and their titles render.
+**Test:** `npm run build` → on an app detail page with screenshots/videos (e.g. `/apps/mindful`), media tiles have subtle neutral shadows; no visual regressions; arrows still scroll.
 
 ---
