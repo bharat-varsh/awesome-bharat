@@ -1,42 +1,27 @@
-## Task 4.1 — Motion, accessibility, and token audit 🟡
+## Task A — StoreBadges: finish tokenizing the card (leftover from Task 2.5) 🟢 Nano
 
-**Multiple files.**
+**File:** `src/components/StoreBadges.astro`
 
-1. **Entrance motion:** In `src/pages/apps/index.astro`, add `animate-fade-in` to the grid container class. In `src/pages/index.astro`, add `animate-fade-in` to each `CardRow` usage via a wrapper or the section — keep it subtle (respect users who prefer reduced motion by adding to `global.css`):
+The store-badge grid has no card container styling at all (unlike `Screenshots.astro`/`YouTubeEmbed.astro`, which got `shadow-card`/`border-neutral-*`/`bg-neutral-*` treatment), and its text-label fallback pill still uses raw `gray-900`/`gray-100` instead of the neutral/primary token scheme.
 
-```css
-@media (prefers-reduced-motion: reduce) {
-    .animate-fade-in {
-        animation: none;
-    }
-}
+### A.1 — Wrap the badge row in a card
+
+**Find** (~line 22):
+
+```html
+<div class="mb-6 px-2 sm:px-2 lg:px-0">
+    <div class="flex flex-wrap gap-4 items-center justify-around"></div>
+</div>
 ```
 
-(Append this to the end of `src/styles/global.css`.)
+**Replace with:**
 
-2. **Accessibility:**
-    - Confirm all icon-only buttons have `aria-label` (carousel arrows do; theme toggle does).
-    - Verify text contrast in both themes on the hero, chips, and muted text (`neutral-500` on `neutral-50` passes AA for normal text; `neutral-400` on `neutral-950` passes for dark).
-
-3. **Token audit:** Search the codebase for leftover values that should now be tokens:
-
-```bash
-grep -rn "secondary-" src/ || true
-grep -rniE "#(ea580c|f97316|fb923c|14b8a6|0d9488|2dd4bf)" src/ || true
-grep -rn "font-display" src/ || true
-grep -rn "shadow-primary" src/ || true
+```html
+<div
+    class="mb-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-card p-4 sm:p-5"
+>
+    <div class="flex flex-wrap gap-4 items-center justify-around"></div>
+</div>
 ```
 
-- `secondary-*` classes are fine (they map to warm neutral now) but prefer migrating high-traffic ones to `neutral-*` for clarity — optional.
-- Any remaining old orange/teal hex or `shadow-primary-*` outside `global.css`/`Search.astro` should be replaced with tokens.
-- `font-display` should no longer appear (replaced by `font-serif` in Task 2.3).
-
-**Test (full regression):**
-
-```bash
-npm run build
-```
-
-Must pass.
-
----
+(Two opening `<div>` tags — make sure the corresponding closing `</div></div>` at the bottom (~lines 94–95) is left untouched; the extra wrapper just adds one more level that already closes correctly since you only changed the opening tag's classes/attributes, not the nesting.)
