@@ -1,10 +1,3 @@
-## Task 3 — Build the domain detail page
-
-**File (new):** `src/pages/domains/[domain].astro`
-
-Structure is copied from [src/pages/categories/[category].astro](../src/pages/categories/[category].astro) but (a) keyed on `data.domains`, (b) scans all collections via the Task 2 helpers, (c) uses `getDomainMeta` for label/icon/blurb.
-
-```astro
 ---
 import { getCollection } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
@@ -150,8 +143,3 @@ const pills = visibleGroups.map((g) => ({
         </div>
     </div>
 </BaseLayout>
-```
-
-> **Important:** `getStaticPaths` only generates a page for domains that appear on ≥1 non-draft entry. If no content uses a given domain, `/domains/<that-domain>` will 404 — that is expected. Task 9 adds seed data so at least a couple of domain pages exist.
-
----
