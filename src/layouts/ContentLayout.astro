@@ -154,9 +154,9 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
 
                             <!-- Domain chips -->
                             {
-                                domains?.length > 0 && (
+                                domains != null && domains.length > 0 && (
                                     <div class="flex flex-wrap gap-2 mt-1">
-                                        {domains.map((domain) => {
+                                        {domains.map((domain: string) => {
                                             const dm = getDomainMeta(domain);
                                             return (
                                                 <a

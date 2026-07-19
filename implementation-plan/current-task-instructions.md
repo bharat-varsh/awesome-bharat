@@ -1,59 +1,32 @@
-## Task 8 — (Optional) Per-domain RSS feed
+## Task 9 — Build, verify, and seed data
 
-Model it on the existing [src/pages/rss.xml.ts](../src/pages/rss.xml.ts) (open that file first to copy its import of `@astrojs/rss` and `site` usage).
+**9a — Seed domains on existing content.** The domain pages only generate for domains present in content. Add `domains` to the existing app frontmatter so real pages exist. Edit the two files in `src/content/apps/*.mdx` and add (values must be from the 29-key enum):
 
-**File (new):** `src/pages/domains/[domain]/rss.xml.ts`
-
-```ts
-import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
-import type { APIContext } from 'astro';
-import {
-    SCANNED_COLLECTIONS,
-    getEntryTitle,
-    getEntryDescription,
-    type ScannedEntry,
-} from '@/utils/collectionsToScan.ts';
-import { getDomainMeta } from '@/utils/domainMeta.ts';
-
-export async function getStaticPaths() {
-    const domains = new Set<string>();
-    for (const name of SCANNED_COLLECTIONS) {
-        const entries = (await getCollection(name)) as ScannedEntry[];
-        for (const e of entries) {
-            if (e.data.draft) continue;
-            for (const d of e.data.domains ?? []) domains.add(d);
-        }
-    }
-    return [...domains].map((domain) => ({ params: { domain } }));
-}
-
-export async function GET(context: APIContext) {
-    const domain = context.params.domain as string;
-    const meta = getDomainMeta(domain);
-
-    const items: Array<{ title: string; description: string; link: string }> = [];
-    for (const name of SCANNED_COLLECTIONS) {
-        const entries = (await getCollection(name)) as ScannedEntry[];
-        for (const e of entries) {
-            if (e.data.draft || !(e.data.domains ?? []).includes(domain)) continue;
-            items.push({
-                title: getEntryTitle(e),
-                description: getEntryDescription(e) ?? '',
-                link: `/${e.collection}/${e.slug}`,
-            });
-        }
-    }
-
-    return rss({
-        title: `${meta.label} — Awesome Bharat`,
-        description: meta.blurb,
-        site: context.site!,
-        items,
-    });
-}
+```yaml
+domains:
+    - mentalHealth
+    - digitalIndia
 ```
 
-> If `@astrojs/rss` import style differs in the existing `rss.xml.ts`, match that file exactly.
+Also add `domains` to `src/content/persons/*.mdx` and `src/content/companies/*.mdx` frontmatter (these currently have none) so the People/Companies groups appear on a domain page:
+
+```yaml
+domains:
+    - technology
+```
+
+**9b — Build.**
+
+```bash
+npm run build
+```
+
+Expected: build succeeds, and the terminal shows generated routes like `/domains/index.html`, `/domains/mentalHealth/index.html`, `/domains/technology/index.html`.
+
+**9d — Lint/format.**
+
+```bash
+npm run lint && npm run format
+```
 
 ---

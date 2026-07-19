@@ -123,7 +123,7 @@ const pills = visibleGroups.map((g) => ({
                                                 : undefined
                                         }
                                         domains={(item.data.domains ?? []).map(
-                                            (d) => getDomainMeta(d).label
+                                            (d: string) => getDomainMeta(d).label
                                         )}
                                         categories={
                                             item.collection === 'apps'

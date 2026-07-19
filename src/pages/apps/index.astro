@@ -48,7 +48,9 @@ const visibleApps = apps
                             logoSrc={
                                 app.data.logo ? resolveLogo(app.slug, app.data.logo) : undefined
                             }
-                            domains={(app.data.domains ?? []).map((d) => getDomainMeta(d).label)}
+                            domains={(app.data.domains ?? []).map(
+                                (d: string) => getDomainMeta(d).label
+                            )}
                             categories={app.data.categories}
                             ctaLabel={ctaLabel}
                             ctaUrl={ctaUrl}

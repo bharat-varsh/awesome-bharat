@@ -1,34 +1,33 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CollectionHero from '@/components/CollectionHero.astro';
+import { getDomainMeta } from '@/utils/domainMeta.ts';
+import { SCANNED_COLLECTIONS, type ScannedEntry } from '@/utils/collectionsToScan.ts';
 
----
-
-<script setup lang="ts">
-    import { getCollection } from 'astro:content';
-    import BaseLayout from '@/layouts/BaseLayout.astro';
-    import CollectionHero from '@/components/CollectionHero.astro';
-    import { getDomainMeta } from '@/utils/domainMeta.ts';
-    import { SCANNED_COLLECTIONS, type ScannedEntry } from '@/utils/collectionsToScan.ts';
-
-    // Count how many non-draft entries (across all scanned collections) use each domain.
-    const counts = new Map<string, number>();
-
-    for (const name of SCANNED_COLLECTIONS) {
-        const entries = (await getCollection(name)) as ScannedEntry[];
-        for (const entry of entries) {
-            if (entry.data.draft) continue;
-            for (const domain of entry.data.domains ?? []) {
-                counts.set(domain, (counts.get(domain) ?? 0) + 1);
-            }
+interface DomainMeta {
+    key: string;
+    count: number;
+    meta: ReturnType<typeof getDomainMeta>;
+}
+const counts = new Map<string, number>();
+for (const name of SCANNED_COLLECTIONS) {
+    const entries = (await getCollection(name)) as ScannedEntry[];
+    for (const entry of entries) {
+        if (entry.data.draft) continue;
+        for (const domain of entry.data.domains ?? []) {
+            counts.set(domain, (counts.get(domain) ?? 0) + 1);
         }
     }
-
-    // Only show domains that have at least one item; sort by count desc, then label.
-    const domains = [...counts.entries()]
-        .map(([key, count]) => ({ key, count, meta: getDomainMeta(key) }))
-        .sort((a, b) => b.count - a.count || a.meta.label.localeCompare(b.meta.label));
-
-    const totalDomains = domains.length;
-</script>
+}
+const domains = [...counts.entries()]
+    .map(([key, count]) => ({ key, count, meta: getDomainMeta(key) }))
+    .sort(
+        (a: DomainMeta, b: DomainMeta) =>
+            b.count - a.count || a.meta.label.localeCompare(b.meta.label)
+    );
+const totalDomains = domains.length;
+---
 
 <BaseLayout
     title="Explore by Domain | Awesome Bharat"
