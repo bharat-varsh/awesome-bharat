@@ -113,62 +113,68 @@ function formatCategory(category: string) {
 
     <div class="max-w-7xl mx-auto px-4 py-12 space-y-12">
         <!-- Latest Apps -->
-        <CardRow title="Latest Apps" viewAllHref="/apps" id="latest-apps">
-            {
-                latestApps.map((app) => (
-                    <ContentCard
-                        title={app.data.title}
-                        href={`/apps/${app.slug}`}
-                        image={app.data.logo}
-                        slug={app.slug}
-                        tags={[
-                            nonDraftPersons.find(
-                                (p: CollectionEntry<'persons'>) =>
-                                    p.slug === app.data.authors?.[0]?.slug
-                            )?.data.name ||
-                                nonDraftCompanies.find(
-                                    (c: CollectionEntry<'companies'>) =>
-                                        c.slug === app.data.authors?.[0]?.slug
+        <div class="animate-fade-in">
+            <CardRow title="Latest Apps" viewAllHref="/apps" id="latest-apps">
+                {
+                    latestApps.map((app) => (
+                        <ContentCard
+                            title={app.data.title}
+                            href={`/apps/${app.slug}`}
+                            image={app.data.logo}
+                            slug={app.slug}
+                            tags={[
+                                nonDraftPersons.find(
+                                    (p: CollectionEntry<'persons'>) =>
+                                        p.slug === app.data.authors?.[0]?.slug
                                 )?.data.name ||
-                                'Unknown',
-                        ]}
-                        class="snap-start"
-                    />
-                ))
-            }
-        </CardRow>
+                                    nonDraftCompanies.find(
+                                        (c: CollectionEntry<'companies'>) =>
+                                            c.slug === app.data.authors?.[0]?.slug
+                                    )?.data.name ||
+                                    'Unknown',
+                            ]}
+                            class="snap-start"
+                        />
+                    ))
+                }
+            </CardRow>
+        </div>
 
         <!-- Featured People -->
-        <CardRow title="Featured People" viewAllHref="/people" id="featured-people">
-            {
-                featuredPersons.map((person) => (
-                    <ContentCard
-                        title={person.data.name}
-                        href={`/people/${person.slug}`}
-                        image={person.data.avatar}
-                        slug={person.slug}
-                        tags={person.data.tags}
-                        class="snap-start"
-                    />
-                ))
-            }
-        </CardRow>
+        <div class="animate-fade-in">
+            <CardRow title="Featured People" viewAllHref="/people" id="featured-people">
+                {
+                    featuredPersons.map((person) => (
+                        <ContentCard
+                            title={person.data.name}
+                            href={`/people/${person.slug}`}
+                            image={person.data.avatar}
+                            slug={person.slug}
+                            tags={person.data.tags}
+                            class="snap-start"
+                        />
+                    ))
+                }
+            </CardRow>
+        </div>
 
         <!-- Featured Companies -->
-        <CardRow title="Featured Companies" viewAllHref="/companies" id="featured-companies">
-            {
-                featuredCompanies.map((company) => (
-                    <ContentCard
-                        title={company.data.name}
-                        href={`/companies/${company.slug}`}
-                        image={company.data.logo}
-                        slug={company.slug}
-                        tags={company.data.tags}
-                        class="snap-start"
-                    />
-                ))
-            }
-        </CardRow>
+        <div class="animate-fade-in">
+            <CardRow title="Featured Companies" viewAllHref="/companies" id="featured-companies">
+                {
+                    featuredCompanies.map((company) => (
+                        <ContentCard
+                            title={company.data.name}
+                            href={`/companies/${company.slug}`}
+                            image={company.data.logo}
+                            slug={company.slug}
+                            tags={company.data.tags}
+                            class="snap-start"
+                        />
+                    ))
+                }
+            </CardRow>
+        </div>
 
         <!-- Explore by Category -->
         <section class="space-y-4">
