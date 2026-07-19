@@ -1,16 +1,12 @@
-## Task A — StoreBadges: finish tokenizing the card (leftover from Task 2.5) 🟢 Nano
+### A.2 — Tokenize the fallback text pill
 
-**File:** `src/components/StoreBadges.astro`
-
-The store-badge grid has no card container styling at all (unlike `Screenshots.astro`/`YouTubeEmbed.astro`, which got `shadow-card`/`border-neutral-*`/`bg-neutral-*` treatment), and its text-label fallback pill still uses raw `gray-900`/`gray-100` instead of the neutral/primary token scheme.
-
-### A.1 — Wrap the badge row in a card
-
-**Find** (~line 22):
+**Find** (~line 87):
 
 ```html
-<div class="mb-6 px-2 sm:px-2 lg:px-0">
-    <div class="flex flex-wrap gap-4 items-center justify-around"></div>
+<div
+    class="h-12 sm:h-10 md:h-11 px-6 flex items-center justify-center bg-gray-900 dark:bg-gray-100 rounded-lg text-white dark:text-gray-900 font-semibold text-sm sm:text-base whitespace-nowrap hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+>
+    {store.label}
 </div>
 ```
 
@@ -18,10 +14,12 @@ The store-badge grid has no card container styling at all (unlike `Screenshots.a
 
 ```html
 <div
-    class="mb-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-card p-4 sm:p-5"
+    class="h-12 sm:h-10 md:h-11 px-6 flex items-center justify-center bg-primary-600 dark:bg-primary-500 rounded-lg text-white font-semibold text-sm sm:text-base whitespace-nowrap hover:bg-primary-700 dark:hover:bg-primary-400 transition-colors"
 >
-    <div class="flex flex-wrap gap-4 items-center justify-around"></div>
+    {store.label}
 </div>
 ```
 
-(Two opening `<div>` tags — make sure the corresponding closing `</div></div>` at the bottom (~lines 94–95) is left untouched; the extra wrapper just adds one more level that already closes correctly since you only changed the opening tag's classes/attributes, not the nesting.)
+**Test:** `npm run build` → open any app detail page with a non-standard store link (i.e. a `storeLinks` entry that isn't Play Store/App Store/F-Droid/GitHub, so the fallback pill renders) — e.g. check `src/content/apps/*.mdx` for a `storeLinks` entry with a label like "Website" or "Direct Download". Confirm the badge row now sits inside a bordered/shadowed card matching `Screenshots.astro`/`YouTubeEmbed.astro`, and the fallback pill is saffron instead of black/white. Check both themes.
+
+---
