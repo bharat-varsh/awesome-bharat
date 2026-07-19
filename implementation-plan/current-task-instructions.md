@@ -1,67 +1,41 @@
-### 3.1b — Extract a reusable carousel (removes 3× duplicated markup)
+### 3.1d — "Explore by Category" + CTA tokenize
 
-Create a new file `src/components/CardRow.astro`:
+**Find** the category card class (~lines 316–319):
 
-```astro
----
-export interface Props {
-    title: string;
-    viewAllHref: string;
-    id: string;
-}
-const { title, viewAllHref, id } = Astro.props;
----
-
-<section class="space-y-4">
-    <div class="flex items-center justify-between">
-        <h2 class="font-serif text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-            {title}
-        </h2>
-        <a
-            href={viewAllHref}
-            class="text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-        >
-            View all →
-        </a>
-    </div>
-
-    <div class="relative">
-        <button
-            aria-label="Scroll left"
-            class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full border border-neutral-200 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/90 text-neutral-700 dark:text-neutral-200 shadow-card backdrop-blur hover:bg-white dark:hover:bg-neutral-800 scroll-left"
-            data-scroll-container={id}
-        >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 19l-7-7 7-7"></path>
-            </svg>
-        </button>
-
-        <div
-            id={id}
-            class="flex gap-4 overflow-x-auto scroll-smooth pb-2 snap-x snap-mandatory px-1 md:px-12 scrollbar-hide"
-        >
-            <slot />
-        </div>
-
-        <button
-            aria-label="Scroll right"
-            class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full border border-neutral-200 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/90 text-neutral-700 dark:text-neutral-200 shadow-card backdrop-blur hover:bg-white dark:hover:bg-neutral-800 scroll-right"
-            data-scroll-container={id}
-        >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 5l7 7-7 7"></path>
-            </svg>
-        </button>
-    </div>
-</section>
+```
+                            class="bg-white dark:bg-secondary-800 border border-gray-300 dark:border-secondary-800
+                                 rounded-xl p-4 flex items-center justify-center text-center font-medium text-gray-700 dark:text-gray-200
+                                 hover:bg-primary-50 dark:hover:bg-secondary-700 hover:border-primary-300 dark:hover:border-primary-500
+                                 transition-all duration-200"
 ```
 
-(Icon-button arrows replace the `‹`/`›` glyphs; the `.scroll-left/.scroll-right` + `data-scroll-container` contract matches the existing `<script>` at the bottom of `index.astro`, so it keeps working.)
+**Replace with:**
+
+```
+                            class="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800
+                                 rounded-xl p-4 flex items-center justify-center text-center font-medium text-neutral-700 dark:text-neutral-200
+                                 hover:border-primary-400 hover:text-primary-700 dark:hover:text-primary-300
+                                 transition-all duration-200"
+```
+
+Also update the section `<h2>` (~line 308) to serif: replace `class="text-xl font-semibold text-gray-900 dark:text-gray-100"` with `class="font-serif text-2xl font-semibold text-neutral-900 dark:text-neutral-100"`.
+
+**CTA button** (~lines 330–334): **find**
+
+```
+                class="inline-block px-8 py-3 rounded-lg
+             bg-primary-600 text-white font-medium
+             hover:bg-primary-700 transition-colors"
+```
+
+**replace with:**
+
+```
+                class="inline-block px-8 py-3 rounded-xl bg-primary-600 text-white font-semibold shadow-card hover:bg-primary-700 hover:shadow-card-hover transition-all"
+```
+
+Leave the `<script>` at the bottom (lines 341–358) unchanged — it already drives `.scroll-left/.scroll-right` via `data-scroll-container`.
+
+**Test:** `npm run build` → homepage has a large serif editorial hero, three carousels with clean circular icon-button arrows (which scroll on click), rounded category tiles, and a saffron CTA. Verify at mobile, tablet, desktop widths, in both themes. No horizontal page overflow.
+
+---
