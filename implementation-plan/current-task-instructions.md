@@ -1,46 +1,69 @@
-## Task 2.1 — ContentCard: give the carousel card a real, rounded card affordance 🟡
+## Task 2.2 — ContentCardFull: retire yellow "featured" + tokenize 🔵
 
-**File:** `src/components/ContentCard.astro` — **biggest single visual win.**
+**File:** `src/components/ContentCardFull.astro`
 
-Replace the markup block (everything from `<a` to the closing `</a>`, lines 19–42) with:
+**Find** the `<a>` class (~lines 40–43):
 
-```astro
-<a
-    href={href}
-    class={`group flex-shrink-0 w-[140px] sm:w-[160px] rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-3 shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover ${extraClass}`}
->
-    <div class="overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800">
-        <Image
-            class="aspect-square w-full object-contain transition-transform duration-300 group-hover:scale-105"
-            src={resolvedImage}
-            alt={title}
-            format="webp"
-            widths={[120, 140, 160, 180]}
-            sizes="(min-width:640px) 160px, 140px"
-        />
-    </div>
-
-    <div class="mt-3 text-left">
-        <h3
-            class="text-sm font-semibold leading-snug line-clamp-2 text-neutral-900 dark:text-neutral-100"
-        >
-            {title}
-        </h3>
-        {
-            tags?.[0] && (
-                <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1">
-                    {tags[0]}
-                </p>
-            )
-        }
-    </div>
-</a>
+```
+    class={`group block min-w-[280px] rounded-xl border p-4 transition-all duration-200 hover:-translate-y-[2px] hover:shadow-md ${
+        featured ? 'border-yellow-400' : 'border-gray-200 dark:border-secondary-600'
+    } bg-white dark:bg-secondary-800`}
 ```
 
-Key changes: wider card (140–160px), rounded container + border + `shadow-card`, hover lift + `shadow-card-hover`, **rounded masked icon** on a subtle tile, `object-contain` (was `object-cover`, which cropped logos). The `Props` interface and frontmatter are unchanged.
+**Replace with:**
 
-> **Coordination note:** the homepage scroll rows (Task 3.1) reference these cards. The wider card still works in the existing `flex gap-5 overflow-x-auto snap-x` rows — no change needed there beyond Task 3.1's own edits. If doing 2.1 before 3.1, the rows simply show larger cards.
+```
+    class={`group block min-w-[280px] rounded-2xl border p-4 transition-all duration-200 hover:-translate-y-1 shadow-card hover:shadow-card-hover ${
+        featured
+            ? 'border-primary-300 dark:border-primary-500/50 ring-1 ring-primary-200/60 dark:ring-primary-500/20'
+            : 'border-neutral-200 dark:border-neutral-800'
+    } bg-white dark:bg-neutral-900`}
+```
 
-**Test:** `npm run build` → homepage carousels show rounded, bordered cards with soft shadows that lift on hover; logos are fully visible (not cropped). Both themes look clean.
+**Find** the logo image (~line 49):
+
+```
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+```
+
+**Replace with:**
+
+```
+                    class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+```
+
+Also wrap the logo tile with rounding — **find** (~line 47):
+
+```html
+<div class="h-14 w-14 overflow-hidden"></div>
+```
+
+**Replace with:**
+
+```html
+<div class="h-14 w-14 overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800"></div>
+```
+
+**Find** the Featured pill (~line 68):
+
+```html
+<span
+    class="flex-shrink-0 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-semibold text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+>
+    ★ Featured
+</span>
+```
+
+**Replace with:**
+
+```html
+<span
+    class="flex-shrink-0 rounded-full bg-primary-100 px-2 py-0.5 text-xs font-semibold text-primary-800 dark:bg-primary-900/40 dark:text-primary-200"
+>
+    Featured
+</span>
+```
+
+**Test:** `npm run build` → `/apps` grid cards are rounded with soft shadows, logos uncropped on a subtle tile; featured cards get a tasteful saffron ring (no yellow); hover lifts.
 
 ---
