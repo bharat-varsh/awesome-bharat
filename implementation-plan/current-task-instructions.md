@@ -1,49 +1,42 @@
-## Task 1.6 — Search: swap hardcoded Pagefind hex for token values 🟢
+## Task 4.1 — Motion, accessibility, and token audit 🟡
 
-**File:** `src/components/Search.astro`
+**Multiple files.**
 
-**Find** (~lines 29–43):
+1. **Entrance motion:** In `src/pages/apps/index.astro`, add `animate-fade-in` to the grid container class. In `src/pages/index.astro`, add `animate-fade-in` to each `CardRow` usage via a wrapper or the section — keep it subtle (respect users who prefer reduced motion by adding to `global.css`):
 
 ```css
-:root {
-    --pagefind-ui-primary: #ea580c;
-    --pagefind-ui-text: #111827;
-    --pagefind-ui-background: #ffffff;
-    --pagefind-ui-border: #e5e7eb;
-    --pagefind-ui-tag: #f3f4f6;
-}
-
-.dark {
-    --pagefind-ui-primary: #fb923c;
-    --pagefind-ui-text: #f9fafb;
-    --pagefind-ui-background: #111827;
-    --pagefind-ui-border: #374151;
-    --pagefind-ui-tag: #1f2937;
+@media (prefers-reduced-motion: reduce) {
+    .animate-fade-in {
+        animation: none;
+    }
 }
 ```
 
-**Replace with:**
+(Append this to the end of `src/styles/global.css`.)
 
-```css
-:root {
-    --pagefind-ui-primary: #b8541f;
-    --pagefind-ui-text: #1c1917;
-    --pagefind-ui-background: #ffffff;
-    --pagefind-ui-border: #e7e5e4;
-    --pagefind-ui-tag: #f5f5f4;
-}
+2. **Accessibility:**
+    - Confirm all icon-only buttons have `aria-label` (carousel arrows do; theme toggle does).
+    - Verify text contrast in both themes on the hero, chips, and muted text (`neutral-500` on `neutral-50` passes AA for normal text; `neutral-400` on `neutral-950` passes for dark).
 
-.dark {
-    --pagefind-ui-primary: #e08445;
-    --pagefind-ui-text: #fafaf9;
-    --pagefind-ui-background: #1c1917;
-    --pagefind-ui-border: #292524;
-    --pagefind-ui-tag: #292524;
-}
+3. **Token audit:** Search the codebase for leftover values that should now be tokens:
+
+```bash
+grep -rn "secondary-" src/ || true
+grep -rniE "#(ea580c|f97316|fb923c|14b8a6|0d9488|2dd4bf)" src/ || true
+grep -rn "font-display" src/ || true
+grep -rn "shadow-primary" src/ || true
 ```
 
-(These hex values equal `primary-600`/`neutral-*` tokens; Pagefind's shadow-DOM can't read Tailwind classes, so hex is required here.)
+- `secondary-*` classes are fine (they map to warm neutral now) but prefer migrating high-traffic ones to `neutral-*` for clarity — optional.
+- Any remaining old orange/teal hex or `shadow-primary-*` outside `global.css`/`Search.astro` should be replaced with tokens.
+- `font-display` should no longer appear (replaced by `font-serif` in Task 2.3).
 
-**Test:** `npm run build`
+**Test (full regression):**
+
+```bash
+npm run build
+```
+
+Must pass.
 
 ---

@@ -6,6 +6,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
+import CardRow from '@/components/CardRow.astro';
 
 const [apps, persons, companies] = await Promise.all([
     getCollection('apps'),
@@ -61,251 +62,123 @@ function formatCategory(category: string) {
     description="A curated collection of awesome made by Indians! Discover your inspiration and the great people who made that possible!"
 >
     <!-- Hero -->
-    <section class="py-12 relative overflow-hidden">
-        <!-- Background gradient -->
-        <div
-            class="absolute inset-0 bg-gradient-to-b from-primary-100 via-primary-50/50 to-transparent dark:from-secondary-900 dark:via-secondary-800/50 dark:to-transparent"
-        >
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 text-center relative">
-            <h1 class="font-bold tracking-tight mb-6">
-                <!-- Desktop -->
-                <span class="hidden md:block text-5xl lg:text-6xl text-gray-900 dark:text-gray-100">
-                    Welcome to
-                    <span class="text-primary-600 dark:text-primary-400"> Awesome</span>
-                    <span class="font-extrabold"> Bharat</span>
-                </span>
-
-                <!-- Mobile -->
-                <span
-                    class="block md:hidden text-4xl lg:text-5xl leading-tight text-gray-900 dark:text-gray-100"
-                >
-                    <span class="block">Welcome to</span>
-                    <span class="block text-primary-600 dark:text-primary-400">Awesome</span>
-                    <span class="block font-extrabold">Bharat</span>
-                </span>
+    <section class="border-b border-neutral-200 dark:border-neutral-800">
+        <div class="container-wide py-16 sm:py-20 text-center">
+            <p
+                class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 dark:text-primary-400"
+            >
+                Curated · Made in India
+            </p>
+            <h1
+                class="font-serif text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50 text-balance"
+            >
+                Remarkable things,
+                <span class="italic text-primary-600 dark:text-primary-400">made by Indians</span>
             </h1>
-
-            <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">
-                A curated collection of awesome made by Indians! Discover your inspiration and the
-                great people who made that possible!
+            <p class="mx-auto mt-6 max-w-2xl text-lg text-neutral-600 dark:text-neutral-400">
+                A curated collection of awesome made by Indians — discover the work and the great
+                people who made it possible.
             </p>
 
             <!-- Stat strip -->
             <div
-                class="inline-flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-gray-700 dark:text-gray-300"
+                class="mt-8 inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm font-medium text-neutral-700 dark:text-neutral-300"
             >
                 <span class="flex items-center gap-1.5">
-                    <span class="text-primary-600 dark:text-primary-400 font-bold text-lg"
+                    <span
+                        class="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100"
                         >{stats.apps}</span
                     >
                     apps
                 </span>
-                <span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-600"></span>
+                <span class="h-1 w-1 rounded-full bg-neutral-300 dark:bg-neutral-700"></span>
                 <span class="flex items-center gap-1.5">
-                    <span class="text-primary-600 dark:text-primary-400 font-bold text-lg"
+                    <span
+                        class="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100"
                         >{stats.persons}</span
                     >
                     people
                 </span>
-                <span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-600"></span>
+                <span class="h-1 w-1 rounded-full bg-neutral-300 dark:bg-neutral-700"></span>
                 <span class="flex items-center gap-1.5">
-                    <span class="text-primary-600 dark:text-primary-400 font-bold text-lg"
+                    <span
+                        class="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100"
                         >{stats.companies}</span
                     >
                     companies
                 </span>
-                <span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-600"></span>
-                <span class="text-primary-600 dark:text-primary-400">all Indian-made</span>
             </div>
         </div>
     </section>
 
     <div class="max-w-7xl mx-auto px-4 py-12 space-y-12">
         <!-- Latest Apps -->
-        <section class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Latest Apps</h2>
-                <a href="/apps" class="text-sm text-primary-500 hover:text-primary-600">View all</a>
-            </div>
-
-            <!-- Horizontal scroll row -->
-            <div class="relative">
-                <!-- Left arrow -->
-                <button
-                    aria-label="Scroll left"
-                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-left"
-                    data-scroll-container="latest-apps"
-                >
-                    ‹
-                </button>
-
-                <!-- Scroll container -->
-                <div
-                    id="latest-apps"
-                    class="flex gap-5 overflow-x-auto scroll-smooth pb-2
-                 snap-x snap-mandatory
-                 px-10 md:px-12 scrollbar-hide"
-                >
-                    {
-                        latestApps.map((app) => (
-                            <ContentCard
-                                title={app.data.title}
-                                href={`/apps/${app.slug}`}
-                                image={app.data.logo}
-                                slug={app.slug}
-                                tags={[
-                                    nonDraftPersons.find(
-                                        (p: CollectionEntry<'persons'>) =>
-                                            p.slug === app.data.authors?.[0]?.slug
+        <div class="animate-fade-in">
+            <CardRow title="Latest Apps" viewAllHref="/apps" id="latest-apps">
+                {
+                    latestApps.map((app) => (
+                        <ContentCard
+                            title={app.data.title}
+                            href={`/apps/${app.slug}`}
+                            image={app.data.logo}
+                            slug={app.slug}
+                            tags={[
+                                nonDraftPersons.find(
+                                    (p: CollectionEntry<'persons'>) =>
+                                        p.slug === app.data.authors?.[0]?.slug
+                                )?.data.name ||
+                                    nonDraftCompanies.find(
+                                        (c: CollectionEntry<'companies'>) =>
+                                            c.slug === app.data.authors?.[0]?.slug
                                     )?.data.name ||
-                                        nonDraftCompanies.find(
-                                            (c: CollectionEntry<'companies'>) =>
-                                                c.slug === app.data.authors?.[0]?.slug
-                                        )?.data.name ||
-                                        'Unknown',
-                                ]}
-                                class="snap-start"
-                            />
-                        ))
-                    }
-                </div>
-
-                <!-- Right arrow -->
-                <button
-                    aria-label="Scroll right"
-                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-right"
-                    data-scroll-container="latest-apps"
-                >
-                    ›
-                </button>
-            </div>
-        </section>
+                                    'Unknown',
+                            ]}
+                            class="snap-start"
+                        />
+                    ))
+                }
+            </CardRow>
+        </div>
 
         <!-- Featured People -->
-        <section class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Featured People
-                </h2>
-                <a href="/people" class="text-sm text-primary-500 hover:text-primary-600"
-                    >View all</a
-                >
-            </div>
-
-            <!-- Horizontal scroll row -->
-            <div class="relative">
-                <!-- Left arrow -->
-                <button
-                    aria-label="Scroll left"
-                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-left"
-                    data-scroll-container="featured-people"
-                >
-                    ‹
-                </button>
-
-                <!-- Scroll container -->
-                <div
-                    id="featured-people"
-                    class="flex gap-5 overflow-x-auto scroll-smooth pb-2
-                 snap-x snap-mandatory
-                 px-10 md:px-12 scrollbar-hide"
-                >
-                    {
-                        featuredPersons.map((person) => (
-                            <ContentCard
-                                title={person.data.name}
-                                href={`/people/${person.slug}`}
-                                image={person.data.avatar}
-                                slug={person.slug}
-                                tags={person.data.tags}
-                                class="snap-start"
-                            />
-                        ))
-                    }
-                </div>
-
-                <!-- Right arrow -->
-                <button
-                    aria-label="Scroll right"
-                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-right"
-                    data-scroll-container="featured-people"
-                >
-                    ›
-                </button>
-            </div>
-        </section>
+        <div class="animate-fade-in">
+            <CardRow title="Featured People" viewAllHref="/people" id="featured-people">
+                {
+                    featuredPersons.map((person) => (
+                        <ContentCard
+                            title={person.data.name}
+                            href={`/people/${person.slug}`}
+                            image={person.data.avatar}
+                            slug={person.slug}
+                            tags={person.data.tags}
+                            class="snap-start"
+                        />
+                    ))
+                }
+            </CardRow>
+        </div>
 
         <!-- Featured Companies -->
-        <section class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Featured Companies
-                </h2>
-                <a href="/companies" class="text-sm text-primary-500 hover:text-primary-600"
-                    >View all</a
-                >
-            </div>
-
-            <!-- Horizontal scroll row -->
-            <div class="relative">
-                <!-- Left arrow -->
-                <button
-                    aria-label="Scroll left"
-                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-left"
-                    data-scroll-container="featured-companies"
-                >
-                    ‹
-                </button>
-
-                <!-- Scroll container -->
-                <div
-                    id="featured-companies"
-                    class="flex gap-5 overflow-x-auto scroll-smooth pb-2
-                 snap-x snap-mandatory
-                 px-10 md:px-12 scrollbar-hide"
-                >
-                    {
-                        featuredCompanies.map((company) => (
-                            <ContentCard
-                                title={company.data.name}
-                                href={`/companies/${company.slug}`}
-                                image={company.data.logo}
-                                slug={company.slug}
-                                tags={company.data.tags}
-                                class="snap-start"
-                            />
-                        ))
-                    }
-                </div>
-
-                <!-- Right arrow -->
-                <button
-                    aria-label="Scroll right"
-                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
-                 h-9 w-9 rounded-full bg-gray-900/70 hover:bg-gray-900
-                 text-white items-center justify-center scroll-right"
-                    data-scroll-container="featured-companies"
-                >
-                    ›
-                </button>
-            </div>
-        </section>
+        <div class="animate-fade-in">
+            <CardRow title="Featured Companies" viewAllHref="/companies" id="featured-companies">
+                {
+                    featuredCompanies.map((company) => (
+                        <ContentCard
+                            title={company.data.name}
+                            href={`/companies/${company.slug}`}
+                            image={company.data.logo}
+                            slug={company.slug}
+                            tags={company.data.tags}
+                            class="snap-start"
+                        />
+                    ))
+                }
+            </CardRow>
+        </div>
 
         <!-- Explore by Category -->
         <section class="space-y-4">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+            <h2 class="font-serif text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
                 Explore by Category
             </h2>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -313,9 +186,9 @@ function formatCategory(category: string) {
                     allCategories.map((category) => (
                         <a
                             href={`/categories/${category}`}
-                            class="bg-white dark:bg-secondary-800 border border-gray-300 dark:border-secondary-800
-                                 rounded-xl p-4 flex items-center justify-center text-center font-medium text-gray-700 dark:text-gray-200
-                                 hover:bg-primary-50 dark:hover:bg-secondary-700 hover:border-primary-300 dark:hover:border-primary-500
+                            class="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800
+                                 rounded-xl p-4 flex items-center justify-center text-center font-medium text-neutral-700 dark:text-neutral-200
+                                 hover:border-primary-400 hover:text-primary-700 dark:hover:text-primary-300
                                  transition-all duration-200"
                         >
                             {formatCategory(category)}
@@ -329,9 +202,7 @@ function formatCategory(category: string) {
         <div class="pt-8 text-center">
             <a
                 href="/apps"
-                class="inline-block px-8 py-3 rounded-lg
-             bg-primary-600 text-white font-medium
-             hover:bg-primary-700 transition-colors"
+                class="inline-block px-8 py-3 rounded-xl bg-primary-600 text-white font-semibold shadow-card hover:bg-primary-700 hover:shadow-card-hover transition-all"
             >
                 Explore everything
             </a>

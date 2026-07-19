@@ -38,15 +38,17 @@ const showCategoryBadge = !!primaryCategory && !showDomainBadge; // Only show on
 
 <a
     href={`/${collection}/${slug}`}
-    class={`group block min-w-[280px] rounded-xl border p-4 transition-all duration-200 hover:-translate-y-[2px] hover:shadow-md ${
-        featured ? 'border-yellow-400' : 'border-gray-200 dark:border-secondary-600'
-    } bg-white dark:bg-secondary-800`}
+    class={`group block min-w-[280px] rounded-2xl border p-4 transition-all duration-200 hover:-translate-y-1 shadow-card hover:shadow-card-hover ${
+        featured
+            ? 'border-primary-300 dark:border-primary-500/50 ring-1 ring-primary-200/60 dark:ring-primary-500/20'
+            : 'border-neutral-200 dark:border-neutral-800'
+    } bg-white dark:bg-neutral-900`}
 >
     <div class="flex gap-4">
         <div class="flex-shrink-0">
-            <div class="h-14 w-14 overflow-hidden">
+            <div class="h-14 w-14 overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800">
                 <Image
-                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
                     src={resolvedLogo}
                     alt={title}
                     format="webp"
@@ -65,8 +67,8 @@ const showCategoryBadge = !!primaryCategory && !showDomainBadge; // Only show on
                 </h2>
                 {
                     featured && (
-                        <span class="flex-shrink-0 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-semibold text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                            ★ Featured
+                        <span class="flex-shrink-0 rounded-full bg-primary-100 px-2 py-0.5 text-xs font-semibold text-primary-800 dark:bg-primary-900/40 dark:text-primary-200">
+                            Featured
                         </span>
                     )
                 }
@@ -90,7 +92,7 @@ const showCategoryBadge = !!primaryCategory && !showDomainBadge; // Only show on
                 }
                 {
                     showCategoryBadge && (
-                        <span class="inline-flex items-center rounded-full bg-secondary-100 px-2 py-1 text-xs font-medium text-secondary-800 dark:bg-secondary-700 dark:text-secondary-200">
+                        <span class="inline-flex items-center rounded-full bg-neutral-100 px-2 py-1 text-xs font-medium text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200">
                             {formatCategoryName(primaryCategory)}
                         </span>
                     )

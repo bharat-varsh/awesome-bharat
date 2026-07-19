@@ -221,3 +221,9 @@ body {
 .prose img {
     @apply rounded-lg shadow-card;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-fade-in {
+        animation: none;
+    }
+}
