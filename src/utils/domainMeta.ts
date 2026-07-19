@@ -1,10 +1,3 @@
-## Task 1 — Create the domain metadata util
-
-**File (new):** `src/utils/domainMeta.ts`
-
-This maps each of the 29 `domainEnum` values to a display label, an emoji icon, and a one-line blurb (used in hero copy). It mirrors the `categoryEmojis` pattern already in [src/pages/categories/[category].astro:24](../src/pages/categories/[category].astro).
-
-```ts
 import { formatCategoryName } from './textUtils.ts';
 
 export interface DomainMeta {
@@ -65,8 +58,3 @@ export function getDomainMeta(domain: string): DomainMeta {
         }
     );
 }
-```
-
-**Verify:** `npx tsc --noEmit` (or rely on the build in Task 9) shows no type errors in this file.
-
----
