@@ -1,31 +1,61 @@
-## Task 2.5 — Screenshots / YouTubeEmbed / StoreBadges: typo + shadow token cleanup 🟢
+## Task 3.1 — Homepage: editorial hero, one responsive `<h1>`, deduped carousel with icon-button arrows 🟡
 
-**Files:** `src/components/Screenshots.astro`, `src/components/YouTubeEmbed.astro`, `src/components/StoreBadges.astro`
+**File:** `src/pages/index.astro`
 
-### 2.5a — `StoreBadges.astro`: fix typo (~line 87)
+### 3.1a — Hero section
 
-**Find:** `whitespace-nowwrap` **Replace with:** `whitespace-nowrap`
+**Find** the hero `<section>` (lines 63–123, from `<!-- Hero -->` through its closing `</section>`) and **replace the whole block** with:
 
-### 2.5b — `YouTubeEmbed.astro`: fix typo (~line 27)
+```astro
+<!-- Hero -->
+<section class="border-b border-neutral-200 dark:border-neutral-800">
+    <div class="container-wide py-16 sm:py-20 text-center">
+        <p
+            class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 dark:text-primary-400"
+        >
+            Curated · Made in India
+        </p>
+        <h1
+            class="font-serif text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50 text-balance"
+        >
+            Remarkable things,
+            <span class="italic text-primary-600 dark:text-primary-400">made by Indians</span>
+        </h1>
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-neutral-600 dark:text-neutral-400">
+            A curated collection of awesome made by Indians — discover the work and the great people
+            who made it possible.
+        </p>
 
-**Find:** `overflow-hideen` **Replace with:** `overflow-hidden`
-
-### 2.5c — Card shadows → token (both `Screenshots.astro` and `YouTubeEmbed.astro`)
-
-In both files, the media card wrapper uses `shadow-lg hover:shadow-xl ... border-gray-200 dark:border-gray-700`. Replace **each occurrence** of:
-
+        <!-- Stat strip -->
+        <div
+            class="mt-8 inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm font-medium text-neutral-700 dark:text-neutral-300"
+        >
+            <span class="flex items-center gap-1.5">
+                <span
+                    class="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100"
+                    >{stats.apps}</span
+                >
+                apps
+            </span>
+            <span class="h-1 w-1 rounded-full bg-neutral-300 dark:bg-neutral-700"></span>
+            <span class="flex items-center gap-1.5">
+                <span
+                    class="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100"
+                    >{stats.persons}</span
+                >
+                people
+            </span>
+            <span class="h-1 w-1 rounded-full bg-neutral-300 dark:bg-neutral-700"></span>
+            <span class="flex items-center gap-1.5">
+                <span
+                    class="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100"
+                    >{stats.companies}</span
+                >
+                companies
+            </span>
+        </div>
+    </div>
+</section>
 ```
-shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900
-```
 
-with:
-
-```
-shadow-card hover:shadow-card-hover transition-shadow duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900
-```
-
-(Screenshots has 1 occurrence ~line 29; YouTubeEmbed has 2 ~lines 28 and 103.)
-
-**Test:** `npm run build` → on an app detail page with screenshots/videos (e.g. `/apps/mindful`), media tiles have subtle neutral shadows; no visual regressions; arrows still scroll.
-
----
+(One responsive serif `<h1>` replaces the duplicated desktop/mobile spans; no orange gradient.)
