@@ -12,6 +12,7 @@ import StoreBadges from '@/components/StoreBadges.astro';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
 import { getCTALinks, getPrimaryCTALabel, getPrimaryCTAUrl } from '../utils/ctaUtils.ts';
+import { getDomainMeta } from '../utils/domainMeta.ts';
 import googlePlayBadge from '../assets/images/badges/google-play-badge.png';
 import appStoreBadge from '../assets/images/badges/app-store-badge.png';
 import fdroidBadge from '../assets/images/badges/fdroid-badge.png';
@@ -26,6 +27,7 @@ export interface Props {
     date: Date;
     tags?: string[];
     categories: string[];
+    domains?: string[];
     paid: boolean;
     ads: boolean;
     offline: boolean;
@@ -51,6 +53,7 @@ const {
     date,
     tags,
     categories,
+    domains,
     paid,
     ads,
     offline,
@@ -145,6 +148,26 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
                                         >
                                             {primaryAuthor.data.name}
                                         </a>
+                                    </div>
+                                )
+                            }
+
+                            <!-- Domain chips -->
+                            {
+                                domains != null && domains.length > 0 && (
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        {domains.map((domain: string) => {
+                                            const dm = getDomainMeta(domain);
+                                            return (
+                                                <a
+                                                    href={`/domains/${domain}`}
+                                                    class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors"
+                                                >
+                                                    <span aria-hidden="true">{dm.icon}</span>
+                                                    {dm.label}
+                                                </a>
+                                            );
+                                        })}
                                     </div>
                                 )
                             }

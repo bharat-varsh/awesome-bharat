@@ -1,38 +1,36 @@
-# Awesome Bharat — Implementation Plan ("Premium Editorial" Redesign)
-
-This is a **self-contained, followable** execution guide. Each task lists the exact files, the exact current code to find, the exact replacement, and how to test. **A model executing any single task should not need to explore the codebase** — everything needed is inline.
+# Domain Pages — Step-by-Step Implementation Guide
 
 ---
 
-## How to use this document
+## Background the implementer must know (read once)
 
-- Tasks are grouped into **Phases**. Do phases in order. Within a phase, tasks marked _(parallel-safe)_ touch disjoint files and can be done concurrently.
-- **Phase 0 is BLOCKING** — nothing else works until it is done and the build passes.
-- After finishing a task, run its **Test** block before moving on.
-- All paths are relative to the repo root `awesome-bharat/`.
+1. **The schema already has a real `domains` field.** In [src/content/config.ts](../src/content/config.ts), every collection (`apps`, `persons`, `companies`, `channels`, `products`, `blogs`, `projects`, `communities`, `podcasts`, `initiatives`) has:
 
-### Model-tier legend (which model can do a task)
+    ```ts
+    domains: z.array(domainEnum).default([]),
+    ```
 
-| Tier              | Example model | Use for                                                                                                    |
-| ----------------- | ------------- | ---------------------------------------------------------------------------------------------------------- |
-| 🟢 **Nano**       | GPT-5.4-nano  | Trivial mechanical edits: typo fixes, single-token class swaps, find-and-replace with exact strings given. |
-| 🔵 **Mini/Flash** | Haiku         | Straightforward single-file edits where full before/after is provided; no cross-file reasoning.            |
-| 🟡 **Mid**        | Sonnet        | Multi-file components, layout judgment, extracting a shared component, careful edits in large files.       |
-| 🔴 **Large**      | Opus          | Framework migration, cross-cutting token-system design, build debugging.                                   |
+    `domainEnum` has **29 values** (listed in Task 1). This is a typed, validated field — it is the correct source of truth.
 
-### Global rules for every task
+2. **BUT the current pages ignore it.** [src/pages/apps/index.astro](../src/pages/apps/index.astro), [src/pages/categories/[category].astro](../src/pages/categories/[category].astro), and [src/pages/tags/[tag].astro](../src/pages/tags/[tag].astro) currently derive "domains" from a `domain:`-prefixed **tag** hack:
 
-- **Do not** introduce hardcoded hex colors in components. Use token classes (`primary-*`, `neutral-*`/`gray-*`, `secondary-*`, `accent-*`) which are defined in Phase 0.
-- **Do not** change any content files (`src/content/**`) — this is a visual redesign only.
-- Preserve all existing `id`, `data-*`, and `<script>` behavior unless a task explicitly says to change it.
-- After each task, run `npm run build` and confirm no console/build errors.
+    ```ts
+    domains={item.data.tags
+        ?.filter((tag) => tag.startsWith('domain:'))
+        ?.map((tag) => tag.replace('domain:', ''))}
+    ```
 
-### Design tokens available after Phase 0 (reference)
+    This guide **standardizes on the real `domains` field** and migrates those call sites. Do not perpetuate the `domain:`-tag hack.
 
-- Fonts: `font-sans` (Inter, body/UI), `font-serif` (Fraunces, display/headings). `h1/h2/h3` are serif by default.
-- Colors (all have `50→950`): `primary-*` = refined **saffron/terracotta** accent; `secondary-*`, `gray-*`, `neutral-*` = warm **stone** neutral (identical values, cohesive). `accent-*` = alias of primary.
-- Shadows: `shadow-card`, `shadow-card-hover` (neutral, layered — use instead of colored glows).
-- Radius: `rounded-card` (1rem) available; `rounded-xl`/`rounded-2xl`/`rounded-full` as usual.
-- Semantic CSS vars (if needed in raw CSS): `--surface`, `--surface-page`, `--surface-elevated`, `--border-subtle`, `--ink`, `--ink-muted`.
+3. **Naming pattern across collections:** `apps` use `data.title`; every other collection uses `data.name`. `apps` use `data.logo`; `persons` use `data.avatar`; the rest use `data.logo`. Helper functions in Task 3 abstract this.
+
+4. **Reusable building blocks that already exist** (do not rebuild them):
+    - [src/components/CollectionHero.astro](../src/components/CollectionHero.astro) — hero card. Props: `eyebrow`, `title`, `description`, `countLabel`, `icon`, `pills` (array of `{label, href}`).
+    - [src/components/ContentCardFull.astro](../src/components/ContentCardFull.astro) — the card. Props: `title`, `description`, `slug`, `collection`, `logoSrc` (ImageMetadata), `domains` (string[]), `categories` (string[]), `ctaLabel`, `ctaUrl`, `featured`.
+    - [src/utils/imageResolvers.ts](../src/utils/imageResolvers.ts) — `resolveLogo(slug, logo?)` → `ImageMetadata`.
+    - [src/utils/ctaUtils.ts](../src/utils/ctaUtils.ts) — `getPrimaryCTAUrl(collection, data)`.
+    - [src/utils/textUtils.ts](../src/utils/textUtils.ts) — `formatCategoryName(str)` inserts spaces into camelCase and title-cases.
+
+5. **The reference page to copy structure from is** [src/pages/categories/[category].astro](../src/pages/categories/[category].astro). The domain page is the same shape but keyed on `data.domains` instead of `data.categories`, and it works across all collections instead of just apps.
 
 ---

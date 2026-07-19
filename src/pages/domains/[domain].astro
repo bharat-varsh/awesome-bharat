@@ -1,0 +1,145 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CollectionHero from '@/components/CollectionHero.astro';
+import ContentCardFull from '@/components/ContentCardFull.astro';
+import { getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
+import { resolveLogo } from '@/utils/imageResolvers.ts';
+import { getDomainMeta } from '@/utils/domainMeta.ts';
+import {
+    SCANNED_COLLECTIONS,
+    COLLECTION_GROUP_META,
+    getEntryTitle,
+    getEntryDescription,
+    getEntryImage,
+    type ScannedCollection,
+    type ScannedEntry,
+} from '@/utils/collectionsToScan.ts';
+
+interface DomainPageProps {
+    domain: string;
+    // one array of entries per scanned collection, in SCANNED_COLLECTIONS order
+    groups: Array<{ collection: ScannedCollection; items: ScannedEntry[] }>;
+}
+
+export const getStaticPaths = (async () => {
+    // Load every scanned collection, drop drafts.
+    const loaded = await Promise.all(
+        SCANNED_COLLECTIONS.map(async (name) => {
+            const entries = (await getCollection(name)) as ScannedEntry[];
+            return {
+                collection: name,
+                entries: entries.filter((e) => !e.data.draft),
+            };
+        })
+    );
+
+    // Sort featured entries to the front within each collection.
+    const sortFeaturedFirst = (items: ScannedEntry[]) =>
+        [...items].sort(
+            (a, b) => Number(Boolean(b.data.featured)) - Number(Boolean(a.data.featured))
+        );
+
+    // Collect every domain that appears on any entry.
+    const domains = new Set<string>();
+    for (const { entries } of loaded) {
+        for (const entry of entries) {
+            for (const domain of entry.data.domains ?? []) {
+                domains.add(domain);
+            }
+        }
+    }
+
+    return [...domains].map((domain) => ({
+        params: { domain },
+        props: {
+            domain,
+            groups: loaded.map(({ collection, entries }) => ({
+                collection,
+                items: sortFeaturedFirst(
+                    entries.filter((e) => (e.data.domains ?? []).includes(domain))
+                ),
+            })),
+        },
+    }));
+}) satisfies GetStaticPaths;
+
+const { domain, groups } = Astro.props as DomainPageProps;
+const meta = getDomainMeta(domain);
+
+// Only render groups that actually have matches.
+const visibleGroups = groups.filter((g) => g.items.length > 0);
+const totalItems = visibleGroups.reduce((sum, g) => sum + g.items.length, 0);
+const countLabel = `${totalItems} ${totalItems === 1 ? 'item' : 'items'}`;
+const description = meta.blurb;
+
+const pills = visibleGroups.map((g) => ({
+    label: `${COLLECTION_GROUP_META[g.collection].title} (${g.items.length})`,
+    href: `#${COLLECTION_GROUP_META[g.collection].id}`,
+}));
+---
+
+<BaseLayout title={`${meta.label} | Awesome Bharat`} description={description}>
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <CollectionHero
+            eyebrow="Domain"
+            title={meta.label}
+            description={description}
+            countLabel={countLabel}
+            icon={meta.icon}
+            pills={pills}
+        />
+
+        <div class="mt-10 space-y-12">
+            {
+                visibleGroups.map((group) => {
+                    const groupMeta = COLLECTION_GROUP_META[group.collection];
+                    return (
+                        <section id={groupMeta.id} class="scroll-mt-24">
+                            <div class="mb-4 flex items-end justify-between gap-4">
+                                <div>
+                                    <h2 class="font-serif text-2xl font-extrabold text-neutral-900 dark:text-neutral-100">
+                                        {groupMeta.title}
+                                    </h2>
+                                    <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                                        {group.items.length}{' '}
+                                        {group.items.length === 1 ? 'match' : 'matches'} in{' '}
+                                        {meta.label}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
+                                {group.items.map((item) => (
+                                    <ContentCardFull
+                                        title={getEntryTitle(item)}
+                                        description={getEntryDescription(item)}
+                                        slug={item.slug}
+                                        collection={item.collection}
+                                        logoSrc={
+                                            getEntryImage(item)
+                                                ? resolveLogo(item.slug, getEntryImage(item))
+                                                : undefined
+                                        }
+                                        domains={(item.data.domains ?? []).map(
+                                            (d: string) => getDomainMeta(d).label
+                                        )}
+                                        categories={
+                                            item.collection === 'apps'
+                                                ? item.data.categories
+                                                : undefined
+                                        }
+                                        ctaLabel="View More"
+                                        ctaUrl={getPrimaryCTAUrl(item.collection, item.data)}
+                                        featured={item.data.featured}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+                    );
+                })
+            }
+        </div>
+    </div>
+</BaseLayout>
