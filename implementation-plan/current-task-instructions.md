@@ -1,42 +1,29 @@
-## Task 4.1 — Motion, accessibility, and token audit 🟡
+## Task B — Brand SVG icons: replace hardcoded old-orange hex with the new accent color 🟢 Nano
 
-**Multiple files.**
+**Files:**
 
-1. **Entrance motion:** In `src/pages/apps/index.astro`, add `animate-fade-in` to the grid container class. In `src/pages/index.astro`, add `animate-fade-in` to each `CardRow` usage via a wrapper or the section — keep it subtle (respect users who prefer reduced motion by adding to `global.css`):
+- `src/assets/images/brand-logo.svg`
+- `src/assets/images/engage/add.svg`
+- `src/assets/images/engage/bug.svg`
+- `src/assets/images/engage/fix.svg`
+- `src/assets/images/engage/suggest.svg`
+- `src/assets/images/engage/website.svg`
 
-```css
-@media (prefers-reduced-motion: reduce) {
-    .animate-fade-in {
-        animation: none;
-    }
-}
-```
+These SVGs still bake in the pre-redesign bright orange (`#ea580c`) as a literal `fill`/`stroke` attribute value, outside the Tailwind token system entirely (SVGs aren't touched by `@theme` tokens). The new accent primary is `--color-primary-600: #b8541f` (see `global.css`). This was not in scope of the original component-level tasks but is a visible inconsistency — the icons render in the old bright orange while every other accent in the app now renders in the muted saffron/terracotta.
 
-(Append this to the end of `src/styles/global.css`.)
+### B.1 — Find and replace in each file
 
-2. **Accessibility:**
-    - Confirm all icon-only buttons have `aria-label` (carousel arrows do; theme toggle does).
-    - Verify text contrast in both themes on the hero, chips, and muted text (`neutral-500` on `neutral-50` passes AA for normal text; `neutral-400` on `neutral-950` passes for dark).
+In every file listed above, replace all occurrences of `#ea580c` with `#b8541f` (case-insensitive; some files use it in both `fill` and `stroke` attributes, and one — `suggest.svg` — has it twice):
 
-3. **Token audit:** Search the codebase for leftover values that should now be tokens:
+- `brand-logo.svg:2` — one `fill="#ea580c"` on the root `<svg>`.
+- `engage/add.svg:3,6` — `fill="#ea580c" stroke="#ea580c"` on the root `<svg>`, plus one more occurrence inside a nested element.
+- `engage/bug.svg:3,6` — `stroke="#ea580c"` on the root `<svg>`, plus one more occurrence inside a nested element.
+- `engage/fix.svg:3` — `fill="#ea580c"` on the root `<svg>`.
+- `engage/suggest.svg:3,5,6` — `stroke="#ea580c"` appears three times (root `<svg>`, a `<g>` tracer element, and one more nested element).
+- `engage/website.svg:3,6` — `stroke="#ea580c"` on the root `<svg>` and again on the inner `<path>`.
 
-```bash
-grep -rn "secondary-" src/ || true
-grep -rniE "#(ea580c|f97316|fb923c|14b8a6|0d9488|2dd4bf)" src/ || true
-grep -rn "font-display" src/ || true
-grep -rn "shadow-primary" src/ || true
-```
+A single find-and-replace of `#ea580c` → `#b8541f` (all occurrences, case-insensitive) across each file is sufficient — there is no styling logic to preserve, just literal color attributes.
 
-- `secondary-*` classes are fine (they map to warm neutral now) but prefer migrating high-traffic ones to `neutral-*` for clarity — optional.
-- Any remaining old orange/teal hex or `shadow-primary-*` outside `global.css`/`Search.astro` should be replaced with tokens.
-- `font-display` should no longer appear (replaced by `font-serif` in Task 2.3).
-
-**Test (full regression):**
-
-```bash
-npm run build
-```
-
-Must pass.
+**Test:** `npm run build` → visually inspect the homepage/header logo (`brand-logo.svg`, if rendered anywhere) and the "Engage" section icons (add/bug/fix/suggest/website — used wherever `Engage.astro` renders its icon links) in both themes. Confirm they now render in the muted terracotta (`#b8541f`) matching `primary-600`, not the old bright orange (`#ea580c`).
 
 ---
