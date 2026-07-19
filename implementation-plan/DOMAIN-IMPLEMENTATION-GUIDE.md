@@ -558,7 +558,7 @@ domains={app.data.domains}
 
 ## Task 8 — (Optional) Per-domain RSS feed
 
-Only do this if per-domain feeds are desired. Model it on the existing [src/pages/rss.xml.ts](../src/pages/rss.xml.ts) (open that file first to copy its import of `@astrojs/rss` and `site` usage).
+Model it on the existing [src/pages/rss.xml.ts](../src/pages/rss.xml.ts) (open that file first to copy its import of `@astrojs/rss` and `site` usage).
 
 **File (new):** `src/pages/domains/[domain]/rss.xml.ts`
 

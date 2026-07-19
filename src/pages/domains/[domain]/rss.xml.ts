@@ -1,10 +1,3 @@
-## Task 8 — (Optional) Per-domain RSS feed
-
-Model it on the existing [src/pages/rss.xml.ts](../src/pages/rss.xml.ts) (open that file first to copy its import of `@astrojs/rss` and `site` usage).
-
-**File (new):** `src/pages/domains/[domain]/rss.xml.ts`
-
-```ts
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
@@ -52,8 +45,3 @@ export async function GET(context: APIContext) {
         items,
     });
 }
-```
-
-> If `@astrojs/rss` import style differs in the existing `rss.xml.ts`, match that file exactly.
-
----
