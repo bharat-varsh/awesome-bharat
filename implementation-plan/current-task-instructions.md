@@ -1,30 +1,26 @@
-## Task 5 — Migrate existing cards to the real `domains` field
+## Task 6 — Add "Domains" to the sidebar navigation
 
-Three existing pages pass domains to `ContentCardFull` using the `domain:`-tag hack. Replace those with the real `domains` field so cards show consistent domain badges everywhere.
+**File (edit):** [src/components/SidebarNav.astro](../src/components/SidebarNav.astro)
 
-Import `getDomainMeta` at the top of each file:
-```ts
-import { getDomainMeta } from '@/utils/domainMeta.ts';
+The `collections` array (around line 17) drives the nav. Add a standalone "Explore by Domain" link. Insert this **static** link right after the closing `</Divider>` that precedes the dynamic collections (around line 70), before the `{collections.map(...)}` block:
+
+```astro
+<a
+    href="/domains"
+    class:list={[
+        'flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors',
+        isActive('/domains')
+            ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 font-semibold'
+            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800',
+    ]}
+>
+    <div class="flex items-center gap-3">
+        <span class="w-5 h-5 grid place-items-center text-base" aria-hidden="true">🧭</span>
+        <span>Domains</span>
+    </div>
+</a>
 ```
 
-**5a — [src/pages/apps/index.astro](../src/pages/apps/index.astro):** find
-```ts
-domains={app.data.tags
-    ?.filter((tag: string) => tag.startsWith('domain:'))
-    ?.map((tag: string) => tag.replace('domain:', ''))}
-```
-replace with
-```ts
-domains={(app.data.domains ?? []).map((d) => getDomainMeta(d).label)}
-```
-
-**5b — [src/pages/categories/[category].astro:190](../src/pages/categories/[category].astro):** find the same `tags?.filter(...startsWith('domain:'))` block passed to `domains=` and replace with
-```ts
-domains={(item.data.domains ?? []).map((d) => getDomainMeta(d).label)}
-```
-
-**5c — [src/pages/tags/[tag].astro:158](../src/pages/tags/[tag].astro):** same replacement as 5b.
-
-> After this task, the `domain:`-prefixed tag convention is fully retired. If any seed content used `tags: ["domain:space"]`, move that to `domains: [space]` in the frontmatter (Task 9 covers seeding correctly).
+`isActive` is already defined in the file (line 40) and already matches by prefix, so `/domains/space` will also highlight this link.
 
 ---
