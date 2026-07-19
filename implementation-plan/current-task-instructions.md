@@ -1,25 +1,29 @@
-### A.2 — Tokenize the fallback text pill
+## Task B — Brand SVG icons: replace hardcoded old-orange hex with the new accent color 🟢 Nano
 
-**Find** (~line 87):
+**Files:**
 
-```html
-<div
-    class="h-12 sm:h-10 md:h-11 px-6 flex items-center justify-center bg-gray-900 dark:bg-gray-100 rounded-lg text-white dark:text-gray-900 font-semibold text-sm sm:text-base whitespace-nowrap hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
->
-    {store.label}
-</div>
-```
+- `src/assets/images/brand-logo.svg`
+- `src/assets/images/engage/add.svg`
+- `src/assets/images/engage/bug.svg`
+- `src/assets/images/engage/fix.svg`
+- `src/assets/images/engage/suggest.svg`
+- `src/assets/images/engage/website.svg`
 
-**Replace with:**
+These SVGs still bake in the pre-redesign bright orange (`#ea580c`) as a literal `fill`/`stroke` attribute value, outside the Tailwind token system entirely (SVGs aren't touched by `@theme` tokens). The new accent primary is `--color-primary-600: #b8541f` (see `global.css`). This was not in scope of the original component-level tasks but is a visible inconsistency — the icons render in the old bright orange while every other accent in the app now renders in the muted saffron/terracotta.
 
-```html
-<div
-    class="h-12 sm:h-10 md:h-11 px-6 flex items-center justify-center bg-primary-600 dark:bg-primary-500 rounded-lg text-white font-semibold text-sm sm:text-base whitespace-nowrap hover:bg-primary-700 dark:hover:bg-primary-400 transition-colors"
->
-    {store.label}
-</div>
-```
+### B.1 — Find and replace in each file
 
-**Test:** `npm run build` → open any app detail page with a non-standard store link (i.e. a `storeLinks` entry that isn't Play Store/App Store/F-Droid/GitHub, so the fallback pill renders) — e.g. check `src/content/apps/*.mdx` for a `storeLinks` entry with a label like "Website" or "Direct Download". Confirm the badge row now sits inside a bordered/shadowed card matching `Screenshots.astro`/`YouTubeEmbed.astro`, and the fallback pill is saffron instead of black/white. Check both themes.
+In every file listed above, replace all occurrences of `#ea580c` with `#b8541f` (case-insensitive; some files use it in both `fill` and `stroke` attributes, and one — `suggest.svg` — has it twice):
+
+- `brand-logo.svg:2` — one `fill="#ea580c"` on the root `<svg>`.
+- `engage/add.svg:3,6` — `fill="#ea580c" stroke="#ea580c"` on the root `<svg>`, plus one more occurrence inside a nested element.
+- `engage/bug.svg:3,6` — `stroke="#ea580c"` on the root `<svg>`, plus one more occurrence inside a nested element.
+- `engage/fix.svg:3` — `fill="#ea580c"` on the root `<svg>`.
+- `engage/suggest.svg:3,5,6` — `stroke="#ea580c"` appears three times (root `<svg>`, a `<g>` tracer element, and one more nested element).
+- `engage/website.svg:3,6` — `stroke="#ea580c"` on the root `<svg>` and again on the inner `<path>`.
+
+A single find-and-replace of `#ea580c` → `#b8541f` (all occurrences, case-insensitive) across each file is sufficient — there is no styling logic to preserve, just literal color attributes.
+
+**Test:** `npm run build` → visually inspect the homepage/header logo (`brand-logo.svg`, if rendered anywhere) and the "Engage" section icons (add/bug/fix/suggest/website — used wherever `Engage.astro` renders its icon links) in both themes. Confirm they now render in the muted terracotta (`#b8541f`) matching `primary-600`, not the old bright orange (`#ea580c`).
 
 ---
