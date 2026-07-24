@@ -51,7 +51,12 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                             )}
                             aria-label="Scroll left"
                         >
-                            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg
+                                class="size-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -70,7 +75,12 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                             )}
                             aria-label="Scroll right"
                         >
-                            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg
+                                class="size-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -124,7 +134,12 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                             )}
                             aria-label="Scroll left"
                         >
-                            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg
+                                class="size-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -143,7 +158,12 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                             )}
                             aria-label="Scroll right"
                         >
-                            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg
+                                class="size-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -160,9 +180,7 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
 
     {
         ((youtubeVideoIds && youtubeVideoIds.length > 0) ||
-            (youtubeShortsIds && youtubeShortsIds.length > 0)) && (
-            <Separator className="my-4" />
-        )
+            (youtubeShortsIds && youtubeShortsIds.length > 0)) && <Separator className="my-4" />
     }
 </>
 

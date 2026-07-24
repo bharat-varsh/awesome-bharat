@@ -114,7 +114,9 @@ const currentPath = Astro.url.pathname;
                 logoSrc={logoSrc}
             >
                 <div slot="headerEnd" class="flex items-center gap-2 sm:gap-4">
-                    <div class="w-full max-w-[120px] sm:max-w-[160px] md:max-w-[200px] lg:max-w-[280px]">
+                    <div
+                        class="w-full max-w-[120px] sm:max-w-[160px] md:max-w-[200px] lg:max-w-[280px]"
+                    >
                         <Search />
                     </div>
                     <ThemeToggle client:load />
