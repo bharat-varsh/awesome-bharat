@@ -8,6 +8,7 @@
         "build": "astro check && astro build --outDir ./docs",
         "preview": "astro preview --outDir ./docs",
         "astro": "astro",
+        "check": "astro check && eslint .",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write \"**/*.{js,ts,mjs,astro,md,mdx,json}\"",

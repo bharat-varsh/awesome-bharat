@@ -16,5 +16,10 @@ pnpm-debug.log*
 # Astro
 .astro/
 
-# Planning files
-future-planning/
+# Build output
+docs/
+
+# Stale / reference-only directories (skip in agent context)
+OLD-INSTRUCTIONS/
+implementation-plan/
+only-reference/

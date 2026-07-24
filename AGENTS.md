@@ -143,6 +143,7 @@ src/
 ```bash
 npm run dev          # Start dev server (http://localhost:4321)
 npm run build        # Build for production → ./docs
+npm run check        # Fast validation: astro check + eslint (no build)
 npm run preview      # Preview production build
 npm run lint         # ESLint
 npm run format       # Prettier
@@ -206,3 +207,14 @@ Several `<Image>` usages pass `aspectRatio="1/1"` — removed in Astro 3, silent
 ## Build Output
 
 Production build outputs to `./docs` for GitHub Pages. Configured with `site: 'https://awesomebharat.com'` in `astro.config.mjs`.
+
+---
+
+## Agent Context
+
+**Skip these directories** — they are stale, reference-only, or build output. Do not read or modify them:
+
+- `docs/` — Build output (regenerated on every build)
+- `OLD-INSTRUCTIONS/` — Archived instructions, no longer authoritative
+- `implementation-plan/` — Superseded by `planning/`
+- `only-reference/` — Reference material, not part of the active codebase
