@@ -14,7 +14,8 @@
         "format": "prettier --write \"**/*.{js,ts,mjs,astro,md,mdx,json}\"",
         "prebuild": "npm run format && npm run lint",
         "build.local": "npm run build && npm run preview",
-        "postbuild": "npx pagefind --site docs"
+        "postbuild": "npx pagefind --site docs",
+        "pack": "npx repomix --config repomix.config.json"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.0.0",

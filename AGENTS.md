@@ -218,3 +218,25 @@ Production build outputs to `./docs` for GitHub Pages. Configured with `site: 'h
 - `OLD-INSTRUCTIONS/` — Archived instructions, no longer authoritative
 - `implementation-plan/` — Superseded by `planning/`
 - `only-reference/` — Reference material, not part of the active codebase
+
+### Task cards
+
+Use `planning/current_task.md` as the session task card (goal, files-in-scope, do-not-touch, done-criteria). Fill it before multi-step work; clear or rewrite when the task ends.
+
+### Agent skills
+
+Load the matching skill under `skills/` for repetitive workflows (short checklists; full docs stay in `planning/`):
+
+| Skill | When |
+| ----- | ---- |
+| `skills/add-content-entry` | New MDX entries (any collection) |
+| `skills/ui-layout-change` | Components, layouts, Tailwind, nav |
+| `skills/schema-change` | Changes to `src/content/config.ts` |
+
+### Cold-start pack (Repomix)
+
+```bash
+npm run pack
+```
+
+Writes a compressed repo summary to `repomix-output.md` (gitignored). Config: `repomix.config.json` (excludes `docs/`, stale dirs, lockfiles).

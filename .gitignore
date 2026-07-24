@@ -23,3 +23,7 @@ docs/
 OLD-INSTRUCTIONS/
 implementation-plan/
 only-reference/
+
+# Repomix cold-start packs
+repomix-output.md
+repomix-output.xml
