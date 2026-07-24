@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'url';
@@ -7,7 +8,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
     site: 'https://awesomebharat.com',
-    integrations: [mdx(), sitemap()],
+    integrations: [mdx(), react(), sitemap()],
     markdown: {
         shikiConfig: {
             theme: 'github-dark',
