@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import SEO from '@/components/SEO.astro';
 import Search from '@/components/Search.astro';
-import ThemeToggle from '@/components/ThemeToggle.astro';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import Footer from '@/components/Footer.astro';
 import { AppSidebarLayout } from '@/components/AppSidebarLayout';
 import type { NavItem } from '@/components/AppSidebar';
@@ -117,7 +117,7 @@ const currentPath = Astro.url.pathname;
                     <div class="w-full max-w-[120px] sm:max-w-[160px] md:max-w-[200px] lg:max-w-[280px]">
                         <Search />
                     </div>
-                    <ThemeToggle />
+                    <ThemeToggle client:load />
                 </div>
 
                 <div class="flex min-h-[calc(100svh-4rem)] flex-col">

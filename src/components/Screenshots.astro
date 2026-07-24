@@ -1,4 +1,7 @@
 ---
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
 interface Props {
     screenshots: Array<{
         url: string;
@@ -43,10 +46,14 @@ const { screenshots, title = 'Screenshots' } = Astro.props;
 
                 <button
                     id="scroll-left"
-                    class="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 shadow-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all opacity-0 group-hover:opacity-100 z-20"
+                    type="button"
+                    class={cn(
+                        buttonVariants({ variant: 'secondary', size: 'icon' }),
+                        'absolute left-2 top-1/2 z-20 hidden size-10 -translate-y-1/2 rounded-full opacity-0 shadow-lg transition-opacity group-hover:opacity-100 md:flex'
+                    )}
                     aria-label="Scroll left"
                 >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
@@ -58,10 +65,14 @@ const { screenshots, title = 'Screenshots' } = Astro.props;
 
                 <button
                     id="scroll-right"
-                    class="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 shadow-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all opacity-0 group-hover:opacity-100 z-20"
+                    type="button"
+                    class={cn(
+                        buttonVariants({ variant: 'secondary', size: 'icon' }),
+                        'absolute right-2 top-1/2 z-20 hidden size-10 -translate-y-1/2 rounded-full opacity-0 shadow-lg transition-opacity group-hover:opacity-100 md:flex'
+                    )}
                     aria-label="Scroll right"
                 >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"

@@ -1,4 +1,7 @@
 ---
+import { Badge, badgeVariants } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+
 export interface StatPill {
     label: string;
     href?: string;
@@ -46,11 +49,9 @@ const { eyebrow, title, description, countLabel, icon = '#', pills = [] } = Astr
             </p>
         </div>
 
-        <p
-            class="w-fit flex-none rounded-full bg-primary-600 px-4 py-2 text-sm font-semibold text-white"
-        >
+        <Badge className="h-auto w-fit flex-none px-4 py-2 text-sm font-semibold">
             {countLabel}
-        </p>
+        </Badge>
     </div>
 
     {
@@ -60,14 +61,20 @@ const { eyebrow, title, description, countLabel, icon = '#', pills = [] } = Astr
                     pill.href ? (
                         <a
                             href={pill.href}
-                            class="whitespace-nowrap rounded-full bg-neutral-50 px-3 py-1.5 text-sm font-semibold text-gray-800 ring-1 ring-neutral-200 transition hover:bg-primary-600 hover:text-white dark:bg-neutral-800 dark:text-gray-100 dark:ring-neutral-700"
+                            class={cn(
+                                badgeVariants({ variant: 'outline' }),
+                                'h-auto px-3 py-1.5 text-sm font-semibold'
+                            )}
                         >
                             {pill.label}
                         </a>
                     ) : (
-                        <span class="whitespace-nowrap rounded-full bg-neutral-50 px-3 py-1.5 text-sm font-semibold text-gray-800 ring-1 ring-neutral-200 dark:bg-neutral-800 dark:text-gray-100 dark:ring-neutral-700">
+                        <Badge
+                            variant="outline"
+                            className="h-auto px-3 py-1.5 text-sm font-semibold"
+                        >
                             {pill.label}
-                        </span>
+                        </Badge>
                     )
                 )}
             </nav>

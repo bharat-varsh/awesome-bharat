@@ -1,4 +1,7 @@
 ---
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
 export interface Props {
     title: string;
     viewAllHref: string;
@@ -22,11 +25,15 @@ const { title, viewAllHref, id } = Astro.props;
 
     <div class="relative">
         <button
+            type="button"
             aria-label="Scroll left"
-            class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full border border-neutral-200 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/90 text-neutral-700 dark:text-neutral-200 shadow-card backdrop-blur hover:bg-white dark:hover:bg-neutral-800 scroll-left"
+            class={cn(
+                buttonVariants({ variant: 'outline', size: 'icon' }),
+                'scroll-left absolute left-0 top-1/2 z-10 hidden size-10 -translate-y-1/2 rounded-full bg-background/90 shadow-card backdrop-blur md:flex'
+            )}
             data-scroll-container={id}
         >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -43,11 +50,15 @@ const { title, viewAllHref, id } = Astro.props;
         </div>
 
         <button
+            type="button"
             aria-label="Scroll right"
-            class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full border border-neutral-200 dark:border-neutral-700 bg-white/90 dark:bg-neutral-900/90 text-neutral-700 dark:text-neutral-200 shadow-card backdrop-blur hover:bg-white dark:hover:bg-neutral-800 scroll-right"
+            class={cn(
+                buttonVariants({ variant: 'outline', size: 'icon' }),
+                'scroll-right absolute right-0 top-1/2 z-10 hidden size-10 -translate-y-1/2 rounded-full bg-background/90 shadow-card backdrop-blur md:flex'
+            )}
             data-scroll-container={id}
         >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                     stroke-linecap="round"
                     stroke-linejoin="round"

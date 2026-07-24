@@ -9,6 +9,8 @@ import Screenshots from '../components/Screenshots.astro';
 import Engage from '@/components/Engage.astro';
 import YouTubeEmbed from '@/components/YouTubeEmbed.astro';
 import StoreBadges from '@/components/StoreBadges.astro';
+import { Badge, badgeVariants } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
 import { getCTALinks, getPrimaryCTALabel, getPrimaryCTAUrl } from '../utils/ctaUtils.ts';
@@ -155,13 +157,16 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
                             <!-- Domain chips -->
                             {
                                 domains != null && domains.length > 0 && (
-                                    <div class="flex flex-wrap gap-2 mt-1">
+                                    <div class="mt-1 flex flex-wrap gap-2">
                                         {domains.map((domain: string) => {
                                             const dm = getDomainMeta(domain);
                                             return (
                                                 <a
                                                     href={`/domains/${domain}`}
-                                                    class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors"
+                                                    class={cn(
+                                                        badgeVariants({ variant: 'secondary' }),
+                                                        'h-auto gap-1 px-3 py-1 text-xs sm:text-sm'
+                                                    )}
                                                 >
                                                     <span aria-hidden="true">{dm.icon}</span>
                                                     {dm.label}
@@ -175,11 +180,14 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
                             <!-- Category chips (max 2) -->
                             {
                                 categories.length > 0 && (
-                                    <div class="flex flex-wrap gap-2 mt-1">
+                                    <div class="mt-1 flex flex-wrap gap-2">
                                         {categories.slice(0, 2).map((category) => (
                                             <a
                                                 href={`/categories/${category}`}
-                                                class="px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                                                class={cn(
+                                                    badgeVariants({ variant: 'outline' }),
+                                                    'h-auto px-3 py-1 text-xs sm:text-sm'
+                                                )}
                                             >
                                                 {formatCategoryName(category)}
                                             </a>
@@ -188,20 +196,20 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
                                 )
                             }
 
-                            <!-- Tags (scrollable on mobile) -->
+                            <!-- Tags -->
                             {
                                 tags && tags.length > 0 && (
-                                    <div class="flex flex-wrap gap-2 mt-1">
+                                    <div class="mt-1 flex flex-wrap gap-2">
                                         {tags.slice(0, 8).map((tag) => (
                                             <a
                                                 href={`/tags/${tag}`}
-                                                class="text-xs px-2.5 py-1 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors whitespace-nowrap"
+                                                class={cn(badgeVariants({ variant: 'secondary' }))}
                                             >
                                                 #{tag}
                                             </a>
                                         ))}
                                         {tags.length > 8 && (
-                                            <span class="text-xs py-1 text-gray-500 dark:text-gray-400">
+                                            <span class="py-1 text-xs text-muted-foreground">
                                                 +{tags.length - 8} more
                                             </span>
                                         )}
@@ -391,40 +399,32 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
                     </div>
 
                     <!-- Status chips -->
-                    <div class="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-800">
+                    <div class="mt-6 border-t border-border pt-4">
                         <div class="flex flex-wrap gap-2">
-                            <span
-                                class="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 px-3 py-1 text-xs font-medium text-neutral-700 dark:text-neutral-300"
-                            >
+                            <Badge variant="outline" className="h-auto gap-1.5 px-3 py-1">
                                 <span
-                                    class={`h-1.5 w-1.5 rounded-full ${paid ? 'bg-neutral-400' : 'bg-emerald-500'}`}
-                                ></span>
+                                    class={`size-1.5 rounded-full ${paid ? 'bg-neutral-400' : 'bg-emerald-500'}`}
+                                />
                                 {paid ? 'Paid' : 'Free'}
-                            </span>
-                            <span
-                                class="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 px-3 py-1 text-xs font-medium text-neutral-700 dark:text-neutral-300"
-                            >
+                            </Badge>
+                            <Badge variant="outline" className="h-auto gap-1.5 px-3 py-1">
                                 <span
-                                    class={`h-1.5 w-1.5 rounded-full ${ads ? 'bg-neutral-400' : 'bg-emerald-500'}`}
-                                ></span>
+                                    class={`size-1.5 rounded-full ${ads ? 'bg-neutral-400' : 'bg-emerald-500'}`}
+                                />
                                 {ads ? 'Has Ads' : 'No Ads'}
-                            </span>
-                            <span
-                                class="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 px-3 py-1 text-xs font-medium text-neutral-700 dark:text-neutral-300"
-                            >
+                            </Badge>
+                            <Badge variant="outline" className="h-auto gap-1.5 px-3 py-1">
                                 <span
-                                    class={`h-1.5 w-1.5 rounded-full ${source === 'open-source' ? 'bg-emerald-500' : 'bg-neutral-400'}`}
-                                ></span>
+                                    class={`size-1.5 rounded-full ${source === 'open-source' ? 'bg-emerald-500' : 'bg-neutral-400'}`}
+                                />
                                 {source === 'open-source' ? 'Open Source' : 'Closed Source'}
-                            </span>
-                            <span
-                                class="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 px-3 py-1 text-xs font-medium text-neutral-700 dark:text-neutral-300"
-                            >
+                            </Badge>
+                            <Badge variant="outline" className="h-auto gap-1.5 px-3 py-1">
                                 <span
-                                    class={`h-1.5 w-1.5 rounded-full ${offline ? 'bg-emerald-500' : 'bg-neutral-400'}`}
-                                ></span>
+                                    class={`size-1.5 rounded-full ${offline ? 'bg-emerald-500' : 'bg-neutral-400'}`}
+                                />
                                 {offline ? 'Works Offline' : 'Needs Internet'}
-                            </span>
+                            </Badge>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 import type { Link } from '@/content/config.ts';
-import Divider from '@/components/Divider.astro';
+import { Separator } from '@/components/ui/separator';
 import addIcon from '@/assets/images/engage/add.svg';
 import bugIcon from '@/assets/images/engage/bug.svg';
 import fixIcon from '@/assets/images/engage/fix.svg';
@@ -70,7 +70,7 @@ const contributionActions = gitHubUrl
 ---
 
 <>
-    {(source === 'open-source' || socials || website) && <Divider />}
+    {(source === 'open-source' || socials || website) && <Separator className="my-4" />}
 
     <div class="space-y-6">
         <!-- Contribute to development (Open source only) -->
@@ -179,5 +179,5 @@ const contributionActions = gitHubUrl
         }
     </div>
 
-    {(source === 'open-source' || socials || website) && <Divider />}
+    {(source === 'open-source' || socials || website) && <Separator className="my-4" />}
 </>
