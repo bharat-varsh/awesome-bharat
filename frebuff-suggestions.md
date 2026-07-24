@@ -33,10 +33,10 @@ The file proposes a phased approach to reduce AI agent token waste and improve w
 | Split check script | ❌ Missing | No separate fast-feedback script |
 | Agent skills | ✅ Done | `skills/{add-content-entry,ui-layout-change,schema-change}/SKILL.md` |
 | Task card template | ✅ Done | `planning/current_task.md` — goal, scope, do-not-touch, done-criteria |
-| Graphify / Stacklit | ❌ Missing | Not installed |
+| Graphify / Stacklit | ✅ Done | `graphifyy` + `npm run graphify` → `graphify-out/`; `.graphifyignore` |
 | Repomix | ✅ Done | `repomix.config.json` + `npm run pack` → `repomix-output.md` |
-| Browser testing | ❌ Missing | No Playwright or browser MCP |
-| Content scaffold CLI | ❌ Missing | No generator script |
+| Browser testing | ✅ Done | Playwright `e2e/smoke.spec.ts` + `npm run test:e2e` |
+| Content scaffold CLI | ✅ Done | `scripts/scaffold-content.mjs` + `npm run scaffold` |
 | OLD-INSTRUCTIONS/ cleanup | ⚠️ Stale | Contains only IMPROVEMENTS.md and empty future-planning/ |
 | implementation-plan/ | ⚠️ Stale | 4 files that may overlap with planning/ |
 
@@ -60,6 +60,6 @@ The file proposes a phased approach to reduce AI agent token waste and improve w
 
 ### Phase C — Later (when exploration feels expensive):
 
-8. Install Graphify — `pip install graphifyy && graphify install` on `src/` + `planning/` for architecture questions.
-9. Add Playwright/browser MCP — For verifying UI changes, especially sidebar, mobile nav, and domain pages.
-10. Build content scaffold CLI — A script or skill that generates MDX frontmatter + image registry stub + checklist for new entries.
+8. ~~Install Graphify~~ ✅ — `pip install graphifyy`; skill via `graphify install`; graph via `npm run graphify` (`python -m graphify . --code-only`). Output: `graphify-out/`.
+9. ~~Add Playwright/browser MCP~~ ✅ — Playwright smoke tests in `e2e/`; `npm run test:e2e` (starts Astro dev server). Browser MCP optional later for interactive agent browsing.
+10. ~~Build content scaffold CLI~~ ✅ — `npm run scaffold -- <type> <slug> [--title] [--logo]`.

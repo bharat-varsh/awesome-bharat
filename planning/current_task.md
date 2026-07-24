@@ -6,53 +6,45 @@ Copy this template for each agent session. Keep it short. Update status as you g
 
 ## Goal
 
-<!-- One sentence: what done looks like -->
-
+Phase C complete: Graphify, Playwright smoke tests, content scaffold CLI.
 
 ## Type
 
-<!-- Content | UI | Schema | Infra | Research -->
-
+Infra
 
 ## Files in scope
 
-<!-- Only these paths (and new files under them) -->
-
-- 
+- `package.json`, `.gitignore`, `.graphifyignore`, `repomix.config.json`
+- `playwright.config.ts`, `e2e/`
+- `scripts/scaffold-content.mjs`
+- `AGENTS.md`, `skills/*`, `frebuff-suggestions.md`
 
 ## Do not touch
 
-<!-- Hard off-limits -->
-
 - `docs/` (build output)
 - `OLD-INSTRUCTIONS/`, `only-reference/`, `implementation-plan/` (stale)
-- 
 
 ## Done criteria
 
-<!-- Checkboxes — task is not done until all pass -->
-
-- [ ] 
+- [x] Graphify installed + graph built (`graphify-out/`, gitignored)
+- [x] Playwright e2e smoke tests pass (`npm run test:e2e`)
+- [x] Content scaffold CLI works (`npm run scaffold`)
+- [x] AGENTS.md documents graphify / scaffold / e2e
 - [ ] `npm run check` passes
-- [ ] `npm run build` passes (if content/schema/UI changed)
 
 ## Read first
 
-<!-- 2–5 paths max -->
-
 - `AGENTS.md`
-- 
+- `frebuff-suggestions.md` (Phase C)
 
 ## Skill / workflow
 
-<!-- Optional: load one skill -->
-
-- `skills/add-content-entry` | `skills/ui-layout-change` | `skills/schema-change` | —
+- —
 
 ## Notes
 
-<!-- Blockers, decisions, links -->
-
+- Prefer `python -m graphify` on Windows if `graphify.exe` is blocked by App Control.
+- Browser MCP not added (Playwright covers UI verification for agents).
 
 ---
 

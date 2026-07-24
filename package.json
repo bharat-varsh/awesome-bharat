@@ -15,7 +15,12 @@
         "prebuild": "npm run format && npm run lint",
         "build.local": "npm run build && npm run preview",
         "postbuild": "npx pagefind --site docs",
-        "pack": "npx repomix --config repomix.config.json"
+        "pack": "npx repomix --config repomix.config.json",
+        "scaffold": "node scripts/scaffold-content.mjs",
+        "graphify": "python -m graphify . --code-only",
+        "graphify:update": "python -m graphify update .",
+        "test:e2e": "playwright test",
+        "test:e2e:ui": "playwright test --ui"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.0.0",
@@ -43,6 +48,7 @@
     "devDependencies": {
         "@astrojs/check": "^0.9.6",
         "@eslint/js": "^9.18.0",
+        "@playwright/test": "^1.61.1",
         "@tailwindcss/typography": "^0.5.20",
         "@types/node": "^22.10.5",
         "eslint": "^9.18.0",

@@ -34,9 +34,10 @@ description: Safely change Astro layouts, components, Tailwind styles, navigatio
 ## Verify
 
 ```bash
-npm run check    # fast
-npm run dev      # visual: light/dark, mobile, listing + detail
-npm run build    # done-gate
+npm run check      # fast
+npm run test:e2e   # Playwright: homepage, apps, domains, mobile viewport
+npm run dev        # manual visual: light/dark, sidebar, mobile nav
+npm run build      # done-gate
 ```
 
 ## Do not

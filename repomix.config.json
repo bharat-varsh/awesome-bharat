@@ -24,7 +24,11 @@
             "**/*.lock",
             "package-lock.json",
             ".astro/**",
-            "public/pagefind/**"
+            "public/pagefind/**",
+            "graphify-out/**",
+            "e2e/**",
+            "test-results/**",
+            "playwright-report/**"
         ]
     },
     "security": {

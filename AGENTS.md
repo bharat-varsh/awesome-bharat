@@ -147,6 +147,9 @@ npm run check        # Fast validation: astro check + eslint (no build)
 npm run preview      # Preview production build
 npm run lint         # ESLint
 npm run format       # Prettier
+npm run scaffold     # New MDX draft: scaffold -- <type> <slug> [--title] [--logo]
+npm run graphify     # Rebuild knowledge graph (AST, no API key)
+npm run test:e2e     # Playwright UI smoke tests
 ```
 
 ---
@@ -165,10 +168,10 @@ Images live in `src/assets/images/` and must be registered in `src/utils/imageRe
 
 ## Adding New Content
 
-1. Create a new `.mdx` file in the appropriate collection folder
+1. Optionally scaffold: `npm run scaffold -- app my-app --title "My App"` (or use `skills/add-content-entry`)
 2. Fill in frontmatter following the schema in `src/content/config.ts`
-3. If the entry has a logo/avatar, add the image to `src/assets/images/` and register it in `src/utils/imageRegistry.ts`
-4. Run `npm run build` to verify no schema errors
+3. If the entry has a logo/avatar, add the image to `src/assets/images/` and register it in `src/utils/imageRegistry.ts` (`--logo` on scaffold stubs the registry)
+4. Run `npm run check` mid-task; `npm run build` to verify no schema errors
 
 ---
 
@@ -240,3 +243,35 @@ npm run pack
 ```
 
 Writes a compressed repo summary to `repomix-output.md` (gitignored). Config: `repomix.config.json` (excludes `docs/`, stale dirs, lockfiles).
+
+### Knowledge graph (Graphify)
+
+Requires `graphifyy` (`pip install graphifyy`). Prefer `python -m graphify` if `graphify.exe` is blocked on Windows.
+
+```bash
+npm run graphify          # AST extract → graphify-out/ (no API key)
+npm run graphify:update   # re-extract after code changes
+python -m graphify query "what uses resolveLogo?"
+python -m graphify explain "ContentLayout"
+python -m graphify path "ctaUtils" "ContentLayout"
+```
+
+Output is gitignored under `graphify-out/`. Skill trigger: `/graphify`. Ignore patterns: `.graphifyignore`.
+
+### Content scaffold CLI
+
+```bash
+npm run scaffold -- app my-app --title "My App"
+npm run scaffold -- person jane-doe --title "Jane Doe" --logo
+```
+
+Creates draft MDX under `src/content/{collection}/` with schema-shaped frontmatter + body TODOs. `--logo` stubs `imageRegistry.ts`. Then fill content and follow `skills/add-content-entry`.
+
+### UI smoke tests (Playwright)
+
+```bash
+npm run test:e2e          # starts dev server if needed; Chromium + mobile project
+npm run test:e2e:ui       # Playwright UI mode
+```
+
+Specs in `e2e/` cover homepage, apps listing/detail, domains, and narrow viewport. Config: `playwright.config.ts`. After UI/layout work, run e2e before considering the task done.

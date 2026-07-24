@@ -9,6 +9,7 @@ Short workflow for new curated entries. Full editorial rules: `planning/CONTENT-
 
 ## Steps
 
+0. **Scaffold (optional)** — `npm run scaffold -- <type> <slug> [--title "Name"] [--logo]` creates draft MDX + optional registry stub.
 1. **Research** — Confirm Indian-made/led, noteworthy, active; collect name, URLs, socials, logo. Check collection for duplicates.
 2. **Pick collection** — `src/content/{apps|persons|companies|channels|products|blogs|projects|communities|podcasts|initiatives}/`
 3. **Slug** — kebab-case lowercase filename: `my-app.mdx`
