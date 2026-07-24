@@ -16,11 +16,8 @@ const { title, href, image, slug, tags, class: extraClass = '' } = Astro.props;
 const resolvedImage = resolveLogo(slug, image) as ImageMetadata;
 ---
 
-<a
-    href={href}
-    class={`group flex-shrink-0 w-[140px] sm:w-[160px] rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-3 shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover ${extraClass}`}
->
-    <div class="overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800">
+<a href={href} class={`ab-card group block w-[140px] flex-shrink-0 p-3 sm:w-[160px] ${extraClass}`}>
+    <div class="overflow-hidden rounded-xl bg-neutral-100 dark:bg-white/[0.02]">
         <Image
             class="aspect-square w-full object-contain transition-transform duration-300 group-hover:scale-105"
             src={resolvedImage}
@@ -33,13 +30,13 @@ const resolvedImage = resolveLogo(slug, image) as ImageMetadata;
 
     <div class="mt-3 text-left">
         <h3
-            class="text-sm font-semibold leading-snug line-clamp-2 text-neutral-900 dark:text-neutral-100"
+            class="line-clamp-2 text-sm font-semibold leading-snug text-neutral-900 dark:text-neutral-100"
         >
             {title}
         </h3>
         {
             tags?.[0] && (
-                <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1">
+                <p class="mt-1 line-clamp-1 text-xs text-neutral-500 dark:text-neutral-400">
                     {tags[0]}
                 </p>
             )
