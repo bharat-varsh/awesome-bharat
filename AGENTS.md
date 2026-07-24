@@ -222,6 +222,16 @@ Production build outputs to `./docs` for GitHub Pages. Configured with `site: 'h
 - `implementation-plan/` — Superseded by `planning/`
 - `only-reference/` — Reference material, not part of the active codebase
 
+### When to use what
+
+| Task type | Before coding | While coding | Before declaring done |
+| --------- | ------------- | ------------ | --------------------- |
+| **Content (new entry)** | `skills/add-content-entry`; optionally `npm run scaffold` to generate draft | — | `npm run check` |
+| **UI / layout change** | `skills/ui-layout-change`; `npm run graphify update` if graph is stale | `npm run dev` for visual check | `npm run test:e2e && npm run build` |
+| **Schema change** | `skills/schema-change` | `npm run dev` | `npm run build` (validates all MDX against Zod) |
+| **Architecture question** | `python -m graphify query "..."` (if `graphify-out/graph.json` exists) | — | — |
+| **Cold-start handoff** | `npm run pack` to produce `repomix-output.md` | — | — |
+
 ### Task cards
 
 Use `planning/current_task.md` as the session task card (goal, files-in-scope, do-not-touch, done-criteria). Fill it before multi-step work; clear or rewrite when the task ends.
@@ -258,6 +268,17 @@ python -m graphify path "ctaUtils" "ContentLayout"
 
 Output is gitignored under `graphify-out/`. Skill trigger: `/graphify`. Ignore patterns: `.graphifyignore`.
 
+**Collaborators using other tools** — graphify installs natively into the project for Claude Code (`~/.claude/CLAUDE.md`). To enable it for other agents (Kilo, OpenCode, Aider, Codex, Devin, Kiro, etc.):
+
+```bash
+python -m graphify <tool> install       # skill + always-on instructions for that tool
+python -m graphify <tool> uninstall     # remove
+```
+
+Replace `<tool>` with one of: `claude | kilo | opencode | aider | codex | devin | kiro | copilot | gemini | cursor | hermes | pi | claw | droid | trae | agents`. The `agents` target is a platform-agnostic option (writes to `.agents/`). All supported platforms: `claude, codex, opencode, kilo, aider, copilot, claw, droid, trae, trae-cn, hermes, kiro, pi, codebuddy, antigravity, agents, devin, gemini, cursor`.
+
+After install, each tool's agent context file (e.g. `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) gets a `## graphify` section instructing the agent to query the graph before grepping raw files.
+
 ### Content scaffold CLI
 
 ```bash
@@ -275,3 +296,16 @@ npm run test:e2e:ui       # Playwright UI mode
 ```
 
 Specs in `e2e/` cover homepage, apps listing/detail, domains, and narrow viewport. Config: `playwright.config.ts`. After UI/layout work, run e2e before considering the task done.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
