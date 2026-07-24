@@ -1,9 +1,13 @@
 ---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import SEO from '@/components/SEO.astro';
-import Header from '@/components/Header.astro';
-import LeftSidebar from '@/components/LeftSidebar.astro';
-import MobileNav from '@/components/MobileNav.astro';
+import Search from '@/components/Search.astro';
+import ThemeToggle from '@/components/ThemeToggle.astro';
 import Footer from '@/components/Footer.astro';
+import { AppSidebarLayout } from '@/components/AppSidebarLayout';
+import type { NavItem } from '@/components/AppSidebar';
+import brandLogo from '@/assets/images/brand-logo.svg';
 import '@/styles/global.css';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/fraunces';
@@ -19,6 +23,36 @@ export interface Props {
 
 const { title, description, image, article = false, publishedTime, tags } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
+const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+const companies = (await getCollection('companies')) as Array<CollectionEntry<'companies'>>;
+
+const navItems: NavItem[] = [
+    { name: 'Home', href: '/', icon: 'home' },
+    { name: 'Domains', href: '/domains', icon: 'domains' },
+    {
+        name: 'Apps',
+        href: '/apps',
+        icon: 'apps',
+        count: apps.filter((app) => !app.data.draft).length,
+    },
+    {
+        name: 'People',
+        href: '/people',
+        icon: 'persons',
+        count: persons.filter((person) => !person.data.draft).length,
+    },
+    {
+        name: 'Companies',
+        href: '/companies',
+        icon: 'companies',
+        count: companies.filter((company) => !company.data.draft).length,
+    },
+];
+
+const logoSrc = typeof brandLogo === 'string' ? brandLogo : brandLogo.src;
+const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -72,16 +106,27 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         <!-- Atmospheric floating particles (from only-reference) -->
         <div id="bg-particles" aria-hidden="true"></div>
 
-        <div class="relative z-10 flex min-h-screen flex-col">
-            <Header />
-            <MobileNav />
-            <div class="flex flex-1">
-                <LeftSidebar />
-                <main class="flex-1 overflow-x-hidden min-w-0" data-pagefind-body>
-                    <slot />
-                </main>
-            </div>
-            <Footer />
+        <div class="relative z-10">
+            <AppSidebarLayout
+                client:load
+                items={navItems}
+                currentPath={currentPath}
+                logoSrc={logoSrc}
+            >
+                <div slot="headerEnd" class="flex items-center gap-2 sm:gap-4">
+                    <div class="w-full max-w-[120px] sm:max-w-[160px] md:max-w-[200px] lg:max-w-[280px]">
+                        <Search />
+                    </div>
+                    <ThemeToggle />
+                </div>
+
+                <div class="flex min-h-[calc(100svh-4rem)] flex-col">
+                    <div class="flex-1 overflow-x-hidden min-w-0" data-pagefind-body>
+                        <slot />
+                    </div>
+                    <Footer />
+                </div>
+            </AppSidebarLayout>
         </div>
 
         <script src="../scripts/particles.ts"></script>
