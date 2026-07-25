@@ -1,45 +1,35 @@
-### Task 2.1 - Add valid default OG image and fix twitter creator placeholder
+### Task 2.2 - Correct RSS scope or copy
 
 Context:
 
-- CODE_REPORT confirms SEO.astro default image is /og-image.jpg, but file is missing.
-- twitter:creator is currently "@" placeholder.
+- CODE_REPORT notes rss.xml.ts description claims all content, but feed currently contains apps only.
 
 Read first:
 
-- src/components/SEO.astro
-- public/
+- src/pages/rss.xml.ts
+- src/content/config.ts
 
 Files to change:
 
-- public/og-image.jpg (new)
-- src/components/SEO.astro
+- src/pages/rss.xml.ts
 
-Implementation steps:
+Implementation options (pick one and finish fully):
 
-1. Add a real 1200x630 og-image.jpg in public.
-2. Keep default OG image path in SEO.astro pointing to that file.
-3. Replace twitter handle placeholder with real account or remove twitter:creator tag when unknown.
-4. Ensure no broken meta URL values are emitted.
+- Option A: Keep apps-only feed and rewrite title/description to explicitly say apps.
+- Option B: Expand feed entries to include other routed collections (at minimum apps, persons, companies once their pages exist).
 
-Short snippet pattern:
+Short snippet pattern for Option A:
 
-```astro
-const twitterHandle = "@awesomebharat";
-```
-
-Or:
-
-```astro
-{twitterHandle && <meta property="twitter:creator" content={twitterHandle} />}
+```ts
+description: 'Latest apps from Awesome Bharat';
 ```
 
 Validation:
 
+- npm run check
 - npm run build
-- Inspect built HTML meta tags in docs/ for one page
+- Open docs/rss.xml and verify copy and items align.
 
 Done criteria:
 
-- Default OG URL resolves.
-- No twitter:creator content="@" remains.
+- Feed scope and feed copy are consistent.

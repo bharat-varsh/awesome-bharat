@@ -16,7 +16,10 @@ interface RSSItem {
 }
 
 export async function GET(context: APIContext) {
-    const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
+    const [apps, companies] = await Promise.all([
+        getCollection('apps') as Promise<Array<CollectionEntry<'apps'>>>,
+        getCollection('companies') as Promise<Array<CollectionEntry<'companies'>>>,
+    ]);
 
     const appItems = apps
         .filter((app) => !app.data.draft)
@@ -28,14 +31,24 @@ export async function GET(context: APIContext) {
             categories: app.data.tags || [],
         }));
 
+    const companyItems = companies
+        .filter((company) => !company.data.draft)
+        .map((company) => ({
+            title: company.data.name,
+            description: company.data.description || '',
+            publishedDate: new Date(company.data.founded || Date.now()),
+            link: `/companies/${company.slug}/`,
+            categories: company.data.tags || [],
+        }));
+
     // Combine all items and sort by date (reverse chronological)
-    const allItems: RSSItem[] = [...appItems].sort(
+    const allItems: RSSItem[] = [...appItems, ...companyItems].sort(
         (a, b) => b.publishedDate.valueOf() - a.publishedDate.valueOf()
     );
 
     return rss({
         title: 'Awesome Bharat',
-        description: 'Latest content from all areas',
+        description: 'Latest apps and companies from Awesome Bharat',
         site: context.site?.toString() || 'https://awesomebharat.com',
         items: allItems,
         customData: '<language>en-in</language>',
