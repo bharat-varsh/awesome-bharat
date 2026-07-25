@@ -14,11 +14,11 @@ Short workflow for new curated entries. Full editorial rules: `planning/CONTENT-
 2. **Pick collection** — `src/content/{apps|persons|companies|channels|products|blogs|projects|communities|podcasts|initiatives}/`
 3. **Slug** — kebab-case lowercase filename: `my-app.mdx`
 4. **Frontmatter** — Match schema exactly. Fill every field you can. Required by type:
-   - Apps: title, description, authors, type, devices, source, paid, ads, offline, categories, tags
-   - Persons: name · Companies: name · Channels: name, description, channelUrl, topics, tags
-   - Products: name, description, tags · Blogs: name, description, url, topics, tags
-   - Projects: name, description, repositoryUrl, tags · Communities: name, description, platform, joinUrl, tags
-   - Podcasts: name, description, platforms, topics, tags · Initiatives: name, description, tags
+    - Apps: title, description, authors, type, devices, source, paid, ads, offline, categories, tags
+    - Persons: name · Companies: name · Channels: name, description, channelUrl, topics, tags
+    - Products: name, description, tags · Blogs: name, description, url, topics, tags
+    - Projects: name, description, repositoryUrl, tags · Communities: name, description, platform, joinUrl, tags
+    - Podcasts: name, description, platforms, topics, tags · Initiatives: name, description, tags
 5. **Authors** — App/product authors need existing `persons/` or `companies/` slugs (create those first if missing).
 6. **Body** — 150–400 words: hook → 2–4 short sections → punchy closer. Templates in CONTENT-GUIDELINES.
 7. **Logo** (optional) — File → `src/assets/images/` → import + key in `src/utils/imageRegistry.ts` (key = slug). Set `logo` frontmatter if filename ≠ slug.

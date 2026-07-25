@@ -12,13 +12,13 @@ Source of truth: `src/content/config.ts`.
 1. **Edit schema** — Update the collection in `defineCollection({ schema: z.object(...) })`. Prefer `.optional()` / `.default()` for non-breaking adds.
 2. **Update all MDX** in that collection — required fields must exist; invalid enum values fail the build.
 3. **Cascade code** that reads the field:
-   - Pages: `src/pages/**`
-   - Layouts/components consuming frontmatter
-   - Utils: `ctaUtils.ts`, `relatedContent.ts`, `imageResolvers.ts`, etc.
+    - Pages: `src/pages/**`
+    - Layouts/components consuming frontmatter
+    - Utils: `ctaUtils.ts`, `relatedContent.ts`, `imageResolvers.ts`, etc.
 4. **Docs** (if field is user-facing):
-   - `planning/CONTENT-ARCHITECTURE.md`
-   - `planning/CONTENT-GUIDELINES.md` (required-fields tables)
-   - `AGENTS.md` content collection summary if needed
+    - `planning/CONTENT-ARCHITECTURE.md`
+    - `planning/CONTENT-GUIDELINES.md` (required-fields tables)
+    - `AGENTS.md` content collection summary if needed
 5. **New collection** — schema + `collections` export + folder under `src/content/{name}/` + listing/detail pages + nav (`SidebarNav` / `LeftSidebar`) + CTA branch in `ctaUtils.ts` if applicable.
 
 ## Enum changes

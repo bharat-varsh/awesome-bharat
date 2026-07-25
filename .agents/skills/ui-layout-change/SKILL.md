@@ -13,14 +13,14 @@ description: Safely change Astro layouts, components, Tailwind styles, navigatio
 
 ## Where things live
 
-| Concern | Location |
-| ------- | -------- |
-| Shell (header, left nav) | `src/layouts/BaseLayout.astro` |
+| Concern                     | Location                          |
+| --------------------------- | --------------------------------- |
+| Shell (header, left nav)    | `src/layouts/BaseLayout.astro`    |
 | Detail article + right rail | `src/layouts/ContentLayout.astro` |
-| Cards / badges / SEO | `src/components/*.astro` |
-| Global CSS | `src/styles/global.css` |
-| Listing / detail routes | `src/pages/` |
-| CTA resolution | `src/utils/ctaUtils.ts` |
+| Cards / badges / SEO        | `src/components/*.astro`          |
+| Global CSS                  | `src/styles/global.css`           |
+| Listing / detail routes     | `src/pages/`                      |
+| CTA resolution              | `src/utils/ctaUtils.ts`           |
 
 ## Rules
 

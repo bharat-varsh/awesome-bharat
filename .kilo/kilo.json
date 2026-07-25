@@ -1,6 +1,4 @@
 {
-  "$schema": "https://app.kilo.ai/config.json",
-  "plugin": [
-    "file:///D:/Documents/Projects/coding/awesome-bharat/.kilo/plugins/graphify.js"
-  ]
+    "$schema": "https://app.kilo.ai/config.json",
+    "plugin": ["file:///D:/Documents/Projects/coding/awesome-bharat/.kilo/plugins/graphify.js"]
 }

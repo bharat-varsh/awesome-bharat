@@ -30,17 +30,17 @@ Scope: Configuration validity, package completeness, code quality, and library c
 
 ## 1. Tech Stack Overview
 
-| Layer | Library / Version |
-|---|---|
-| Framework | Astro 5.x (`^5.16.6`) |
-| Styling | Tailwind CSS v4 (`^4.3.3`) via `@tailwindcss/vite` plugin |
-| UI components | shadcn/ui (style: `radix-nova`) + Radix UI v1 monorepo |
-| Interactivity | React 19 (`^19.2.8`) via `@astrojs/react` |
-| Icons | Lucide React (`^1.26.0`) |
-| Content | Astro Content Collections with Zod schemas |
-| Search | Pagefind (`^1.5.2`) - Component UI (web components) |
-| E2E tests | Playwright (`^1.61.1`) |
-| Build output | `/docs` directory (GitHub Pages) |
+| Layer         | Library / Version                                         |
+| ------------- | --------------------------------------------------------- |
+| Framework     | Astro 5.x (`^5.16.6`)                                     |
+| Styling       | Tailwind CSS v4 (`^4.3.3`) via `@tailwindcss/vite` plugin |
+| UI components | shadcn/ui (style: `radix-nova`) + Radix UI v1 monorepo    |
+| Interactivity | React 19 (`^19.2.8`) via `@astrojs/react`                 |
+| Icons         | Lucide React (`^1.26.0`)                                  |
+| Content       | Astro Content Collections with Zod schemas                |
+| Search        | Pagefind (`^1.5.2`) - Component UI (web components)       |
+| E2E tests     | Playwright (`^1.61.1`)                                    |
+| Build output  | `/docs` directory (GitHub Pages)                          |
 
 ---
 
@@ -63,6 +63,7 @@ The codebase correctly uses `radix-ui ^1.6.5` -- the new unified monorepo packag
 `pagefind ^1.5.2` is correctly in `devDependencies` since it is a build-time postprocessor.
 
 **Script notes:**
+
 - `"build"` runs `astro check && astro build`, which validates TypeScript before building. This is correct.
 - `"prebuild"` runs `format && lint`. This means every `npm run build` reformats and lints the entire project first. This is effective for CI but can be slow locally.
 - `"postbuild"` runs `npx pagefind --site docs`, which builds the search index after Astro outputs to `./docs`. This is the correct wiring for Pagefind.
@@ -122,18 +123,18 @@ The `"config": ""` field (empty string) in `components.json` is correct for Tail
 
 The following 10 shadcn components exist under `src/components/ui/`:
 
-| Component | Used Where |
-|---|---|
-| `badge.tsx` | `ContentCardFull.astro`, `CollectionHero.astro`, `ContentLayout.astro` |
-| `button.tsx` | `ThemeToggle.tsx`, `CardRow.astro`, `AppSidebarLayout.tsx` (via sidebar) |
-| `card.tsx` | **Not used anywhere** |
-| `input.tsx` | Internally by `sidebar.tsx` only |
-| `label.tsx` | Internally by `sidebar.tsx` only |
-| `separator.tsx` | `AppSidebarLayout.tsx`, `Engage.astro` |
-| `sheet.tsx` | Internally by `sidebar.tsx` only |
-| `sidebar.tsx` | `AppSidebarLayout.tsx`, `AppSidebar.tsx` |
-| `skeleton.tsx` | Internally by `sidebar.tsx` only |
-| `tooltip.tsx` | `AppSidebarLayout.tsx` (via `TooltipProvider`) |
+| Component       | Used Where                                                               |
+| --------------- | ------------------------------------------------------------------------ |
+| `badge.tsx`     | `ContentCardFull.astro`, `CollectionHero.astro`, `ContentLayout.astro`   |
+| `button.tsx`    | `ThemeToggle.tsx`, `CardRow.astro`, `AppSidebarLayout.tsx` (via sidebar) |
+| `card.tsx`      | **Not used anywhere**                                                    |
+| `input.tsx`     | Internally by `sidebar.tsx` only                                         |
+| `label.tsx`     | Internally by `sidebar.tsx` only                                         |
+| `separator.tsx` | `AppSidebarLayout.tsx`, `Engage.astro`                                   |
+| `sheet.tsx`     | Internally by `sidebar.tsx` only                                         |
+| `sidebar.tsx`   | `AppSidebarLayout.tsx`, `AppSidebar.tsx`                                 |
+| `skeleton.tsx`  | Internally by `sidebar.tsx` only                                         |
+| `tooltip.tsx`   | `AppSidebarLayout.tsx` (via `TooltipProvider`)                           |
 
 **`card.tsx` is installed but never used.**
 All content card UI in this project is built with the custom `.ab-card` CSS class defined in `global.css`. The shadcn `Card`, `CardHeader`, `CardContent`, `CardFooter` components from `card.tsx` are not imported or rendered anywhere.
@@ -147,13 +148,13 @@ The shadcn CLI generated `"use client"` as the first line of `sidebar.tsx`. In a
 **shadcn-eligible components that remain custom:**
 The following UI elements in this codebase are implemented without shadcn but have direct shadcn equivalents that were available to install:
 
-| Custom implementation | Equivalent shadcn component |
-|---|---|
-| `ContentCard.astro` (compact card) | `Card` (already installed, unused) |
-| `ContentCardFull.astro` (grid card) | `Card` (already installed, unused) |
-| Inline CTA dropdown in `ContentLayout.astro` | `DropdownMenu` |
-| `screenshots` horizontal scroller | `Carousel` |
-| `YouTubeEmbed.astro` horizontal scroller | `Carousel` |
+| Custom implementation                        | Equivalent shadcn component        |
+| -------------------------------------------- | ---------------------------------- |
+| `ContentCard.astro` (compact card)           | `Card` (already installed, unused) |
+| `ContentCardFull.astro` (grid card)          | `Card` (already installed, unused) |
+| Inline CTA dropdown in `ContentLayout.astro` | `DropdownMenu`                     |
+| `screenshots` horizontal scroller            | `Carousel`                         |
+| `YouTubeEmbed.astro` horizontal scroller     | `Carousel`                         |
 
 This is an editorial choice and not necessarily wrong -- the `.ab-card` class applies brand-specific hover effects (gradient wash, shadow transition) that a bare shadcn Card would not. It is noted here for completeness.
 
@@ -220,6 +221,7 @@ export default defineConfig({
 - `docs/**`, `.astro/**`, `node_modules/**` correctly ignored
 
 The only custom rules are:
+
 - `@typescript-eslint/no-unused-vars`: warn (not error), with pattern ignores for `_` prefixes
 - `@typescript-eslint/no-explicit-any`: warn (not error)
 
@@ -238,18 +240,18 @@ projects, communities, podcasts, initiatives
 
 The actual directories that exist under `src/content/`:
 
-| Collection | Directory exists | Content files present |
-|---|---|---|
-| `apps` | Yes | Yes (at least: mindful, neend, linkora) |
-| `persons` | Yes | Present (not inspected individually) |
-| `companies` | Yes | Present (not inspected individually) |
-| `channels` | **No** | -- |
-| `products` | **No** | -- |
-| `blogs` | **No** | -- |
-| `projects` | **No** | -- |
-| `communities` | **No** | -- |
-| `podcasts` | **No** | -- |
-| `initiatives` | **No** | -- |
+| Collection    | Directory exists | Content files present                   |
+| ------------- | ---------------- | --------------------------------------- |
+| `apps`        | Yes              | Yes (at least: mindful, neend, linkora) |
+| `persons`     | Yes              | Present (not inspected individually)    |
+| `companies`   | Yes              | Present (not inspected individually)    |
+| `channels`    | **No**           | --                                      |
+| `products`    | **No**           | --                                      |
+| `blogs`       | **No**           | --                                      |
+| `projects`    | **No**           | --                                      |
+| `communities` | **No**           | --                                      |
+| `podcasts`    | **No**           | --                                      |
+| `initiatives` | **No**           | --                                      |
 
 Seven collections have complete Zod schemas but no corresponding content directories, no MDX entries, and no page routes. Astro silently returns an empty array for `getCollection('channels')` etc., so there is no build error. However, these collections are entirely invisible in the running application.
 
@@ -265,17 +267,18 @@ There is no shared `title` vs. `name` convention. `apps` uses `title`, all other
 
 The left sidebar navigation (defined in `BaseLayout.astro`) exposes these links:
 
-| Nav label | href | Page file exists |
-|---|---|---|
-| Home | `/` | Yes - `src/pages/index.astro` |
-| Domains | `/domains` | Yes - `src/pages/domains/index.astro` |
-| Apps | `/apps` | Yes - `src/pages/apps/index.astro` |
-| People | `/people` | **No** |
-| Companies | `/companies` | **No** |
+| Nav label | href         | Page file exists                      |
+| --------- | ------------ | ------------------------------------- |
+| Home      | `/`          | Yes - `src/pages/index.astro`         |
+| Domains   | `/domains`   | Yes - `src/pages/domains/index.astro` |
+| Apps      | `/apps`      | Yes - `src/pages/apps/index.astro`    |
+| People    | `/people`    | **No**                                |
+| Companies | `/companies` | **No**                                |
 
 There are no files at `src/pages/people/index.astro`, `src/pages/people/[slug].astro`, `src/pages/companies/index.astro`, or `src/pages/companies/[slug].astro`.
 
 **Impact:**
+
 - Clicking "People" in the nav produces a 404.
 - Clicking "Companies" in the nav produces a 404.
 - `ContentCard` components on the homepage link persons to `/people/{slug}` -- all produce 404s.
@@ -304,6 +307,7 @@ The other 7 defined collection types (channels, products, blogs, projects, commu
 ### `collectionsToScan.ts`
 
 Defines `SCANNED_COLLECTIONS = ['apps', 'persons', 'companies']`. This constant controls which collections are indexed for:
+
 - Domain pages (`/domains/[domain].astro`)
 - Tag pages (`/tags/[tag].astro`)
 - Category pages (`/categories/[category].astro`)
@@ -313,6 +317,7 @@ The other 7 collections are excluded from all cross-cutting discovery surfaces. 
 ### `relatedContent.ts`
 
 `SupportedCollection` type is `'apps' | 'persons' | 'companies'`. Matching fields are configured per collection:
+
 - `apps`: tags, categories, authors
 - `persons`: tags only
 - `companies`: tags only
@@ -333,6 +338,7 @@ neend    -> neend.webp
 ```
 
 **Unused assets in `src/assets/images/`:**
+
 - `default-card-image.png` -- a dedicated default card image exists but is commented out, replaced by `brand-logo.svg`. This means content cards fall back to displaying the brand logo when no specific image is available.
 - `mindful-banner.png` and `mindful.webp` -- two additional variants of the Mindful images are on disk but not registered.
 
@@ -352,8 +358,9 @@ The function resolves: explicit `logo` filename -> slug-based lookup -> `default
 ### Default OG Image
 
 `SEO.astro` defaults to:
+
 ```js
-image = '/og-image.jpg'
+image = '/og-image.jpg';
 ```
 
 There is no `og-image.jpg` in the `public/` directory. When a page does not pass an explicit `image` prop, the generated `<meta property="og:image">` tag will point to a broken URL.
@@ -361,6 +368,7 @@ There is no `og-image.jpg` in the `public/` directory. When a page does not pass
 ### Twitter Handle
 
 `SEO.astro` has:
+
 ```js
 const twitterHandle = '@';
 ```
@@ -370,6 +378,7 @@ The `<meta property="twitter:creator">` tag will render as `content="@"`. This i
 ### `public/` Directory
 
 Contents:
+
 - `favicon.ico` -- present and linked in BaseLayout
 - `favicon-old.ico` -- stale file, no longer referenced
 - `CNAME` -- GitHub Pages custom domain config, correct
@@ -389,9 +398,11 @@ Pagefind only works after `npm run build`. The postbuild script runs `npx pagefi
 
 **Dev mode fallback:**
 `Search.astro` contains a fallback element:
+
 ```html
-<div class="pagefind-ui-placeholder ... hidden">
+<div class="pagefind-ui-placeholder ... hidden"></div>
 ```
+
 The `hidden` class means this fallback is invisible in both dev and production. The comment says "Fallback for dev mode" but the element is never shown.
 
 **`data-pagefind-body`:**
@@ -404,6 +415,7 @@ The `hidden` class means this fallback is invisible in both dev and production. 
 ### `.astro` vs. `.tsx` split
 
 The project uses a correct hybrid model:
+
 - `.astro` components: static/server-rendered layout, content display, SEO
 - `.tsx` components: interactive UI (sidebar, theme toggle) rendered with `client:load` or `client:idle`
 
@@ -422,6 +434,7 @@ If `CardRow` were ever used on a page other than `index.astro`, the scroll butto
 ### `particles.ts` loading
 
 `BaseLayout.astro` loads particles via:
+
 ```html
 <script src="../scripts/particles.ts"></script>
 ```
@@ -434,14 +447,14 @@ Astro processes this TypeScript file and bundles it. The script runs on `DOMCont
 
 The codebase had several documented issues. Their current state:
 
-| Documented issue | Current state |
-|---|---|
-| Footer not rendered | Fixed -- `Footer.astro` is imported and rendered in `BaseLayout.astro` |
-| `ContentLayout` uses `items-center` causing sidebar scroll issue | Fixed -- layout uses `items-start` |
-| Store badges duplicated in `ContentLayout` | Fixed -- `StoreBadges` is rendered once, after the prose slot |
-| Homepage carousel uses inline `onclick` scroll handlers | Fixed -- uses `data-scroll-container` attributes and proper event listeners |
-| `aspectRatio` prop on `<Image>` | No instances found -- resolved |
-| Secondary color scale documented as inverted | The scale in the current `global.css` is correctly ordered (50 = lightest, 950 = darkest) -- documentation was stale |
+| Documented issue                                                 | Current state                                                                                                        |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Footer not rendered                                              | Fixed -- `Footer.astro` is imported and rendered in `BaseLayout.astro`                                               |
+| `ContentLayout` uses `items-center` causing sidebar scroll issue | Fixed -- layout uses `items-start`                                                                                   |
+| Store badges duplicated in `ContentLayout`                       | Fixed -- `StoreBadges` is rendered once, after the prose slot                                                        |
+| Homepage carousel uses inline `onclick` scroll handlers          | Fixed -- uses `data-scroll-container` attributes and proper event listeners                                          |
+| `aspectRatio` prop on `<Image>`                                  | No instances found -- resolved                                                                                       |
+| Secondary color scale documented as inverted                     | The scale in the current `global.css` is correctly ordered (50 = lightest, 950 = darkest) -- documentation was stale |
 
 ---
 
@@ -471,22 +484,22 @@ A per-domain RSS feed route exists at `src/pages/domains/[domain]/rss.xml.ts`. T
 
 ## 17. Summary Table
 
-| Area | Status | Notes |
-|---|---|---|
-| `package.json` dependencies | Mostly valid | `@fontsource-variable/geist` unused; `shadcn` CLI should be `devDependency` |
-| Tailwind v4 config | Valid and complete | CSS-first config is correct |
-| `components.json` | Valid | Aligned with Tailwind v4 and path aliases |
-| shadcn component coverage | Partial | `card.tsx` installed but unused; 7 collection types have no CTA logic |
-| TypeScript config | Valid | Correct base, aliases consistent across configs |
-| Astro config | Valid | `outDir` passed via CLI flag, not config |
-| ESLint config | Valid | Flat config, appropriate rules |
-| Content schemas | Complete for 3 of 10 collections | 7 collections have schemas but no content or routes |
-| Page routes | Incomplete | `/people` and `/companies` nav links produce 404s |
-| Image registry | Functional but minimal | Fallback is brand-logo; `default-card-image.png` unused; some images unregistered |
-| OG image | Missing | `/og-image.jpg` default does not exist in `public/` |
-| Twitter handle SEO | Placeholder | Value is `'@'` |
-| Search (Pagefind) | Build-only | Dev mode fallback element is hidden |
-| `CardRow` scroll script | Scoped to homepage | Script is in `index.astro`, not in `CardRow.astro` |
-| SVG image format override | Issue | `Engage.astro` passes `format="webp"` to SVG assets |
-| `formatCategoryName` | Bug | `.toLowerCase()` strips inter-word capitalization |
-| RSS feed accuracy | Inaccurate label | Says "all areas" but only covers apps |
+| Area                        | Status                           | Notes                                                                             |
+| --------------------------- | -------------------------------- | --------------------------------------------------------------------------------- |
+| `package.json` dependencies | Mostly valid                     | `@fontsource-variable/geist` unused; `shadcn` CLI should be `devDependency`       |
+| Tailwind v4 config          | Valid and complete               | CSS-first config is correct                                                       |
+| `components.json`           | Valid                            | Aligned with Tailwind v4 and path aliases                                         |
+| shadcn component coverage   | Partial                          | `card.tsx` installed but unused; 7 collection types have no CTA logic             |
+| TypeScript config           | Valid                            | Correct base, aliases consistent across configs                                   |
+| Astro config                | Valid                            | `outDir` passed via CLI flag, not config                                          |
+| ESLint config               | Valid                            | Flat config, appropriate rules                                                    |
+| Content schemas             | Complete for 3 of 10 collections | 7 collections have schemas but no content or routes                               |
+| Page routes                 | Incomplete                       | `/people` and `/companies` nav links produce 404s                                 |
+| Image registry              | Functional but minimal           | Fallback is brand-logo; `default-card-image.png` unused; some images unregistered |
+| OG image                    | Missing                          | `/og-image.jpg` default does not exist in `public/`                               |
+| Twitter handle SEO          | Placeholder                      | Value is `'@'`                                                                    |
+| Search (Pagefind)           | Build-only                       | Dev mode fallback element is hidden                                               |
+| `CardRow` scroll script     | Scoped to homepage               | Script is in `index.astro`, not in `CardRow.astro`                                |
+| SVG image format override   | Issue                            | `Engage.astro` passes `format="webp"` to SVG assets                               |
+| `formatCategoryName`        | Bug                              | `.toLowerCase()` strips inter-word capitalization                                 |
+| RSS feed accuracy           | Inaccurate label                 | Says "all areas" but only covers apps                                             |

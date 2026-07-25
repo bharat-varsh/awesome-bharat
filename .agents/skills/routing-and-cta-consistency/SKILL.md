@@ -54,6 +54,6 @@ npm run test:e2e
 
 ## Done Criteria
 
-- No links point to /persons/*.
+- No links point to /persons/\*.
 - Card, listing, and related-item links are consistent.
 - Every active collection has a primary CTA label and URL strategy.

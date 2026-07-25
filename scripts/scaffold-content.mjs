@@ -355,7 +355,10 @@ function main() {
         usage(1);
     }
 
-    const slug = args.slug.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
+    const slug = args.slug
+        .toLowerCase()
+        .replace(/[^a-z0-9-]/g, '-')
+        .replace(/-+/g, '-');
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
         console.error(`Invalid slug: ${args.slug} (use kebab-case)`);
         process.exit(1);

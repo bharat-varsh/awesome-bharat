@@ -33,7 +33,9 @@ test.describe('mobile shell', () => {
         await page.goto('/');
         await expect(page.getByRole('link', { name: /Awesome\s*Bharat/i }).first()).toBeVisible();
         // Sidebar is off-canvas; open via trigger then assert Apps nav
-        const trigger = page.getByRole('button', { name: /toggle sidebar|open sidebar|sidebar/i }).first();
+        const trigger = page
+            .getByRole('button', { name: /toggle sidebar|open sidebar|sidebar/i })
+            .first();
         if (await trigger.isVisible().catch(() => false)) {
             await trigger.click();
         }

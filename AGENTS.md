@@ -224,13 +224,13 @@ Production build outputs to `./docs` for GitHub Pages. Configured with `site: 'h
 
 ### When to use what
 
-| Task type | Before coding | While coding | Before declaring done |
-| --------- | ------------- | ------------ | --------------------- |
-| **Content (new entry)** | `skills/add-content-entry`; optionally `npm run scaffold` to generate draft | — | `npm run check` |
-| **UI / layout change** | `skills/ui-layout-change`; `npm run graphify update` if graph is stale | `npm run dev` for visual check | `npm run test:e2e && npm run build` |
-| **Schema change** | `skills/schema-change` | `npm run dev` | `npm run build` (validates all MDX against Zod) |
-| **Architecture question** | `python -m graphify query "..."` (if `graphify-out/graph.json` exists) | — | — |
-| **Cold-start handoff** | `npm run pack` to produce `repomix-output.md` | — | — |
+| Task type                 | Before coding                                                               | While coding                   | Before declaring done                           |
+| ------------------------- | --------------------------------------------------------------------------- | ------------------------------ | ----------------------------------------------- |
+| **Content (new entry)**   | `skills/add-content-entry`; optionally `npm run scaffold` to generate draft | —                              | `npm run check`                                 |
+| **UI / layout change**    | `skills/ui-layout-change`; `npm run graphify update` if graph is stale      | `npm run dev` for visual check | `npm run test:e2e && npm run build`             |
+| **Schema change**         | `skills/schema-change`                                                      | `npm run dev`                  | `npm run build` (validates all MDX against Zod) |
+| **Architecture question** | `python -m graphify query "..."` (if `graphify-out/graph.json` exists)      | —                              | —                                               |
+| **Cold-start handoff**    | `npm run pack` to produce `repomix-output.md`                               | —                              | —                                               |
 
 ### Task cards
 
@@ -240,11 +240,11 @@ Use `planning/current_task.md` as the session task card (goal, files-in-scope, d
 
 Load the matching skill under `skills/` for repetitive workflows (short checklists; full docs stay in `planning/`):
 
-| Skill | When |
-| ----- | ---- |
-| `skills/add-content-entry` | New MDX entries (any collection) |
-| `skills/ui-layout-change` | Components, layouts, Tailwind, nav |
-| `skills/schema-change` | Changes to `src/content/config.ts` |
+| Skill                      | When                               |
+| -------------------------- | ---------------------------------- |
+| `skills/add-content-entry` | New MDX entries (any collection)   |
+| `skills/ui-layout-change`  | Components, layouts, Tailwind, nav |
+| `skills/schema-change`     | Changes to `src/content/config.ts` |
 
 ### Cold-start pack (Repomix)
 
@@ -304,6 +304,7 @@ This project has a knowledge graph at graphify-out/ with god nodes, community st
 When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
 
 Rules:
+
 - For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
 - Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.

@@ -8,6 +8,7 @@ description: Ship the seven schema-only collections into live product surface by
 Use this skill for the collection-surface expansion task group when task instructions are provided as pasted text.
 
 Collections in scope:
+
 - channels
 - products
 - blogs

@@ -29,20 +29,20 @@ For each finding, capture:
 ## Common Fix Tracks
 
 - Routing mismatches:
-  - Add missing pages under src/pages/
-  - Normalize href generation in shared utility
+    - Add missing pages under src/pages/
+    - Normalize href generation in shared utility
 - Formatting/data bugs:
-  - Fix utility logic in src/utils/
-  - Add focused checks where data is consumed
+    - Fix utility logic in src/utils/
+    - Add focused checks where data is consumed
 - SEO:
-  - Ensure referenced assets exist in public/
-  - Remove placeholder tags when value unknown
+    - Ensure referenced assets exist in public/
+    - Remove placeholder tags when value unknown
 - Search:
-  - Keep prod behavior
-  - Add explicit dev helper text when index unavailable
+    - Keep prod behavior
+    - Add explicit dev helper text when index unavailable
 - Package hygiene:
-  - Move tooling packages to devDependencies
-  - Remove unused runtime dependencies
+    - Move tooling packages to devDependencies
+    - Remove unused runtime dependencies
 
 ## Validation Matrix
 
