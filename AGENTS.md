@@ -86,6 +86,12 @@ src/
 │   ├── apps/
 │   │   ├── index.astro        # Apps listing
 │   │   └── [slug].astro       # App detail
+│   ├── people/
+│   │   ├── index.astro        # People listing
+│   │   └── [slug].astro       # Person detail
+│   ├── companies/
+│   │   ├── index.astro        # Companies listing
+│   │   └── [slug].astro       # Company detail
 │   ├── categories/
 │   │   └── [category].astro   # Category landing pages
 │   ├── tags/
@@ -192,14 +198,6 @@ In `tailwind.config.mjs`, the `secondary` palette runs from `50` (darkest) to `9
 ### Store Badges Duplicated
 
 `ContentLayout.astro` renders the store badges block twice (before screenshots and after the prose slot). Extract to a `StoreBadges.astro` component.
-
-### Inline onclick Scroll Handlers
-
-The homepage carousel uses `onclick="this.nextElementSibling.scrollBy(...)"`. Fragile DOM traversal — should be proper `<script>` event listeners.
-
-### `aspectRatio` Prop Deprecated
-
-Several `<Image>` usages pass `aspectRatio="1/1"` — removed in Astro 3, silently ignored.
 
 ### Related Content Only Matches Tags
 
