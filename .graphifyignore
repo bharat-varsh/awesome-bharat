@@ -1,0 +1,20 @@
+# Build / deps
+docs/**
+node_modules/**
+.astro/**
+public/pagefind/**
+
+# Stale / reference-only
+OLD-INSTRUCTIONS/**
+implementation-plan/**
+only-reference/**
+
+# Generated packs & graphs (avoid self-indexing noise)
+repomix-output.md
+repomix-output.xml
+graphify-out/**
+
+# E2E artifacts
+test-results/**
+playwright-report/**
+blob-report/**

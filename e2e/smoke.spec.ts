@@ -1,0 +1,44 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('shell navigation', () => {
+    test('homepage loads with brand and content', async ({ page }) => {
+        await page.goto('/');
+        await expect(page).toHaveTitle(/Awesome Bharat/i);
+        await expect(page.getByRole('link', { name: /Awesome\s*Bharat/i }).first()).toBeVisible();
+        // Body content (cards / hero) — not sidebar (collapsed on mobile)
+        await expect(page.locator('body')).toContainText(/Mindful|Neend|Discover|Apps/i);
+    });
+
+    test('apps listing and detail pages render', async ({ page }) => {
+        await page.goto('/apps');
+        await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+
+        const appLink = page.locator('a[href*="/apps/"]').first();
+        await expect(appLink).toBeVisible();
+        await appLink.click();
+        await expect(page).toHaveURL(/\/apps\/.+/);
+        await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    });
+
+    test('domains listing is reachable', async ({ page }) => {
+        await page.goto('/domains');
+        await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    });
+});
+
+test.describe('mobile shell', () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+
+    test('homepage is usable on narrow viewport', async ({ page }) => {
+        await page.goto('/');
+        await expect(page.getByRole('link', { name: /Awesome\s*Bharat/i }).first()).toBeVisible();
+        // Sidebar is off-canvas; open via trigger then assert Apps nav
+        const trigger = page.getByRole('button', { name: /toggle sidebar|open sidebar|sidebar/i }).first();
+        if (await trigger.isVisible().catch(() => false)) {
+            await trigger.click();
+        }
+        await expect(page.getByRole('link', { name: /^Apps$/i }).first()).toBeVisible({
+            timeout: 10_000,
+        });
+    });
+});

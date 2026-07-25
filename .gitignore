@@ -16,5 +16,23 @@ pnpm-debug.log*
 # Astro
 .astro/
 
-# Planning files
-future-planning/
+# Build output
+docs/
+
+# Stale / reference-only directories (skip in agent context)
+OLD-INSTRUCTIONS/
+implementation-plan/
+only-reference/
+
+# Repomix cold-start packs
+repomix-output.md
+repomix-output.xml
+
+# Graphify knowledge graph (regenerate with: python -m graphify . --code-only)
+graphify-out/
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

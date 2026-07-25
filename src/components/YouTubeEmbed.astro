@@ -1,5 +1,7 @@
 ---
-import Divider from '@/components/Divider.astro';
+import { Separator } from '@/components/ui/separator';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export interface Props {
     youtubeVideoIds?: string[];
@@ -42,11 +44,15 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
 
                         <button
                             id="shorts-scroll-left"
-                            class="flex absolute left-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full text-white dark:text-gray-900 shadow-lg bg-gray-800 dark:bg-gray-200 transition-all opacity-100 z-20"
+                            type="button"
+                            class={cn(
+                                buttonVariants({ variant: 'secondary', size: 'icon' }),
+                                'absolute left-2 top-1/2 z-20 size-10 -translate-y-1/2 rounded-full shadow-lg'
+                            )}
                             aria-label="Scroll left"
                         >
                             <svg
-                                class="w-5 h-5"
+                                class="size-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -62,11 +68,15 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
 
                         <button
                             id="shorts-scroll-right"
-                            class="flex absolute right-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full text-white dark:text-gray-900 shadow-lg bg-gray-800 dark:bg-gray-200 transition-all opacity-100 z-20"
+                            type="button"
+                            class={cn(
+                                buttonVariants({ variant: 'secondary', size: 'icon' }),
+                                'absolute right-2 top-1/2 z-20 size-10 -translate-y-1/2 rounded-full shadow-lg'
+                            )}
                             aria-label="Scroll right"
                         >
                             <svg
-                                class="w-5 h-5"
+                                class="size-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -117,11 +127,15 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
 
                         <button
                             id="long-form-scroll-left"
-                            class="flex absolute left-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full text-white dark:text-gray-900 shadow-lg bg-gray-800 dark:bg-gray-200 transition-all opacity-100 z-20"
+                            type="button"
+                            class={cn(
+                                buttonVariants({ variant: 'secondary', size: 'icon' }),
+                                'absolute left-2 top-1/2 z-20 size-10 -translate-y-1/2 rounded-full shadow-lg'
+                            )}
                             aria-label="Scroll left"
                         >
                             <svg
-                                class="w-5 h-5"
+                                class="size-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -137,11 +151,15 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
 
                         <button
                             id="long-form-scroll-right"
-                            class="flex absolute right-2 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full text-white dark:text-gray-900 shadow-lg bg-gray-800 dark:bg-gray-200 transition-all opacity-100 z-20"
+                            type="button"
+                            class={cn(
+                                buttonVariants({ variant: 'secondary', size: 'icon' }),
+                                'absolute right-2 top-1/2 z-20 size-10 -translate-y-1/2 rounded-full shadow-lg'
+                            )}
                             aria-label="Scroll right"
                         >
                             <svg
-                                class="w-5 h-5"
+                                class="size-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -162,7 +180,7 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
 
     {
         ((youtubeVideoIds && youtubeVideoIds.length > 0) ||
-            (youtubeShortsIds && youtubeShortsIds.length > 0)) && <Divider />
+            (youtubeShortsIds && youtubeShortsIds.length > 0)) && <Separator className="my-4" />
     }
 </>
 
