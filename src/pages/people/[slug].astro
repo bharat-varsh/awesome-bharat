@@ -1,0 +1,257 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import type { Author, Link } from '@/content/config.ts';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import { resolveLogo } from '@/utils/imageResolvers.ts';
+import { getDomainMeta } from '@/utils/domainMeta.ts';
+import { Badge } from '@/components/ui/badge';
+import { getPrimaryCTALabel, getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
+import { getCollection as getAppsCollection } from 'astro:content';
+
+export const getStaticPaths = (async () => {
+    const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+    const publishedPersons = persons.filter((person) => !person.data.draft);
+
+    return publishedPersons.map((person) => ({
+        params: { slug: person.slug },
+        props: { person },
+    }));
+}) satisfies GetStaticPaths;
+
+const { person } = Astro.props as { person: CollectionEntry<'persons'> };
+const { Content } = await person.render();
+
+const resolvedImage = resolveLogo(person.slug, person.data.avatar);
+
+// Get apps by this person
+const apps = (await getAppsCollection('apps')) as Array<CollectionEntry<'apps'>>;
+const appsByPerson = apps.filter(
+    (app) =>
+        !app.data.draft && app.data.authors.some((author: Author) => author.slug === person.slug)
+);
+
+// Get companies this person is a member of
+const companies = (await getCollection('companies')) as Array<CollectionEntry<'companies'>>;
+const companiesPerson = companies.filter(
+    (company) =>
+        !company.data.draft &&
+        company.data.members?.some(
+            (member: { slug: string; role: string }) => member.slug === person.slug
+        )
+);
+
+const primaryCTAUrl = getPrimaryCTAUrl('persons', { website: person.data.website });
+const primaryCTALabel = getPrimaryCTALabel('persons', { website: person.data.website });
+---
+
+<BaseLayout
+    title={`${person.data.name} | Awesome Bharat`}
+    description={person.data.bio ?? `${person.data.name} - Featured on Awesome Bharat`}
+    image={person.data.avatar}
+>
+    <div class="max-w-4xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+        <article data-pagefind-body>
+            <!-- Header Card -->
+            <div
+                class="rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-card bg-white dark:bg-neutral-900 p-5 sm:p-7 mb-8"
+            >
+                <div class="flex flex-col md:flex-row gap-6 items-start">
+                    <!-- Avatar -->
+                    {
+                        resolvedImage && (
+                            <div class="flex-shrink-0">
+                                <div class="w-24 h-24 sm:w-32 sm:h-32 overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800">
+                                    <Image
+                                        class="w-full h-full object-cover"
+                                        src={resolvedImage}
+                                        alt={person.data.name}
+                                        loading="eager"
+                                        format="webp"
+                                        width={128}
+                                        height={128}
+                                    />
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    <!-- Info -->
+                    <div class="flex-1 min-w-0">
+                        <h1
+                            class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight leading-tight text-gray-900 dark:text-gray-100"
+                        >
+                            {person.data.name}
+                        </h1>
+
+                        {
+                            person.data.title && (
+                                <p class="mt-2 text-base text-gray-600 dark:text-gray-400">
+                                    {person.data.title}
+                                </p>
+                            )
+                        }
+
+                        <!-- Domain chips -->
+                        {
+                            person.data.domains && person.data.domains.length > 0 && (
+                                <div class="mt-3 flex flex-wrap gap-2">
+                                    {person.data.domains.map((domain: string) => {
+                                        const dm = getDomainMeta(domain);
+                                        return (
+                                            <Badge variant="secondary" className="gap-1">
+                                                <span aria-hidden="true">{dm.icon}</span>
+                                                {dm.label}
+                                            </Badge>
+                                        );
+                                    })}
+                                </div>
+                            )
+                        }
+
+                        <!-- Tags -->
+                        {
+                            person.data.tags && person.data.tags.length > 0 && (
+                                <div class="mt-3 flex flex-wrap gap-2">
+                                    {person.data.tags.slice(0, 8).map((tag: string) => (
+                                        <Badge variant="outline">#{tag}</Badge>
+                                    ))}
+                                </div>
+                            )
+                        }
+
+                        <!-- Primary CTA -->
+                        {
+                            primaryCTALabel && primaryCTAUrl && (
+                                <a
+                                    href={primaryCTAUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex items-center justify-center px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold rounded-xl transition-colors mt-4 bg-primary-600 hover:bg-primary-700 text-white dark:bg-primary-500 dark:hover:bg-primary-400 shadow-card hover:shadow-card-hover"
+                                >
+                                    {primaryCTALabel}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4 h-4 ml-2"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
+                                    </svg>
+                                </a>
+                            )
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bio -->
+            {
+                person.data.bio && (
+                    <div class="mb-8">
+                        <p class="text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed">
+                            {person.data.bio}
+                        </p>
+                    </div>
+                )
+            }
+
+            <!-- Social Links -->
+            {
+                person.data.socials && person.data.socials.length > 0 && (
+                    <div class="mb-8">
+                        <h2 class="text-lg font-semibold mb-3">Connect</h2>
+                        <div class="flex flex-wrap gap-3">
+                            {person.data.socials.map((social: Link) => (
+                                <a
+                                    href={social.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors text-sm font-medium"
+                                >
+                                    {social.label}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
+
+            <!-- Achievements -->
+            {
+                person.data.achievements && person.data.achievements.length > 0 && (
+                    <div class="mb-8">
+                        <h2 class="text-lg font-semibold mb-3">Achievements</h2>
+                        <ul class="space-y-2">
+                            {person.data.achievements.map((achievement: string) => (
+                                <li class="flex items-start gap-2">
+                                    <span class="text-emerald-500 mt-1">✓</span>
+                                    <span>{achievement}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )
+            }
+
+            <!-- Apps by this person -->
+            {
+                appsByPerson.length > 0 && (
+                    <div class="mb-8">
+                        <h2 class="text-lg font-semibold mb-3">Apps</h2>
+                        <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+                            {appsByPerson.map((app) => (
+                                <a
+                                    href={`/apps/${app.slug}`}
+                                    class="block p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-primary-500 dark:hover:border-primary-500 transition-colors"
+                                >
+                                    <h3 class="font-semibold">{app.data.title}</h3>
+                                    <p class="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2 mt-1">
+                                        {app.data.description}
+                                    </p>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
+
+            <!-- Companies this person is part of -->
+            {
+                companiesPerson.length > 0 && (
+                    <div class="mb-8">
+                        <h2 class="text-lg font-semibold mb-3">Companies</h2>
+                        <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+                            {companiesPerson.map((company) => (
+                                <a
+                                    href={`/companies/${company.slug}`}
+                                    class="block p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-primary-500 dark:hover:border-primary-500 transition-colors"
+                                >
+                                    <h3 class="font-semibold">{company.data.name}</h3>
+                                    {company.data.description && (
+                                        <p class="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2 mt-1">
+                                            {company.data.description}
+                                        </p>
+                                    )}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
+
+            <!-- Content from MDX -->
+            <div class="prose prose-lg dark:prose-dark max-w-none">
+                <Content />
+            </div>
+        </article>
+    </div>
+</BaseLayout>

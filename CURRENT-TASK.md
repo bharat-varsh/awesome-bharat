@@ -1,40 +1,49 @@
-### Task 1.1 - Fix category name formatting bug
+### Task 1.2 - Fix broken People and Companies navigation routes
 
 Context:
 
-- CODE_REPORT confirms formatCategoryName lowercases words incorrectly.
-- Current bad output example: booksAndReference -> Books and reference.
-- Required output: Books And Reference.
+- CODE_REPORT confirms nav links point to /people and /companies but route files are missing.
+- Person collection key is persons, while desired public route is people.
+- Current behavior produces 404s from homepage and nav.
 
 Read first:
 
-- src/utils/textUtils.ts
-- src/pages/categories/[category].astro
+- src/layouts/BaseLayout.astro
+- src/components/ContentCard.astro
+- src/components/ContentCardFull.astro
+- src/pages/apps/[slug].astro
 
 Files to change:
 
-- src/utils/textUtils.ts
+- src/pages/people/index.astro (new)
+- src/pages/people/[slug].astro (new)
+- src/pages/companies/index.astro (new)
+- src/pages/companies/[slug].astro (new)
+- src/components/ContentCardFull.astro
+- src/pages/domains/[domain].astro
 
 Implementation steps:
 
-1. Locate formatCategoryName().
-2. Keep camelCase split logic.
-3. Remove final blanket lowercasing.
-4. Ensure each token is capitalized.
+1. Create people and companies listing pages following apps listing layout pattern (CollectionHero + card grid).
+2. Create detail pages for people and companies.
+3. For people route, query collection persons but expose URL prefix /people.
+4. Normalize link construction so person links always use /people/{slug}, never /persons/{slug}.
+5. Keep company links at /companies/{slug}.
 
 Short snippet pattern:
 
 ```ts
-return splitWords
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
+const personHref = `/people/${slug}`;
+const companyHref = `/companies/${slug}`;
 ```
 
 Validation:
 
 - npm run check
 - npm run build
+- npm run test:e2e
 
 Done criteria:
 
-- Category headings show proper title case for all camelCase categories.
+- Sidebar links Home, Domains, Apps, People, Companies all resolve.
+- No generated links point to /persons/\*.

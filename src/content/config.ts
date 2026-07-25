@@ -14,6 +14,11 @@ const linkSchema = z.object({
     url: z.string().url(),
 });
 
+const memberSchema = z.object({
+    slug: z.string(),
+    role: z.string(),
+});
+
 const domainEnum = z.enum([
     'technology',
     'space',
@@ -48,6 +53,7 @@ const domainEnum = z.enum([
 
 export type Author = z.infer<typeof authorSchema>;
 export type Link = z.infer<typeof linkSchema>;
+export type CompanyMember = z.infer<typeof memberSchema>;
 export type Domain = z.infer<typeof domainEnum>;
 
 // Applications

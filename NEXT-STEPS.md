@@ -314,8 +314,9 @@ Implementation steps:
 
 Validation:
 
-- npm run dev -> search area should show clear helper state.
-- npm run build -> search should function with index.
+- npm run build ->
+    - search area should show clear helper state.
+    - search should function with index.
 
 Done criteria:
 

@@ -116,7 +116,11 @@ const pills = visibleGroups.map((g) => ({
                                         title={getEntryTitle(item)}
                                         description={getEntryDescription(item)}
                                         slug={item.slug}
-                                        collection={item.collection}
+                                        collection={
+                                            item.collection === 'persons'
+                                                ? 'people'
+                                                : item.collection
+                                        }
                                         logoSrc={
                                             getEntryImage(item)
                                                 ? resolveLogo(item.slug, getEntryImage(item))

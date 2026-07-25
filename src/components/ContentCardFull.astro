@@ -35,10 +35,13 @@ const primaryDomain = domains[0];
 const primaryCategory = categories[0];
 const showDomainBadge = !!primaryDomain;
 const showCategoryBadge = !!primaryCategory && !showDomainBadge; // Only show one badge max
+
+// Handle special case: 'persons' collection maps to '/people' URL path
+const urlCollection = collection === 'persons' ? 'people' : collection;
 ---
 
 <a
-    href={`/${collection}/${slug}`}
+    href={`/${urlCollection}/${slug}`}
     class={`ab-card group block min-w-[280px] p-4 ${featured ? 'ab-card--featured' : ''}`}
 >
     <div class="flex gap-4">
