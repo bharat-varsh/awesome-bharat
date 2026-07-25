@@ -15,14 +15,14 @@ const {
     title,
     description,
     canonical,
-    image = '/og-image.jpg',
+    image = '/og-image.svg',
     article = false,
     publishedTime,
     tags,
 } = Astro.props;
 
 const siteName = 'Awesome Bharat';
-const twitterHandle = '@';
+const twitterHandle = '@awesomebharat';
 
 const imageUrl = new URL(image, Astro.site).toString();
 ---

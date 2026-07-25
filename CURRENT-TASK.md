@@ -1,48 +1,45 @@
-### Task 1.4 - Package hygiene cleanup
+### Task 2.1 - Add valid default OG image and fix twitter creator placeholder
 
 Context:
 
-- CODE_REPORT identifies:
-    - @fontsource-variable/geist unused.
-    - shadcn CLI in dependencies instead of devDependencies.
+- CODE_REPORT confirms SEO.astro default image is /og-image.jpg, but file is missing.
+- twitter:creator is currently "@" placeholder.
 
 Read first:
 
-- package.json
-- src/layouts/BaseLayout.astro (verify actual imported fonts)
+- src/components/SEO.astro
+- public/
 
 Files to change:
 
-- package.json
+- public/og-image.jpg (new)
+- src/components/SEO.astro
 
 Implementation steps:
 
-1. Remove unused @fontsource-variable/geist.
-2. Move shadcn from dependencies to devDependencies.
-3. Keep lockfile update in same commit.
+1. Add a real 1200x630 og-image.jpg in public.
+2. Keep default OG image path in SEO.astro pointing to that file.
+3. Replace twitter handle placeholder with real account or remove twitter:creator tag when unknown.
+4. Ensure no broken meta URL values are emitted.
+
+Short snippet pattern:
+
+```astro
+const twitterHandle = "@awesomebharat";
+```
+
+Or:
+
+```astro
+{twitterHandle && <meta property="twitter:creator" content={twitterHandle} />}
+```
 
 Validation:
 
-- npm install
-- npm run check
 - npm run build
+- Inspect built HTML meta tags in docs/ for one page
 
 Done criteria:
 
-- Dependency sections reflect runtime vs tooling usage correctly.
-
-### AGENTS.md update
-
-Update AGENTS.md with these exact changes:
-
-1. In Known Issues and Design Decisions, remove items fixed in this phase:
-    - People/Companies route gap
-    - /persons vs /people link mismatch
-    - SVG format override issue
-    - formatCategoryName capitalization bug
-2. In Project Structure, add the new pages:
-    - src/pages/people/index.astro
-    - src/pages/people/[slug].astro
-    - src/pages/companies/index.astro
-    - src/pages/companies/[slug].astro
-3. In Key Commands or workflow notes, keep npm run check as mandatory mid-task gate.
+- Default OG URL resolves.
+- No twitter:creator content="@" remains.
