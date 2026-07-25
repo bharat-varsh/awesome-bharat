@@ -7,9 +7,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# macOS-specific files
-.DS_Store
-
 # VS Code
 .vscode/
 
@@ -18,11 +15,6 @@ pnpm-debug.log*
 
 # Build output
 docs/
-
-# Stale / reference-only directories (skip in agent context)
-OLD-INSTRUCTIONS/
-implementation-plan/
-only-reference/
 
 # Repomix cold-start packs
 repomix-output.md
