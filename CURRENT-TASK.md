@@ -1,44 +1,45 @@
-### Task 2.3 - Make search behavior explicit in dev and production
+### Task 3.1 - Extend CTA utilities to all 10 collection types
 
 Context:
 
-- CODE_REPORT notes Search.astro has a hidden fallback and Pagefind is build-only.
-- Developers need a clear dev-mode message.
+- CODE_REPORT confirms ctaUtils currently covers only apps, persons, companies.
+- Schemas already exist for channels, products, blogs, projects, communities, podcasts, initiatives.
+- Planning docs define primary CTA mapping per type.
 
 Read first:
 
-- src/components/Search.astro
-- package.json postbuild pagefind command
+- src/utils/ctaUtils.ts
+- src/content/config.ts
+- planning/CONTENT-ARCHITECTURE.md (Primary CTA mapping)
 
 Files to change:
 
-- src/components/Search.astro
-- README.md (optional, if needed for developer note)
+- src/utils/ctaUtils.ts
 
 Implementation steps:
 
-1. Detect when pagefind index is unavailable.
-2. Show a visible non-error helper text in dev mode:
-    - Example: "Search is available after npm run build (pagefind index generation)."
-3. Keep production behavior unchanged when index exists.
+1. Extend getPrimaryCTALabel and getPrimaryCTAUrl for all missing types.
+2. Implement URL fallback order per type:
+    - channels: channelUrl -> Subscribe
+    - products: buyUrl then website -> Buy
+    - blogs: url -> Read
+    - projects: repositoryUrl -> Contribute
+    - communities: joinUrl -> Join
+    - podcasts: platforms[0].url then website -> Listen
+    - initiatives: howToHelp[0].url then website -> Get Involved
+3. Keep existing app/person/company behavior unchanged.
+
+Short snippet pattern:
+
+```ts
+if (collection === 'products') return data.buyUrl ?? data.website ?? null;
+```
 
 Validation:
 
-- npm run build ->
-    - search area should show clear helper state.
-    - search should function with index.
+- npm run check
+- npm run build
 
 Done criteria:
 
-- No hidden fallback state in dev.
-- User sees clear instruction instead of silent failure.
-
-### AGENTS.md update after work is completed
-
-Update AGENTS.md with these exact changes:
-
-1. In SEO or Known Issues sections, remove OG image and twitter placeholder warnings.
-2. Add one explicit Search note under Key Commands or workflow:
-    - npm run build generates pagefind index used by search.
-    - In dev mode, search may show helper text until build index exists.
-3. If RSS scope was changed, update Build Output or routing notes to match final feed behavior.
+- Every collection type has deterministic primary CTA label and URL logic.
