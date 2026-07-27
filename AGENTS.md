@@ -158,6 +158,15 @@ npm run graphify     # Rebuild knowledge graph (AST, no API key)
 npm run test:e2e     # Playwright UI smoke tests
 ```
 
+### Search (Pagefind)
+
+Search uses [Pagefind](https://pagefind.app/), a static search library. The search index is generated during `postbuild` via `npx pagefind --site docs`.
+
+- **Production**: After `npm run build`, the pagefind index lives in `docs/pagefind/`. The `Search.astro` component loads pagefind's custom elements and works normally.
+- **Dev mode**: In `npm run dev`, no pagefind index exists. The search component shows a clear helper message: *"Search is available after npm run build (generates pagefind search index)"* — no silent failures.
+
+No additional build step is needed; `postbuild` handles index generation automatically.
+
 ---
 
 ## Image Handling
