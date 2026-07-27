@@ -1,27 +1,28 @@
-### Task 5.1 - Strengthen domain pages with cross-collection grouping
+### Task 5.2 - Introduce domain opportunities content model and section shell
 
 Context:
 
-- Domain pages exist but must become core cross-type discovery surface.
-- CODE_REPORT confirms domain logic depends on scanned collections coverage.
+- planning/CONTENT-ARCHITECTURE.md and ROADMAP Phase 4 define opportunities as differentiator.
+- Implement shell first, then fill content iteratively.
 
 Read first:
 
-- src/pages/domains/[domain].astro
-- src/utils/domainMeta.ts
-- src/utils/collectionsToScan.ts
+- planning/CONTENT-ARCHITECTURE.md (Opportunities section)
+- planning/CONTENT-GUIDELINES.md (Opportunities writing)
+- src/content/config.ts
 
 Files to change:
 
+- src/content/config.ts (new domains collection schema if absent)
+- src/content/domains/\*.mdx (new)
+- src/components (new opportunities section component)
 - src/pages/domains/[domain].astro
-- src/pages/domains/index.astro
 
 Implementation steps:
 
-1. Group domain results by collection type with per-group headings.
-2. Add result counts per group.
-3. Ensure empty groups do not render.
-4. Keep persons links routed via /people.
+1. Add or finalize schema for domain opportunities data blocks.
+2. Render section conditionally only when data exists.
+3. Start with one domain pilot entry and verify rendering.
 
 Validation:
 
@@ -30,4 +31,16 @@ Validation:
 
 Done criteria:
 
-- Domain pages provide clear, mixed-type discovery and no broken links.
+- At least one domain page shows an Opportunities section with real structured data.
+
+### AGENTS.md update after completing the task
+
+Update AGENTS.md with these exact changes:
+
+1. Add a new section describing Opportunities data flow:
+    - schema location,
+    - content folder,
+    - render component,
+    - domain page integration point.
+2. Add one short rule in Agent Context:
+    - For domain work, verify both grouped content results and opportunities block rendering.

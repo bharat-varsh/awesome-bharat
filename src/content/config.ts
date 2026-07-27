@@ -14,11 +14,11 @@ const linkSchema = z.object({
     url: z.string().url(),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const memberSchema = z.object({
     slug: z.string(),
     role: z.string(),
 });
-
 const domainEnum = z.enum([
     'technology',
     'space',
@@ -329,6 +329,70 @@ const initiatives = defineCollection({
     }),
 });
 
+/**
+ * Domains — editorial opportunities data blocks for domain landing pages.
+ * Each slug matches a domainEnum key (e.g. `space`, `artificialIntelligence`).
+ * Rendered conditionally on /domains/[slug] if the entry exists.
+ */
+const domains = defineCollection({
+    type: 'content',
+    schema: z.object({
+        title: z.string(),
+        emoji: z.string().optional(),
+        description: z.string(),
+        achievements: z
+            .array(
+                z.object({
+                    title: z.string(),
+                    description: z.string(),
+                    date: z.string().optional(),
+                    source: z.string().url().optional(),
+                    badge: z.string().optional(),
+                })
+            )
+            .optional(),
+        comparisons: z
+            .array(
+                z.object({
+                    metric: z.string(),
+                    india: z.union([z.number(), z.string()]),
+                    leaders: z.array(
+                        z.object({
+                            country: z.string(),
+                            value: z.union([z.number(), z.string()]),
+                        })
+                    ),
+                    gap: z.string().optional(),
+                })
+            )
+            .optional(),
+        actions: z
+            .array(
+                z.object({
+                    type: z
+                        .enum(['volunteer', 'donate', 'promote', 'collaborate', 'learn'])
+                        .optional(),
+                    title: z.string(),
+                    description: z.string().optional(),
+                    url: z.string().url().optional(),
+                })
+            )
+            .optional(),
+        milestones: z
+            .array(
+                z.object({
+                    title: z.string(),
+                    source: z.string().optional(),
+                    sourceUrl: z.string().url().optional(),
+                    date: z.string().optional(),
+                    thumbnail: z.string().optional(),
+                })
+            )
+            .optional(),
+        draft: z.boolean().default(false),
+    }),
+});
+
 export const collections = {
     apps,
     persons,
@@ -340,4 +404,5 @@ export const collections = {
     communities,
     podcasts,
     initiatives,
+    domains,
 };

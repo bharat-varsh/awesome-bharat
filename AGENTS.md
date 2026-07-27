@@ -405,6 +405,46 @@ npm run scaffold -- person jane-doe --title "Jane Doe" --logo
 
 Creates draft MDX under `src/content/{collection}/` with schema-shaped frontmatter + body TODOs. `--logo` stubs `imageRegistry.ts`. Then fill content and follow `skills/add-content-entry`.
 
+## Opportunities Data Flow
+
+Domain Opportunities are editorial data blocks that appear on domain landing pages (`/domains/[domain]/`). They provide context on where India stands in each domain and how visitors can get involved.
+
+### Schema
+
+Defined in `src/content/config.ts` under the `domains` collection:
+
+| Field          | Type            | Description                                     |
+| -------------- | --------------- | ----------------------------------------------- |
+| `title`        | `string`        | Human-readable domain name                      |
+| `emoji`        | `string`        | Emoji icon                                      |
+| `description`  | `string`        | Editorial overview                              |
+| `achievements` | `Achievement[]` | Notable Indian wins (badge, title, description) |
+| `comparisons`  | `Comparison[]`  | India vs World data (metric, values, gap)       |
+| `actions`      | `Action[]`      | Actionable CTAs (volunteer, donate, promote…)   |
+| `milestones`   | `Milestone[]`   | Recent news items with source attribution       |
+| `draft`        | `boolean`       | Hides from rendering when `true`                |
+
+### Content folder
+
+`src/content/domains/{domainKey}.mdx` — each filename must match a `domainEnum` value (e.g. `space.mdx`, `artificialIntelligence.mdx`).
+
+### Render component
+
+`src/components/DomainOpportunities.astro` — conditionally renders four sub-sections:
+
+1. 🏆 Achievements (gamification-inspired cards)
+2. 📊 India vs The World (bar visualization)
+3. 🚀 How You Can Help (action cards with CTAs)
+4. 📰 Recent Milestones (news-style items)
+
+### Domain page integration
+
+`src/pages/domains/[domain].astro` loads the matching domain entry via `getEntryBySlug('domains', domain)` and renders `<DomainOpportunities>` above the grouped content results. The section is hidden entirely when no domain entry exists.
+
+### Agent rule
+
+For domain work, verify both grouped content results and opportunities block rendering.
+
 ### UI smoke tests (Playwright)
 
 ```bash
