@@ -41,9 +41,9 @@ The site exists to break the notion that India has nothing noteworthy, to bring 
 
 Collection keys may differ from their public URL path prefix:
 
-| Collection key | Public route        |
-| -------------- | ------------------- |
-| `persons`      | `/people/{slug}`    |
+| Collection key | Public route           |
+| -------------- | ---------------------- |
+| `persons`      | `/people/{slug}`       |
 | all others     | `/{collection}/{slug}` |
 
 **All cross-collection hrefs must go through `getEntryHref(collection, slug)`** from `src/utils/routeUtils.ts`. Do not hardcode the path pattern directly — always use the utility to guarantee consistent routing.

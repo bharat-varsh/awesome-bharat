@@ -1,52 +1,38 @@
-### Task 3.3 - Add route-safe href resolver for cross-collection cards
+### Task 4.1 - Create collection folders and minimum seed content
 
 Context:
 
-- Mixed collection pages currently risk using collection key as URL prefix directly.
-- persons collection must route to /people.
+- CODE_REPORT confirms these schemas exist but directories/content are missing.
+- Without content, routes and discovery pages remain empty.
 
 Read first:
 
-- src/components/ContentCard.astro
-- src/components/ContentCardFull.astro
-- src/components/RelatedItem.astro
-- src/utils/ (create route utility if needed)
+- src/content/config.ts
+- planning/CONTENT-GUIDELINES.md
+- scripts/scaffold-content.mjs
 
 Files to change:
 
-- src/utils/routeUtils.ts (new)
-- all card components that build href
+- src/content/channels/\*.mdx (new)
+- src/content/products/\*.mdx (new)
+- src/content/blogs/\*.mdx (new)
+- src/content/projects/\*.mdx (new)
+- src/content/communities/\*.mdx (new)
+- src/content/podcasts/\*.mdx (new)
+- src/content/initiatives/\*.mdx (new)
 
 Implementation steps:
 
-1. Create one utility function, for example getEntryHref(collection, slug).
-2. Mapping rules:
-    - persons -> /people/{slug}
-    - all others -> /{collection}/{slug}
-3. Replace inline href construction in all card-like components.
-
-Short snippet pattern:
-
-```ts
-const ROUTE_PREFIX: Record<string, string> = { persons: 'people' };
-return `/${ROUTE_PREFIX[collection] ?? collection}/${slug}`;
-```
+1. Add at least 2 non-draft entries per collection.
+2. Fill required frontmatter exactly as schema expects.
+3. Keep body concise (150-400 words) and action-oriented.
+4. Ensure links are valid and real.
 
 Validation:
 
 - npm run check
 - npm run build
-- click-test cards in apps/tags/categories/domains pages
 
 Done criteria:
 
-- No component hardcodes inconsistent path rules.
-
-### AGENTS.md update after completing the work
-
-Update AGENTS.md with these exact changes:
-
-1. Add a short routing convention note:
-    - collection key persons maps to public route /people.
-2. Add CTA mapping table for all 10 content types (same labels used in code).
-3. Update project structure or architecture notes to mention routeUtils utility and where all cross-collection hrefs must go through it.
+- All seven collections have real, non-draft content entries passing schema checks.

@@ -76,7 +76,9 @@ const resolvedImage = resolveLogo(slug, image);
 
 // Get first author for display
 const primaryAuthor = authors.length > 0 ? authors[0] : null;
-const authorLink = primaryAuthor ? getEntryHref(primaryAuthor.collection, primaryAuthor.slug) : null;
+const authorLink = primaryAuthor
+    ? getEntryHref(primaryAuthor.collection, primaryAuthor.slug)
+    : null;
 
 // Compute CTA groups and primary button
 const ctaGroups = getCTALinks(collection, { type, source, storeLinks, repositoryLinks, website });
