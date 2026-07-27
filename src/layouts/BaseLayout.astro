@@ -24,9 +24,40 @@ export interface Props {
 const { title, description, image, article = false, publishedTime, tags } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const apps = (await getCollection('apps')) as Array<CollectionEntry<'apps'>>;
-const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
-const companies = (await getCollection('companies')) as Array<CollectionEntry<'companies'>>;
+const [
+    apps,
+    persons,
+    companies,
+    channels,
+    products,
+    blogs,
+    projects,
+    communities,
+    podcasts,
+    initiatives,
+] = (await Promise.all([
+    getCollection('apps'),
+    getCollection('persons'),
+    getCollection('companies'),
+    getCollection('channels'),
+    getCollection('products'),
+    getCollection('blogs'),
+    getCollection('projects'),
+    getCollection('communities'),
+    getCollection('podcasts'),
+    getCollection('initiatives'),
+])) as [
+    Array<CollectionEntry<'apps'>>,
+    Array<CollectionEntry<'persons'>>,
+    Array<CollectionEntry<'companies'>>,
+    Array<CollectionEntry<'channels'>>,
+    Array<CollectionEntry<'products'>>,
+    Array<CollectionEntry<'blogs'>>,
+    Array<CollectionEntry<'projects'>>,
+    Array<CollectionEntry<'communities'>>,
+    Array<CollectionEntry<'podcasts'>>,
+    Array<CollectionEntry<'initiatives'>>,
+];
 
 const navItems: NavItem[] = [
     { name: 'Home', href: '/', icon: 'home' },
@@ -48,6 +79,48 @@ const navItems: NavItem[] = [
         href: '/companies',
         icon: 'companies',
         count: companies.filter((company) => !company.data.draft).length,
+    },
+    {
+        name: 'Channels',
+        href: '/channels',
+        icon: 'channels',
+        count: channels.filter((c) => !c.data.draft).length,
+    },
+    {
+        name: 'Products',
+        href: '/products',
+        icon: 'products',
+        count: products.filter((p) => !p.data.draft).length,
+    },
+    {
+        name: 'Blogs',
+        href: '/blogs',
+        icon: 'blogs',
+        count: blogs.filter((b) => !b.data.draft).length,
+    },
+    {
+        name: 'Projects',
+        href: '/projects',
+        icon: 'projects',
+        count: projects.filter((p) => !p.data.draft).length,
+    },
+    {
+        name: 'Communities',
+        href: '/communities',
+        icon: 'communities',
+        count: communities.filter((c) => !c.data.draft).length,
+    },
+    {
+        name: 'Podcasts',
+        href: '/podcasts',
+        icon: 'podcasts',
+        count: podcasts.filter((p) => !p.data.draft).length,
+    },
+    {
+        name: 'Initiatives',
+        href: '/initiatives',
+        icon: 'initiatives',
+        count: initiatives.filter((i) => !i.data.draft).length,
     },
 ];
 

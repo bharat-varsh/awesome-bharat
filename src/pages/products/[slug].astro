@@ -26,7 +26,10 @@ const { product, allProducts } = Astro.props as {
 const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
 const resolvedAuthors = (product.data.authors ?? [])
     .map((author: Author) => persons.find((person) => person.slug === author.slug))
-    .filter((author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> => Boolean(author));
+    .filter(
+        (author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> =>
+            Boolean(author)
+    );
 
 const { Content } = await product.render();
 
@@ -54,34 +57,40 @@ const relatedProductsEnriched = relatedProducts.map((item) => ({
     <!-- Collection-specific metadata -->
     <div slot="metadata">
         <div class="flex flex-wrap gap-4 mb-6">
-            {product.data.priceRange && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Price:</span>
-                    <span>{product.data.priceRange}</span>
-                </div>
-            )}
-            {product.data.madeIn && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Made in:</span>
-                    <span>{product.data.madeIn}</span>
-                </div>
-            )}
-            <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+            {
+                product.data.priceRange && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Price:</span>
+                        <span>{product.data.priceRange}</span>
+                    </div>
+                )
+            }
+            {
+                product.data.madeIn && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Made in:</span>
+                        <span>{product.data.madeIn}</span>
+                    </div>
+                )
+            }
+            <div
+                class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm"
+            >
                 <span
                     class={`size-1.5 rounded-full ${product.data.paid ? 'bg-neutral-400' : 'bg-emerald-500'}`}
                 ></span>
                 {product.data.paid ? 'Paid' : 'Free'}
             </div>
-            {product.data.category && (
-                <Badge variant="secondary">{product.data.category}</Badge>
-            )}
+            {product.data.category && <Badge variant="secondary">{product.data.category}</Badge>}
         </div>
 
-        {product.data.screenshots && product.data.screenshots.length > 0 && (
-            <div class="mb-6">
-                <Screenshots screenshots={product.data.screenshots} />
-            </div>
-        )}
+        {
+            product.data.screenshots && product.data.screenshots.length > 0 && (
+                <div class="mb-6">
+                    <Screenshots screenshots={product.data.screenshots} />
+                </div>
+            )
+        }
     </div>
 
     <Content />

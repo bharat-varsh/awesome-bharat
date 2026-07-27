@@ -25,7 +25,10 @@ const { blog, allBlogs } = Astro.props as {
 const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
 const resolvedAuthors = (blog.data.authors ?? [])
     .map((author: Author) => persons.find((person) => person.slug === author.slug))
-    .filter((author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> => Boolean(author));
+    .filter(
+        (author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> =>
+            Boolean(author)
+    );
 
 const { Content } = await blog.render();
 
@@ -52,25 +55,31 @@ const relatedBlogsEnriched = relatedBlogs.map((item) => ({
     <!-- Collection-specific metadata -->
     <div slot="metadata">
         <div class="flex flex-wrap gap-4 mb-6">
-            {blog.data.frequency && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Frequency:</span>
-                    <span class="capitalize">{blog.data.frequency}</span>
-                </div>
-            )}
-            {blog.data.language && blog.data.language.length > 0 && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Language:</span>
-                    <span>{blog.data.language.join(', ')}</span>
-                </div>
-            )}
-            {blog.data.topics && blog.data.topics.length > 0 && (
-                <div class="flex flex-wrap gap-2">
-                    {blog.data.topics.map((topic: string) => (
-                        <Badge variant="secondary">{topic}</Badge>
-                    ))}
-                </div>
-            )}
+            {
+                blog.data.frequency && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Frequency:</span>
+                        <span class="capitalize">{blog.data.frequency}</span>
+                    </div>
+                )
+            }
+            {
+                blog.data.language && blog.data.language.length > 0 && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Language:</span>
+                        <span>{blog.data.language.join(', ')}</span>
+                    </div>
+                )
+            }
+            {
+                blog.data.topics && blog.data.topics.length > 0 && (
+                    <div class="flex flex-wrap gap-2">
+                        {blog.data.topics.map((topic: string) => (
+                            <Badge variant="secondary">{topic}</Badge>
+                        ))}
+                    </div>
+                )
+            }
         </div>
     </div>
 

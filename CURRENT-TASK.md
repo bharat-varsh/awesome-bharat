@@ -1,42 +1,42 @@
-### ~~Task 4.3 - Create detail pages for all seven collections~~ ✅
+### Task 4.4 - Expand navigation and homepage sections for new collections
 
 Context:
 
-- Cards and listing pages must link to concrete detail pages.
-- Reuse common layout patterns, avoid app-only assumptions.
+- Planning docs expect dual discovery by type and domain.
+- After new routes exist, navigation must expose them.
 
 Read first:
 
-- src/pages/apps/[slug].astro
-- src/layouts/ContentLayout.astro
-- src/components/RightSidebar.astro
+- src/components/AppSidebar.tsx
+- src/pages/index.astro
+- planning/ROADMAP.md (Phase 1 and 2 intent)
 
-Files changed:
+Files to change:
 
-- src/pages/channels/[slug].astro (new)
-- src/pages/products/[slug].astro (new)
-- src/pages/blogs/[slug].astro (new)
-- src/pages/projects/[slug].astro (new)
-- src/pages/communities/[slug].astro (new)
-- src/pages/podcasts/[slug].astro (new)
-- src/pages/initiatives/[slug].astro (new)
-- src/layouts/CollectionDetailLayout.astro (new shared layout)
-- src/utils/relatedContent.ts (refactored: expanded to support all collections)
-- src/components/RelatedItem.astro (expanded type support)
-- src/components/YouMightLike.astro (expanded type support)
+- src/components/AppSidebar.tsx
+- src/pages/index.astro
 
-Implementation:
+Implementation steps:
 
-1. Built shared `CollectionDetailLayout.astro` for all non-app collections (header with CTA, description, MDX slot, right sidebar slot)
-2. Each detail page shows primary CTA above fold (type-specific label per ctaUtils)
-3. Renders collection-specific metadata (topics, language, platform, price, license, etc.)
-4. Includes related content block in right sidebar via `getRelatedContentSimple`
+1. Add sidebar nav entries for all newly routed collections.
+2. Add homepage sections beyond latest apps where useful (featured people/companies plus at least one new type section).
+3. Keep layout responsive and consistent with existing card rows/grid style.
 
 Validation:
 
-- npm run check ✅ (0 errors, 1 pre-existing warning)
+- npm run check
+- npm run build
+- npm run test:e2e
 
 Done criteria:
 
-- ✅ Every collection has clickable listing -> detail flow.
-- ✅ Primary CTA is visible above fold on each type.
+- New collections are discoverable from primary navigation and homepage.
+
+### AGENTS.md update after completing the task
+
+Update AGENTS.md with these exact changes:
+
+1. In Project Structure, add all new collection route folders and content folders.
+2. In Content Collections section, mark the seven collections as active (not planned).
+3. In Primary CTA table, ensure implemented labels and source fields match final ctaUtils behavior.
+4. In Key Commands, keep scaffold command examples for these collection types.

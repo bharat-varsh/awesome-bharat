@@ -68,56 +68,94 @@ src/
 │   ├── apps/          # App entries (MDX)
 │   ├── persons/       # Person profiles (MDX)
 │   ├── companies/     # Company profiles (MDX)
+│   ├── channels/      # YouTube channel entries (MDX)
+│   ├── products/      # Product entries (MDX)
+│   ├── blogs/         # Blog entries (MDX)
+│   ├── projects/      # Open-source project entries (MDX)
+│   ├── communities/   # Community entries (MDX)
+│   ├── podcasts/      # Podcast entries (MDX)
+│   ├── initiatives/   # Social initiative entries (MDX)
 │   └── config.ts      # Content collection schemas (Zod)
 ├── components/        # Astro components
-│   ├── ContentCard.astro      # Compact card for scroll rows
-│   ├── ContentCardFull.astro  # Rich card for listing grids
-│   ├── ContentLayout.astro    # Detail page layout
-│   ├── CollectionHero.astro   # Hero banner for listing pages
-│   ├── Engage.astro           # Contribute / community / web links
-│   ├── Header.astro
+│   ├── ContentCard.astro        # Compact card for scroll rows
+│   ├── ContentCardFull.astro    # Rich card for listing grids
+│   ├── ContentLayout.astro      # Detail page layout
+│   ├── CollectionHero.astro     # Hero banner for listing pages
+│   ├── CollectionDetailLayout.astro  # Shared detail layout for all non-app collections
+│   ├── Engage.astro             # Contribute / community / web links
 │   ├── Footer.astro
-│   ├── LeftSidebar.astro      # Navigation sidebar
-│   ├── MobileNav.astro        # Mobile navigation drawer
-│   ├── RightSidebar.astro     # Related content sidebar
-│   ├── SidebarNav.astro       # Nav links with collection counts
-│   ├── StoreBadges.astro      # Store download badges
-│   ├── YouMightLike.astro     # Related items grid
-│   ├── RelatedItem.astro      # Single related item card
+│   ├── AppSidebar.tsx            # shadcn sidebar with nav items
+│   ├── AppSidebarLayout.tsx      # Sidebar + header shell
+│   ├── RightSidebar.astro       # Related content sidebar
+│   ├── StoreBadges.astro        # Store download badges
+│   ├── YouMightLike.astro       # Related items grid
+│   ├── RelatedItem.astro        # Single related item card
 │   ├── Screenshots.astro
 │   ├── SEO.astro
-│   ├── YouTubeEmbed.astro
-│   └── ThemeToggle.astro
-│   └── ThemeToggle.astro
+│   ├── Search.astro             # Pagefind search component
+│   ├── ThemeToggle.tsx           # Dark/light mode toggle
+│   └── YouTubeEmbed.astro
 ├── layouts/
-│   ├── BaseLayout.astro       # Shell: header + left sidebar + main slot
-│   └── ContentLayout.astro    # Detail page: article + right sidebar
+│   ├── BaseLayout.astro         # Shell: sidebar + header + main slot
+│   └── ContentLayout.astro      # App detail: article + right sidebar
 ├── pages/
-│   ├── index.astro            # Homepage
+│   ├── index.astro                # Homepage
 │   ├── apps/
-│   │   ├── index.astro        # Apps listing
-│   │   └── [slug].astro       # App detail
+│   │   ├── index.astro            # Apps listing
+│   │   └── [slug].astro           # App detail
 │   ├── people/
-│   │   ├── index.astro        # People listing
-│   │   └── [slug].astro       # Person detail
+│   │   ├── index.astro            # People listing
+│   │   └── [slug].astro           # Person detail
 │   ├── companies/
-│   │   ├── index.astro        # Companies listing
-│   │   └── [slug].astro       # Company detail
+│   │   ├── index.astro            # Companies listing
+│   │   └── [slug].astro           # Company detail
+│   ├── channels/
+│   │   ├── index.astro            # Channels listing
+│   │   └── [slug].astro           # Channel detail
+│   ├── products/
+│   │   ├── index.astro            # Products listing
+│   │   └── [slug].astro           # Product detail
+│   ├── blogs/
+│   │   ├── index.astro            # Blogs listing
+│   │   └── [slug].astro           # Blog detail
+│   ├── projects/
+│   │   ├── index.astro            # Projects listing
+│   │   └── [slug].astro           # Project detail
+│   ├── communities/
+│   │   ├── index.astro            # Communities listing
+│   │   └── [slug].astro           # Community detail
+│   ├── podcasts/
+│   │   ├── index.astro            # Podcasts listing
+│   │   └── [slug].astro           # Podcast detail
+│   ├── initiatives/
+│   │   ├── index.astro            # Initiatives listing
+│   │   └── [slug].astro           # Initiative detail
+│   ├── domains/
+│   │   ├── index.astro            # All domains overview
+│   │   └── [domain].astro         # Domain-filtered entries
 │   ├── categories/
-│   │   └── [category].astro   # Category landing pages
+│   │   └── [category].astro       # Category landing pages
 │   ├── tags/
-│   │   └── [tag].astro        # Tag landing pages
+│   │   └── [tag].astro            # Tag landing pages
 │   └── rss.xml.ts
 ├── styles/
 │   └── global.css
+├── hooks/
+│   └── use-mobile.ts            # Mobile breakpoint detection
+├── lib/
+│   └── utils.ts                 # cn() utility
+├── scripts/
+│   └── particles.ts             # Atmospheric background particles
 └── utils/
-    ├── ctaUtils.ts            # CTA label/URL resolution per content type
+    ├── ctaUtils.ts               # CTA label/URL resolution per content type
     ├── dateUtils.ts
-    ├── imageRegistry.ts       # Maps slug/filename → ImageMetadata
-    ├── imageResolvers.ts      # resolveLogo(), resolvePageImages()
-    ├── relatedContent.ts      # Tag-based related content scoring
-    ├── routeUtils.ts          # getEntryHref() — cross-collection href resolver
-    └── textUtils.ts           # formatCategoryName()
+    ├── imageRegistry.ts          # Maps slug/filename → ImageMetadata
+    ├── imageResolvers.ts         # resolveLogo(), resolvePageImages()
+    ├── relatedContent.ts         # Tag-based related content scoring
+    ├── routeUtils.ts             # getEntryHref() — cross-collection href resolver
+    ├── textUtils.ts              # formatCategoryName()
+    ├── domainMeta.ts             # Domain metadata (icons, labels)
+    └── collectionsToScan.ts      # Cross-cutting collection list & helpers
 ```
 
 ---
@@ -154,6 +192,59 @@ src/
 - `members` — Array of `{ slug, role }` (links to persons)
 - `socials`, `logo`, `draft`
 
+### Channels (`src/content/channels/`)
+
+- `name`, `description`, `channelUrl` — YouTube channel URL
+- `topics` — Content focus areas
+- `language` — Array of languages
+- `domains`, `tags`, `authors`
+- `logo`, `draft`, `featured`
+
+### Products (`src/content/products/`)
+
+- `name`, `description`, `category`
+- `buyUrl`, `website`
+- `paid`, `priceRange`, `madeIn`
+- `authors`, `tags`, `domains`
+- `logo`, `screenshots`, `draft`, `featured`
+
+### Blogs (`src/content/blogs/`)
+
+- `name`, `description`, `url`, `rssUrl`
+- `topics`, `language`, `frequency`
+- `authors`, `tags`, `domains`
+- `logo`, `draft`, `featured`
+
+### Projects (`src/content/projects/`)
+
+- `name`, `description`, `repositoryUrl`
+- `language`, `license`, `starsRange`
+- `website`, `authors`, `tags`, `domains`
+- `logo`, `draft`, `featured`
+
+### Communities (`src/content/communities/`)
+
+- `name`, `description`, `platform`, `joinUrl`
+- `topics`, `memberRange`
+- `authors`, `tags`, `domains`
+- `logo`, `draft`, `featured`
+
+### Podcasts (`src/content/podcasts/`)
+
+- `name`, `description`, `website`
+- `platforms` — Array of `{ label, url }`
+- `topics`, `language`, `frequency`, `episodeCount`
+- `authors`, `tags`, `domains`
+- `logo`, `draft`, `featured`
+
+### Initiatives (`src/content/initiatives/`)
+
+- `name`, `description`, `mission`, `impact`
+- `howToHelp` — Array of `{ action, description, url }`
+- `website`, `socials`, `founded`, `location`
+- `authors`, `tags`, `domains`
+- `logo`, `draft`, `featured`
+
 ---
 
 ## Key Commands
@@ -166,6 +257,13 @@ npm run preview      # Preview production build
 npm run lint         # ESLint
 npm run format       # Prettier
 npm run scaffold     # New MDX draft: scaffold -- <type> <slug> [--title] [--logo]
+npm run scaffold -- channel my-channel --title "My Channel"
+npm run scaffold -- product my-product --title "My Product"
+npm run scaffold -- blog my-blog --title "My Blog"
+npm run scaffold -- project my-project --title "My Project"
+npm run scaffold -- community my-community --title "My Community"
+npm run scaffold -- podcast my-podcast --title "My Podcast"
+npm run scaffold -- initiative my-initiative --title "My Initiative"
 npm run graphify     # Rebuild knowledge graph (AST, no API key)
 npm run test:e2e     # Playwright UI smoke tests
 ```

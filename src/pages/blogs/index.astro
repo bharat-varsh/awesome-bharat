@@ -50,9 +50,7 @@ const visibleBlogs = blogs
                             slug={blog.slug}
                             collection="blogs"
                             logoSrc={
-                                blog.data.logo
-                                    ? resolveLogo(blog.slug, blog.data.logo)
-                                    : undefined
+                                blog.data.logo ? resolveLogo(blog.slug, blog.data.logo) : undefined
                             }
                             domains={(blog.data.domains ?? []).map(
                                 (d: string) => getDomainMeta(d).label

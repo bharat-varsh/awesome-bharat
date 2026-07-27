@@ -25,7 +25,10 @@ const { podcast, allPodcasts } = Astro.props as {
 const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
 const resolvedAuthors = (podcast.data.authors ?? [])
     .map((author: Author) => persons.find((person) => person.slug === author.slug))
-    .filter((author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> => Boolean(author));
+    .filter(
+        (author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> =>
+            Boolean(author)
+    );
 
 const { Content } = await podcast.render();
 
@@ -53,41 +56,49 @@ const relatedPodcastsEnriched = relatedPodcasts.map((item) => ({
     <!-- Collection-specific metadata -->
     <div slot="metadata">
         <div class="flex flex-wrap gap-4 mb-6">
-            {podcast.data.frequency && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Frequency:</span>
-                    <span class="capitalize">{podcast.data.frequency}</span>
-                </div>
-            )}
-            {podcast.data.episodeCount && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Episodes:</span>
-                    <span>{podcast.data.episodeCount}</span>
-                </div>
-            )}
-            {podcast.data.language && podcast.data.language.length > 0 && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Language:</span>
-                    <span>{podcast.data.language.join(', ')}</span>
-                </div>
-            )}
-            {podcast.data.topics && podcast.data.topics.length > 0 && (
-                <div class="flex flex-wrap gap-2">
-                    {podcast.data.topics.map((topic: string) => (
-                        <Badge variant="secondary">{topic}</Badge>
-                    ))}
-                </div>
-            )}
+            {
+                podcast.data.frequency && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Frequency:</span>
+                        <span class="capitalize">{podcast.data.frequency}</span>
+                    </div>
+                )
+            }
+            {
+                podcast.data.episodeCount && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Episodes:</span>
+                        <span>{podcast.data.episodeCount}</span>
+                    </div>
+                )
+            }
+            {
+                podcast.data.language && podcast.data.language.length > 0 && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Language:</span>
+                        <span>{podcast.data.language.join(', ')}</span>
+                    </div>
+                )
+            }
+            {
+                podcast.data.topics && podcast.data.topics.length > 0 && (
+                    <div class="flex flex-wrap gap-2">
+                        {podcast.data.topics.map((topic: string) => (
+                            <Badge variant="secondary">{topic}</Badge>
+                        ))}
+                    </div>
+                )
+            }
         </div>
 
-        {podcast.data.platforms && podcast.data.platforms.length > 0 && (
-            <div class="mb-6">
-                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                    Available on
-                </h3>
-                <div class="flex flex-wrap gap-2">
-                    {podcast.data.platforms.map(
-                        (platform: { label: string; url: string }) => (
+        {
+            podcast.data.platforms && podcast.data.platforms.length > 0 && (
+                <div class="mb-6">
+                    <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                        Available on
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        {podcast.data.platforms.map((platform: { label: string; url: string }) => (
                             <a
                                 href={platform.url}
                                 target="_blank"
@@ -96,11 +107,11 @@ const relatedPodcastsEnriched = relatedPodcasts.map((item) => ({
                             >
                                 {platform.label}
                             </a>
-                        )
-                    )}
+                        ))}
+                    </div>
                 </div>
-            </div>
-        )}
+            )
+        }
     </div>
 
     <Content />

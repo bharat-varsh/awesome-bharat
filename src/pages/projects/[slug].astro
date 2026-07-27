@@ -25,7 +25,10 @@ const { project, allProjects } = Astro.props as {
 const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
 const resolvedAuthors = (project.data.authors ?? [])
     .map((author: Author) => persons.find((person) => person.slug === author.slug))
-    .filter((author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> => Boolean(author));
+    .filter(
+        (author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> =>
+            Boolean(author)
+    );
 
 const { Content } = await project.render();
 
@@ -54,24 +57,30 @@ const relatedProjectsEnriched = relatedProjects.map((item) => ({
     <!-- Collection-specific metadata -->
     <div slot="metadata">
         <div class="flex flex-wrap gap-4 mb-6">
-            {project.data.language && project.data.language.length > 0 && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Language:</span>
-                    <span>{project.data.language.join(', ')}</span>
-                </div>
-            )}
-            {project.data.license && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">License:</span>
-                    <span>{project.data.license}</span>
-                </div>
-            )}
-            {project.data.starsRange && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Stars:</span>
-                    <span>{project.data.starsRange}</span>
-                </div>
-            )}
+            {
+                project.data.language && project.data.language.length > 0 && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Language:</span>
+                        <span>{project.data.language.join(', ')}</span>
+                    </div>
+                )
+            }
+            {
+                project.data.license && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">License:</span>
+                        <span>{project.data.license}</span>
+                    </div>
+                )
+            }
+            {
+                project.data.starsRange && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Stars:</span>
+                        <span>{project.data.starsRange}</span>
+                    </div>
+                )
+            }
             <Badge variant="secondary">
                 <span class="size-1.5 rounded-full bg-emerald-500"></span>
                 Open Source

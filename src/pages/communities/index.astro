@@ -8,9 +8,7 @@ import { getPrimaryCTAUrl, getPrimaryCTALabel } from '@/utils/ctaUtils.ts';
 import { resolveLogo } from '@/utils/imageResolvers.ts';
 import { getDomainMeta } from '@/utils/domainMeta.ts';
 
-const communities = (await getCollection('communities')) as Array<
-    CollectionEntry<'communities'>
->;
+const communities = (await getCollection('communities')) as Array<CollectionEntry<'communities'>>;
 const visibleCommunities = communities
     .filter((community) => !community.data.draft)
     .sort((a, b) => {

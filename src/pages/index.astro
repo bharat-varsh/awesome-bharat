@@ -7,21 +7,31 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
 import CardRow from '@/components/CardRow.astro';
+import { getEntryHref } from '@/utils/routeUtils';
 
-const [apps, persons, companies] = await Promise.all([
+const [apps, persons, companies, channels, blogs, projects] = await Promise.all([
     getCollection('apps'),
     getCollection('persons'),
     getCollection('companies'),
+    getCollection('channels'),
+    getCollection('blogs'),
+    getCollection('projects'),
 ]);
 
 const nonDraftApps = apps.filter((app: CollectionEntry<'apps'>) => !app.data.draft);
 const nonDraftPersons = persons.filter((p: CollectionEntry<'persons'>) => !p.data.draft);
 const nonDraftCompanies = companies.filter((c: CollectionEntry<'companies'>) => !c.data.draft);
+const nonDraftChannels = channels.filter((c: CollectionEntry<'channels'>) => !c.data.draft);
+const nonDraftBlogs = blogs.filter((b: CollectionEntry<'blogs'>) => !b.data.draft);
+const nonDraftProjects = projects.filter((p: CollectionEntry<'projects'>) => !p.data.draft);
 
 const stats = {
     apps: nonDraftApps.length,
     persons: nonDraftPersons.length,
     companies: nonDraftCompanies.length,
+    channels: nonDraftChannels.length,
+    blogs: nonDraftBlogs.length,
+    projects: nonDraftProjects.length,
 };
 
 const latestApps = [...nonDraftApps]
@@ -41,6 +51,27 @@ const featuredPersons = [...nonDraftPersons]
 const featuredCompanies = [...nonDraftCompanies]
     .sort(
         (a: CollectionEntry<'companies'>, b: CollectionEntry<'companies'>) =>
+            (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0)
+    )
+    .slice(0, 20);
+
+const featuredChannels = [...nonDraftChannels]
+    .sort(
+        (a: CollectionEntry<'channels'>, b: CollectionEntry<'channels'>) =>
+            (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0)
+    )
+    .slice(0, 20);
+
+const featuredBlogs = [...nonDraftBlogs]
+    .sort(
+        (a: CollectionEntry<'blogs'>, b: CollectionEntry<'blogs'>) =>
+            (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0)
+    )
+    .slice(0, 20);
+
+const featuredProjects = [...nonDraftProjects]
+    .sort(
+        (a: CollectionEntry<'projects'>, b: CollectionEntry<'projects'>) =>
             (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0)
     )
     .slice(0, 20);
@@ -107,6 +138,30 @@ function formatCategory(category: string) {
                     >
                     companies
                 </span>
+                <span class="h-1 w-1 rounded-full bg-neutral-300 dark:bg-neutral-700"></span>
+                <span class="flex items-center gap-1.5">
+                    <span
+                        class="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100"
+                        >{stats.channels}</span
+                    >
+                    channels
+                </span>
+                <span class="h-1 w-1 rounded-full bg-neutral-300 dark:bg-neutral-700"></span>
+                <span class="flex items-center gap-1.5">
+                    <span
+                        class="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100"
+                        >{stats.blogs}</span
+                    >
+                    blogs
+                </span>
+                <span class="h-1 w-1 rounded-full bg-neutral-300 dark:bg-neutral-700"></span>
+                <span class="flex items-center gap-1.5">
+                    <span
+                        class="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100"
+                        >{stats.projects}</span
+                    >
+                    projects
+                </span>
             </div>
         </div>
     </section>
@@ -119,7 +174,7 @@ function formatCategory(category: string) {
                     latestApps.map((app) => (
                         <ContentCard
                             title={app.data.title}
-                            href={`/apps/${app.slug}`}
+                            href={getEntryHref('apps', app.slug)}
                             image={app.data.logo}
                             slug={app.slug}
                             tags={[
@@ -147,7 +202,7 @@ function formatCategory(category: string) {
                     featuredPersons.map((person) => (
                         <ContentCard
                             title={person.data.name}
-                            href={`/people/${person.slug}`}
+                            href={getEntryHref('persons', person.slug)}
                             image={person.data.avatar}
                             slug={person.slug}
                             tags={person.data.tags}
@@ -165,10 +220,64 @@ function formatCategory(category: string) {
                     featuredCompanies.map((company) => (
                         <ContentCard
                             title={company.data.name}
-                            href={`/companies/${company.slug}`}
+                            href={getEntryHref('companies', company.slug)}
                             image={company.data.logo}
                             slug={company.slug}
                             tags={company.data.tags}
+                            class="snap-start"
+                        />
+                    ))
+                }
+            </CardRow>
+        </div>
+
+        <!-- Popular Channels -->
+        <div class="animate-fade-in">
+            <CardRow title="Popular Channels" viewAllHref="/channels" id="popular-channels">
+                {
+                    featuredChannels.map((channel) => (
+                        <ContentCard
+                            title={channel.data.name}
+                            href={getEntryHref('channels', channel.slug)}
+                            image={channel.data.logo}
+                            slug={channel.slug}
+                            tags={channel.data.topics?.slice(0, 1)}
+                            class="snap-start"
+                        />
+                    ))
+                }
+            </CardRow>
+        </div>
+
+        <!-- Latest Blogs -->
+        <div class="animate-fade-in">
+            <CardRow title="Latest Blogs" viewAllHref="/blogs" id="latest-blogs">
+                {
+                    featuredBlogs.map((blog) => (
+                        <ContentCard
+                            title={blog.data.name}
+                            href={getEntryHref('blogs', blog.slug)}
+                            image={blog.data.logo}
+                            slug={blog.slug}
+                            tags={blog.data.topics?.slice(0, 1)}
+                            class="snap-start"
+                        />
+                    ))
+                }
+            </CardRow>
+        </div>
+
+        <!-- Open Source Projects -->
+        <div class="animate-fade-in">
+            <CardRow title="Open Source Projects" viewAllHref="/projects" id="open-source-projects">
+                {
+                    featuredProjects.map((project) => (
+                        <ContentCard
+                            title={project.data.name}
+                            href={getEntryHref('projects', project.slug)}
+                            image={project.data.logo}
+                            slug={project.slug}
+                            tags={project.data.language?.slice(0, 1)}
                             class="snap-start"
                         />
                     ))

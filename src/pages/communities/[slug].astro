@@ -27,16 +27,14 @@ const { community, allCommunities } = Astro.props as {
 const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
 const resolvedAuthors = (community.data.authors ?? [])
     .map((author: Author) => persons.find((person) => person.slug === author.slug))
-    .filter((author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> => Boolean(author));
+    .filter(
+        (author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> =>
+            Boolean(author)
+    );
 
 const { Content } = await community.render();
 
-const relatedCommunities = getRelatedContentSimple(
-    community,
-    allCommunities,
-    'communities',
-    8
-);
+const relatedCommunities = getRelatedContentSimple(community, allCommunities, 'communities', 8);
 const relatedCommunitiesEnriched = relatedCommunities.map((item) => ({
     item,
     resolved: undefined,
@@ -59,25 +57,31 @@ const relatedCommunitiesEnriched = relatedCommunities.map((item) => ({
     <!-- Collection-specific metadata -->
     <div slot="metadata">
         <div class="flex flex-wrap gap-4 mb-6">
-            {community.data.platform && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Platform:</span>
-                    <span class="capitalize">{community.data.platform}</span>
-                </div>
-            )}
-            {community.data.memberRange && (
-                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
-                    <span class="font-semibold">Members:</span>
-                    <span>{community.data.memberRange}</span>
-                </div>
-            )}
-            {community.data.topics && community.data.topics.length > 0 && (
-                <div class="flex flex-wrap gap-2">
-                    {community.data.topics.map((topic: string) => (
-                        <Badge variant="secondary">{topic}</Badge>
-                    ))}
-                </div>
-            )}
+            {
+                community.data.platform && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Platform:</span>
+                        <span class="capitalize">{community.data.platform}</span>
+                    </div>
+                )
+            }
+            {
+                community.data.memberRange && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Members:</span>
+                        <span>{community.data.memberRange}</span>
+                    </div>
+                )
+            }
+            {
+                community.data.topics && community.data.topics.length > 0 && (
+                    <div class="flex flex-wrap gap-2">
+                        {community.data.topics.map((topic: string) => (
+                            <Badge variant="secondary">{topic}</Badge>
+                        ))}
+                    </div>
+                )
+            }
         </div>
     </div>
 
