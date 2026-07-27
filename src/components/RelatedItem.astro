@@ -1,13 +1,13 @@
 ---
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { getEntryHref } from '../utils/routeUtils.ts';
+import type { AnyCollectionEntry } from '@/utils/relatedContent.ts';
 
 interface Props {
-    item: CollectionEntry<'apps' | 'persons' | 'companies'>;
-    collection: 'apps' | 'persons' | 'companies';
-    resolved?: Record<string, CollectionEntry<'persons'>>;
+    item: AnyCollectionEntry;
+    collection: string;
+    resolved?: Record<string, AnyCollectionEntry>;
 }
 
 const { item, collection } = Astro.props;

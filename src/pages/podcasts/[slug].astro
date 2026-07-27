@@ -1,0 +1,116 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import type { Author } from '@/content/config.ts';
+import CollectionDetailLayout from '@/layouts/CollectionDetailLayout.astro';
+import YouMightLike from '@/components/YouMightLike.astro';
+import { getRelatedContentSimple } from '@/utils/relatedContent.ts';
+import { Badge } from '@/components/ui/badge';
+
+export const getStaticPaths = (async () => {
+    const podcasts = (await getCollection('podcasts')) as Array<CollectionEntry<'podcasts'>>;
+    const publishedPodcasts = podcasts.filter((podcast) => !podcast.data.draft);
+
+    return publishedPodcasts.map((podcast) => ({
+        params: { slug: podcast.slug },
+        props: { podcast, allPodcasts: publishedPodcasts },
+    }));
+}) satisfies GetStaticPaths;
+
+const { podcast, allPodcasts } = Astro.props as {
+    podcast: CollectionEntry<'podcasts'>;
+    allPodcasts: Array<CollectionEntry<'podcasts'>>;
+};
+const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+const resolvedAuthors = (podcast.data.authors ?? [])
+    .map((author: Author) => persons.find((person) => person.slug === author.slug))
+    .filter((author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> => Boolean(author));
+
+const { Content } = await podcast.render();
+
+const relatedPodcasts = getRelatedContentSimple(podcast, allPodcasts, 'podcasts', 8);
+const relatedPodcastsEnriched = relatedPodcasts.map((item) => ({
+    item,
+    resolved: undefined,
+}));
+---
+
+<CollectionDetailLayout
+    slug={podcast.slug}
+    collection="podcasts"
+    title={podcast.data.name}
+    description={podcast.data.description}
+    image={podcast.data.logo}
+    tags={podcast.data.tags}
+    domains={podcast.data.domains}
+    ctaData={{
+        platforms: podcast.data.platforms,
+        website: podcast.data.website,
+    }}
+    authors={resolvedAuthors}
+>
+    <!-- Collection-specific metadata -->
+    <div slot="metadata">
+        <div class="flex flex-wrap gap-4 mb-6">
+            {podcast.data.frequency && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Frequency:</span>
+                    <span class="capitalize">{podcast.data.frequency}</span>
+                </div>
+            )}
+            {podcast.data.episodeCount && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Episodes:</span>
+                    <span>{podcast.data.episodeCount}</span>
+                </div>
+            )}
+            {podcast.data.language && podcast.data.language.length > 0 && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Language:</span>
+                    <span>{podcast.data.language.join(', ')}</span>
+                </div>
+            )}
+            {podcast.data.topics && podcast.data.topics.length > 0 && (
+                <div class="flex flex-wrap gap-2">
+                    {podcast.data.topics.map((topic: string) => (
+                        <Badge variant="secondary">{topic}</Badge>
+                    ))}
+                </div>
+            )}
+        </div>
+
+        {podcast.data.platforms && podcast.data.platforms.length > 0 && (
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                    Available on
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    {podcast.data.platforms.map(
+                        (platform: { label: string; url: string }) => (
+                            <a
+                                href={platform.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors text-sm font-medium"
+                            >
+                                {platform.label}
+                            </a>
+                        )
+                    )}
+                </div>
+            </div>
+        )}
+    </div>
+
+    <Content />
+
+    <div slot="right-sidebar">
+        <YouMightLike
+            items={relatedPodcastsEnriched}
+            collectionName="podcasts"
+            title="You might also like"
+            maxItems={8}
+        />
+    </div>
+</CollectionDetailLayout>

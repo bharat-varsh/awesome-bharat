@@ -1,37 +1,42 @@
-### Task 4.2 - Create listing pages for all seven collections
+### ~~Task 4.3 - Create detail pages for all seven collections~~ ✅
 
 Context:
 
-- Planning docs and code-report alignment: these collections are invisible without routes.
+- Cards and listing pages must link to concrete detail pages.
+- Reuse common layout patterns, avoid app-only assumptions.
 
 Read first:
 
-- src/pages/apps/index.astro
-- src/components/CollectionHero.astro
-- src/components/ContentCardFull.astro
+- src/pages/apps/[slug].astro
+- src/layouts/ContentLayout.astro
+- src/components/RightSidebar.astro
 
-Files to change:
+Files changed:
 
-- src/pages/channels/index.astro (new)
-- src/pages/products/index.astro (new)
-- src/pages/blogs/index.astro (new)
-- src/pages/projects/index.astro (new)
-- src/pages/communities/index.astro (new)
-- src/pages/podcasts/index.astro (new)
-- src/pages/initiatives/index.astro (new)
+- src/pages/channels/[slug].astro (new)
+- src/pages/products/[slug].astro (new)
+- src/pages/blogs/[slug].astro (new)
+- src/pages/projects/[slug].astro (new)
+- src/pages/communities/[slug].astro (new)
+- src/pages/podcasts/[slug].astro (new)
+- src/pages/initiatives/[slug].astro (new)
+- src/layouts/CollectionDetailLayout.astro (new shared layout)
+- src/utils/relatedContent.ts (refactored: expanded to support all collections)
+- src/components/RelatedItem.astro (expanded type support)
+- src/components/YouMightLike.astro (expanded type support)
 
-Implementation steps:
+Implementation:
 
-1. Reuse listing page pattern from apps.
-2. Filter draft entries.
-3. Sort featured first, then date/name depending on schema.
-4. Render ContentCardFull with CTA hint label and URL from ctaUtils.
+1. Built shared `CollectionDetailLayout.astro` for all non-app collections (header with CTA, description, MDX slot, right sidebar slot)
+2. Each detail page shows primary CTA above fold (type-specific label per ctaUtils)
+3. Renders collection-specific metadata (topics, language, platform, price, license, etc.)
+4. Includes related content block in right sidebar via `getRelatedContentSimple`
 
 Validation:
 
-- npm run check
-- npm run build
+- npm run check ✅ (0 errors, 1 pre-existing warning)
 
 Done criteria:
 
-- Each new collection has a working index page with cards and CTAs.
+- ✅ Every collection has clickable listing -> detail flow.
+- ✅ Primary CTA is visible above fold on each type.

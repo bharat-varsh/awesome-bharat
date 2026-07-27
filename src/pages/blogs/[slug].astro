@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import type { Author } from '@/content/config.ts';
+import CollectionDetailLayout from '@/layouts/CollectionDetailLayout.astro';
+import YouMightLike from '@/components/YouMightLike.astro';
+import { getRelatedContentSimple } from '@/utils/relatedContent.ts';
+import { Badge } from '@/components/ui/badge';
+
+export const getStaticPaths = (async () => {
+    const blogs = (await getCollection('blogs')) as Array<CollectionEntry<'blogs'>>;
+    const publishedBlogs = blogs.filter((blog) => !blog.data.draft);
+
+    return publishedBlogs.map((blog) => ({
+        params: { slug: blog.slug },
+        props: { blog, allBlogs: publishedBlogs },
+    }));
+}) satisfies GetStaticPaths;
+
+const { blog, allBlogs } = Astro.props as {
+    blog: CollectionEntry<'blogs'>;
+    allBlogs: Array<CollectionEntry<'blogs'>>;
+};
+const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+const resolvedAuthors = (blog.data.authors ?? [])
+    .map((author: Author) => persons.find((person) => person.slug === author.slug))
+    .filter((author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> => Boolean(author));
+
+const { Content } = await blog.render();
+
+const relatedBlogs = getRelatedContentSimple(blog, allBlogs, 'blogs', 8);
+const relatedBlogsEnriched = relatedBlogs.map((item) => ({
+    item,
+    resolved: undefined,
+}));
+---
+
+<CollectionDetailLayout
+    slug={blog.slug}
+    collection="blogs"
+    title={blog.data.name}
+    description={blog.data.description}
+    image={blog.data.logo}
+    tags={blog.data.tags}
+    domains={blog.data.domains}
+    ctaData={{
+        url: blog.data.url,
+    }}
+    authors={resolvedAuthors}
+>
+    <!-- Collection-specific metadata -->
+    <div slot="metadata">
+        <div class="flex flex-wrap gap-4 mb-6">
+            {blog.data.frequency && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Frequency:</span>
+                    <span class="capitalize">{blog.data.frequency}</span>
+                </div>
+            )}
+            {blog.data.language && blog.data.language.length > 0 && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Language:</span>
+                    <span>{blog.data.language.join(', ')}</span>
+                </div>
+            )}
+            {blog.data.topics && blog.data.topics.length > 0 && (
+                <div class="flex flex-wrap gap-2">
+                    {blog.data.topics.map((topic: string) => (
+                        <Badge variant="secondary">{topic}</Badge>
+                    ))}
+                </div>
+            )}
+        </div>
+    </div>
+
+    <Content />
+
+    <div slot="right-sidebar">
+        <YouMightLike
+            items={relatedBlogsEnriched}
+            collectionName="blogs"
+            title="You might also like"
+            maxItems={8}
+        />
+    </div>
+</CollectionDetailLayout>

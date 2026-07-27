@@ -1,0 +1,94 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import type { Author } from '@/content/config.ts';
+import CollectionDetailLayout from '@/layouts/CollectionDetailLayout.astro';
+import YouMightLike from '@/components/YouMightLike.astro';
+import { getRelatedContentSimple } from '@/utils/relatedContent.ts';
+import { Badge } from '@/components/ui/badge';
+
+export const getStaticPaths = (async () => {
+    const communities = (await getCollection('communities')) as Array<
+        CollectionEntry<'communities'>
+    >;
+    const publishedCommunities = communities.filter((community) => !community.data.draft);
+
+    return publishedCommunities.map((community) => ({
+        params: { slug: community.slug },
+        props: { community, allCommunities: publishedCommunities },
+    }));
+}) satisfies GetStaticPaths;
+
+const { community, allCommunities } = Astro.props as {
+    community: CollectionEntry<'communities'>;
+    allCommunities: Array<CollectionEntry<'communities'>>;
+};
+const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+const resolvedAuthors = (community.data.authors ?? [])
+    .map((author: Author) => persons.find((person) => person.slug === author.slug))
+    .filter((author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> => Boolean(author));
+
+const { Content } = await community.render();
+
+const relatedCommunities = getRelatedContentSimple(
+    community,
+    allCommunities,
+    'communities',
+    8
+);
+const relatedCommunitiesEnriched = relatedCommunities.map((item) => ({
+    item,
+    resolved: undefined,
+}));
+---
+
+<CollectionDetailLayout
+    slug={community.slug}
+    collection="communities"
+    title={community.data.name}
+    description={community.data.description}
+    image={community.data.logo}
+    tags={community.data.tags}
+    domains={community.data.domains}
+    ctaData={{
+        joinUrl: community.data.joinUrl,
+    }}
+    authors={resolvedAuthors}
+>
+    <!-- Collection-specific metadata -->
+    <div slot="metadata">
+        <div class="flex flex-wrap gap-4 mb-6">
+            {community.data.platform && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Platform:</span>
+                    <span class="capitalize">{community.data.platform}</span>
+                </div>
+            )}
+            {community.data.memberRange && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Members:</span>
+                    <span>{community.data.memberRange}</span>
+                </div>
+            )}
+            {community.data.topics && community.data.topics.length > 0 && (
+                <div class="flex flex-wrap gap-2">
+                    {community.data.topics.map((topic: string) => (
+                        <Badge variant="secondary">{topic}</Badge>
+                    ))}
+                </div>
+            )}
+        </div>
+    </div>
+
+    <Content />
+
+    <div slot="right-sidebar">
+        <YouMightLike
+            items={relatedCommunitiesEnriched}
+            collectionName="communities"
+            title="You might also like"
+            maxItems={8}
+        />
+    </div>
+</CollectionDetailLayout>

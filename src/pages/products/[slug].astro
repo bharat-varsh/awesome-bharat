@@ -1,0 +1,97 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import type { Author } from '@/content/config.ts';
+import CollectionDetailLayout from '@/layouts/CollectionDetailLayout.astro';
+import YouMightLike from '@/components/YouMightLike.astro';
+import { getRelatedContentSimple } from '@/utils/relatedContent.ts';
+import Screenshots from '@/components/Screenshots.astro';
+import { Badge } from '@/components/ui/badge';
+
+export const getStaticPaths = (async () => {
+    const products = (await getCollection('products')) as Array<CollectionEntry<'products'>>;
+    const publishedProducts = products.filter((product) => !product.data.draft);
+
+    return publishedProducts.map((product) => ({
+        params: { slug: product.slug },
+        props: { product, allProducts: publishedProducts },
+    }));
+}) satisfies GetStaticPaths;
+
+const { product, allProducts } = Astro.props as {
+    product: CollectionEntry<'products'>;
+    allProducts: Array<CollectionEntry<'products'>>;
+};
+const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+const resolvedAuthors = (product.data.authors ?? [])
+    .map((author: Author) => persons.find((person) => person.slug === author.slug))
+    .filter((author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> => Boolean(author));
+
+const { Content } = await product.render();
+
+const relatedProducts = getRelatedContentSimple(product, allProducts, 'products', 8);
+const relatedProductsEnriched = relatedProducts.map((item) => ({
+    item,
+    resolved: undefined,
+}));
+---
+
+<CollectionDetailLayout
+    slug={product.slug}
+    collection="products"
+    title={product.data.name}
+    description={product.data.description}
+    image={product.data.logo}
+    tags={product.data.tags}
+    domains={product.data.domains}
+    ctaData={{
+        buyUrl: product.data.buyUrl,
+        website: product.data.website,
+    }}
+    authors={resolvedAuthors}
+>
+    <!-- Collection-specific metadata -->
+    <div slot="metadata">
+        <div class="flex flex-wrap gap-4 mb-6">
+            {product.data.priceRange && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Price:</span>
+                    <span>{product.data.priceRange}</span>
+                </div>
+            )}
+            {product.data.madeIn && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Made in:</span>
+                    <span>{product.data.madeIn}</span>
+                </div>
+            )}
+            <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                <span
+                    class={`size-1.5 rounded-full ${product.data.paid ? 'bg-neutral-400' : 'bg-emerald-500'}`}
+                ></span>
+                {product.data.paid ? 'Paid' : 'Free'}
+            </div>
+            {product.data.category && (
+                <Badge variant="secondary">{product.data.category}</Badge>
+            )}
+        </div>
+
+        {product.data.screenshots && product.data.screenshots.length > 0 && (
+            <div class="mb-6">
+                <Screenshots screenshots={product.data.screenshots} />
+            </div>
+        )}
+    </div>
+
+    <Content />
+
+    <div slot="right-sidebar">
+        <YouMightLike
+            items={relatedProductsEnriched}
+            collectionName="products"
+            title="You might also like"
+            maxItems={8}
+        />
+    </div>
+</CollectionDetailLayout>

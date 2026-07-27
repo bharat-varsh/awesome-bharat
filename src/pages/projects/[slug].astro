@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import type { Author } from '@/content/config.ts';
+import CollectionDetailLayout from '@/layouts/CollectionDetailLayout.astro';
+import YouMightLike from '@/components/YouMightLike.astro';
+import { getRelatedContentSimple } from '@/utils/relatedContent.ts';
+import { Badge } from '@/components/ui/badge';
+
+export const getStaticPaths = (async () => {
+    const projects = (await getCollection('projects')) as Array<CollectionEntry<'projects'>>;
+    const publishedProjects = projects.filter((project) => !project.data.draft);
+
+    return publishedProjects.map((project) => ({
+        params: { slug: project.slug },
+        props: { project, allProjects: publishedProjects },
+    }));
+}) satisfies GetStaticPaths;
+
+const { project, allProjects } = Astro.props as {
+    project: CollectionEntry<'projects'>;
+    allProjects: Array<CollectionEntry<'projects'>>;
+};
+const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+const resolvedAuthors = (project.data.authors ?? [])
+    .map((author: Author) => persons.find((person) => person.slug === author.slug))
+    .filter((author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> => Boolean(author));
+
+const { Content } = await project.render();
+
+const relatedProjects = getRelatedContentSimple(project, allProjects, 'projects', 8);
+const relatedProjectsEnriched = relatedProjects.map((item) => ({
+    item,
+    resolved: undefined,
+}));
+---
+
+<CollectionDetailLayout
+    slug={project.slug}
+    collection="projects"
+    title={project.data.name}
+    description={project.data.description}
+    image={project.data.logo}
+    tags={project.data.tags}
+    domains={project.data.domains}
+    ctaData={{
+        repositoryUrl: project.data.repositoryUrl,
+        website: project.data.website,
+        repositoryLinks: [{ label: 'GitHub', url: project.data.repositoryUrl }],
+    }}
+    authors={resolvedAuthors}
+>
+    <!-- Collection-specific metadata -->
+    <div slot="metadata">
+        <div class="flex flex-wrap gap-4 mb-6">
+            {project.data.language && project.data.language.length > 0 && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Language:</span>
+                    <span>{project.data.language.join(', ')}</span>
+                </div>
+            )}
+            {project.data.license && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">License:</span>
+                    <span>{project.data.license}</span>
+                </div>
+            )}
+            {project.data.starsRange && (
+                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                    <span class="font-semibold">Stars:</span>
+                    <span>{project.data.starsRange}</span>
+                </div>
+            )}
+            <Badge variant="secondary">
+                <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                Open Source
+            </Badge>
+        </div>
+    </div>
+
+    <Content />
+
+    <div slot="right-sidebar">
+        <YouMightLike
+            items={relatedProjectsEnriched}
+            collectionName="projects"
+            title="You might also like"
+            maxItems={8}
+        />
+    </div>
+</CollectionDetailLayout>
