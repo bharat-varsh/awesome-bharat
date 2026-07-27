@@ -37,6 +37,17 @@ The site exists to break the notion that India has nothing noteworthy, to bring 
 | Podcast          | Listen         | `platforms[0]`                  |
 | Initiative       | Get Involved   | `howToHelp[0].url` or `website` |
 
+### Routing Convention
+
+Collection keys may differ from their public URL path prefix:
+
+| Collection key | Public route        |
+| -------------- | ------------------- |
+| `persons`      | `/people/{slug}`    |
+| all others     | `/{collection}/{slug}` |
+
+**All cross-collection hrefs must go through `getEntryHref(collection, slug)`** from `src/utils/routeUtils.ts`. Do not hardcode the path pattern directly — always use the utility to guarantee consistent routing.
+
 ---
 
 ## Tech Stack
@@ -105,6 +116,7 @@ src/
     ├── imageRegistry.ts       # Maps slug/filename → ImageMetadata
     ├── imageResolvers.ts      # resolveLogo(), resolvePageImages()
     ├── relatedContent.ts      # Tag-based related content scoring
+    ├── routeUtils.ts          # getEntryHref() — cross-collection href resolver
     └── textUtils.ts           # formatCategoryName()
 ```
 

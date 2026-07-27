@@ -8,6 +8,7 @@ import {
     type ScannedEntry,
 } from '@/utils/collectionsToScan.ts';
 import { getDomainMeta } from '@/utils/domainMeta.ts';
+import { getEntryHref } from '@/utils/routeUtils.ts';
 
 export async function getStaticPaths() {
     const domains = new Set<string>();
@@ -33,7 +34,7 @@ export async function GET(context: APIContext) {
             items.push({
                 title: getEntryTitle(e),
                 description: getEntryDescription(e) ?? '',
-                link: `/${e.collection}/${e.slug}`,
+                link: getEntryHref(e.collection, e.slug),
             });
         }
     }

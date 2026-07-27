@@ -1,33 +1,52 @@
-### Task 3.2 - Expand cross-cutting collection scan lists
+### Task 3.3 - Add route-safe href resolver for cross-collection cards
 
 Context:
 
-- CODE_REPORT confirms collectionsToScan.ts includes only apps, persons, companies.
-- This blocks tags/categories/domains from seeing future entries in 7 existing collections.
+- Mixed collection pages currently risk using collection key as URL prefix directly.
+- persons collection must route to /people.
 
 Read first:
 
-- src/utils/collectionsToScan.ts
-- src/pages/tags/[tag].astro
-- src/pages/categories/[category].astro
-- src/pages/domains/[domain].astro
+- src/components/ContentCard.astro
+- src/components/ContentCardFull.astro
+- src/components/RelatedItem.astro
+- src/utils/ (create route utility if needed)
 
 Files to change:
 
-- src/utils/collectionsToScan.ts
-- any page-level type guards that assume only 3 collections
+- src/utils/routeUtils.ts (new)
+- all card components that build href
 
 Implementation steps:
 
-1. Add all existing configured collections to scanned list.
-2. Ensure title resolution utility handles title vs name safely.
-3. Ensure rendering components can display mixed collection cards without route errors.
+1. Create one utility function, for example getEntryHref(collection, slug).
+2. Mapping rules:
+    - persons -> /people/{slug}
+    - all others -> /{collection}/{slug}
+3. Replace inline href construction in all card-like components.
+
+Short snippet pattern:
+
+```ts
+const ROUTE_PREFIX: Record<string, string> = { persons: 'people' };
+return `/${ROUTE_PREFIX[collection] ?? collection}/${slug}`;
+```
 
 Validation:
 
 - npm run check
 - npm run build
+- click-test cards in apps/tags/categories/domains pages
 
 Done criteria:
 
-- Tags, categories, and domains include all supported collections once content exists.
+- No component hardcodes inconsistent path rules.
+
+### AGENTS.md update after completing the work
+
+Update AGENTS.md with these exact changes:
+
+1. Add a short routing convention note:
+    - collection key persons maps to public route /people.
+2. Add CTA mapping table for all 10 content types (same labels used in code).
+3. Update project structure or architecture notes to mention routeUtils utility and where all cross-collection hrefs must go through it.

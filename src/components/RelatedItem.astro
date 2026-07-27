@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { resolveLogo } from '../utils/imageResolvers.ts';
+import { getEntryHref } from '../utils/routeUtils.ts';
 
 interface Props {
     item: CollectionEntry<'apps' | 'persons' | 'companies'>;
@@ -11,7 +12,7 @@ interface Props {
 
 const { item, collection } = Astro.props;
 
-const href = `/${collection}/${item.slug}`;
+const href = getEntryHref(collection, item.slug);
 const resolvedImage = resolveLogo(item.slug, item.data.logo);
 ---
 

@@ -13,6 +13,7 @@ import { Badge, badgeVariants } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
+import { getEntryHref } from '../utils/routeUtils.ts';
 import { getCTALinks, getPrimaryCTALabel, getPrimaryCTAUrl } from '../utils/ctaUtils.ts';
 import { getDomainMeta } from '../utils/domainMeta.ts';
 import googlePlayBadge from '../assets/images/badges/google-play-badge.png';
@@ -75,7 +76,7 @@ const resolvedImage = resolveLogo(slug, image);
 
 // Get first author for display
 const primaryAuthor = authors.length > 0 ? authors[0] : null;
-const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor.slug}` : null;
+const authorLink = primaryAuthor ? getEntryHref(primaryAuthor.collection, primaryAuthor.slug) : null;
 
 // Compute CTA groups and primary button
 const ctaGroups = getCTALinks(collection, { type, source, storeLinks, repositoryLinks, website });
