@@ -1,39 +1,27 @@
-### Task 3.1 - Extend CTA utilities to all 10 collection types
+### Task 3.2 - Expand cross-cutting collection scan lists
 
 Context:
 
-- CODE_REPORT confirms ctaUtils currently covers only apps, persons, companies.
-- Schemas already exist for channels, products, blogs, projects, communities, podcasts, initiatives.
-- Planning docs define primary CTA mapping per type.
+- CODE_REPORT confirms collectionsToScan.ts includes only apps, persons, companies.
+- This blocks tags/categories/domains from seeing future entries in 7 existing collections.
 
 Read first:
 
-- src/utils/ctaUtils.ts
-- src/content/config.ts
-- planning/CONTENT-ARCHITECTURE.md (Primary CTA mapping)
+- src/utils/collectionsToScan.ts
+- src/pages/tags/[tag].astro
+- src/pages/categories/[category].astro
+- src/pages/domains/[domain].astro
 
 Files to change:
 
-- src/utils/ctaUtils.ts
+- src/utils/collectionsToScan.ts
+- any page-level type guards that assume only 3 collections
 
 Implementation steps:
 
-1. Extend getPrimaryCTALabel and getPrimaryCTAUrl for all missing types.
-2. Implement URL fallback order per type:
-    - channels: channelUrl -> Subscribe
-    - products: buyUrl then website -> Buy
-    - blogs: url -> Read
-    - projects: repositoryUrl -> Contribute
-    - communities: joinUrl -> Join
-    - podcasts: platforms[0].url then website -> Listen
-    - initiatives: howToHelp[0].url then website -> Get Involved
-3. Keep existing app/person/company behavior unchanged.
-
-Short snippet pattern:
-
-```ts
-if (collection === 'products') return data.buyUrl ?? data.website ?? null;
-```
+1. Add all existing configured collections to scanned list.
+2. Ensure title resolution utility handles title vs name safely.
+3. Ensure rendering components can display mixed collection cards without route errors.
 
 Validation:
 
@@ -42,4 +30,4 @@ Validation:
 
 Done criteria:
 
-- Every collection type has deterministic primary CTA label and URL logic.
+- Tags, categories, and domains include all supported collections once content exists.
