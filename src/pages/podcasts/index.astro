@@ -1,0 +1,69 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContentCardFull from '@/components/ContentCardFull.astro';
+import CollectionHero from '@/components/CollectionHero.astro';
+import { getPrimaryCTAUrl, getPrimaryCTALabel } from '@/utils/ctaUtils.ts';
+import { resolveLogo } from '@/utils/imageResolvers.ts';
+import { getDomainMeta } from '@/utils/domainMeta.ts';
+
+const podcasts = (await getCollection('podcasts')) as Array<CollectionEntry<'podcasts'>>;
+const visiblePodcasts = podcasts
+    .filter((podcast) => !podcast.data.draft)
+    .sort((a, b) => {
+        if (a.data.featured && !b.data.featured) return -1;
+        if (!a.data.featured && b.data.featured) return 1;
+        return a.data.name.localeCompare(b.data.name);
+    });
+---
+
+<BaseLayout
+    title="Podcasts | Awesome Bharat"
+    description="Podcasts that inform, inspire, and entertain — made by Indians for the world"
+>
+    <div class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+        <div class="mb-10">
+            <CollectionHero
+                title="Podcasts"
+                description="Podcasts that inform, inspire, and entertain — made by Indians for the world"
+                countLabel={`${visiblePodcasts.length} podcasts`}
+                icon="🎙️"
+                eyebrow="Collection"
+            />
+        </div>
+
+        <div
+            class="animate-fade-in grid
+        grid-cols-[repeat(auto-fit,minmax(280px,1fr))]
+        gap-6"
+        >
+            {
+                visiblePodcasts.map((podcast) => {
+                    const ctaLabel = getPrimaryCTALabel('podcasts', podcast.data);
+                    const ctaUrl = getPrimaryCTAUrl('podcasts', podcast.data);
+
+                    return (
+                        <ContentCardFull
+                            title={podcast.data.name}
+                            description={podcast.data.description}
+                            slug={podcast.slug}
+                            collection="podcasts"
+                            logoSrc={
+                                podcast.data.logo
+                                    ? resolveLogo(podcast.slug, podcast.data.logo)
+                                    : undefined
+                            }
+                            domains={(podcast.data.domains ?? []).map(
+                                (d: string) => getDomainMeta(d).label
+                            )}
+                            ctaLabel={ctaLabel}
+                            ctaUrl={ctaUrl}
+                            featured={podcast.data.featured}
+                        />
+                    );
+                })
+            }
+        </div>
+    </div>
+</BaseLayout>

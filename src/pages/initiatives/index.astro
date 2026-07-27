@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContentCardFull from '@/components/ContentCardFull.astro';
+import CollectionHero from '@/components/CollectionHero.astro';
+import { getPrimaryCTAUrl, getPrimaryCTALabel } from '@/utils/ctaUtils.ts';
+import { resolveLogo } from '@/utils/imageResolvers.ts';
+import { getDomainMeta } from '@/utils/domainMeta.ts';
+
+const initiatives = (await getCollection('initiatives')) as Array<
+    CollectionEntry<'initiatives'>
+>;
+const visibleInitiatives = initiatives
+    .filter((initiative) => !initiative.data.draft)
+    .sort((a, b) => {
+        if (a.data.featured && !b.data.featured) return -1;
+        if (!a.data.featured && b.data.featured) return 1;
+        return a.data.name.localeCompare(b.data.name);
+    });
+---
+
+<BaseLayout
+    title="Initiatives | Awesome Bharat"
+    description="Social initiatives and nonprofits making a real difference on the ground"
+>
+    <div class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+        <div class="mb-10">
+            <CollectionHero
+                title="Initiatives"
+                description="Social initiatives and nonprofits making a real difference on the ground"
+                countLabel={`${visibleInitiatives.length} initiatives`}
+                icon="🌟"
+                eyebrow="Collection"
+            />
+        </div>
+
+        <div
+            class="animate-fade-in grid
+        grid-cols-[repeat(auto-fit,minmax(280px,1fr))]
+        gap-6"
+        >
+            {
+                visibleInitiatives.map((initiative) => {
+                    const ctaLabel = getPrimaryCTALabel('initiatives', initiative.data);
+                    const ctaUrl = getPrimaryCTAUrl('initiatives', initiative.data);
+
+                    return (
+                        <ContentCardFull
+                            title={initiative.data.name}
+                            description={initiative.data.description}
+                            slug={initiative.slug}
+                            collection="initiatives"
+                            logoSrc={
+                                initiative.data.logo
+                                    ? resolveLogo(initiative.slug, initiative.data.logo)
+                                    : undefined
+                            }
+                            domains={(initiative.data.domains ?? []).map(
+                                (d: string) => getDomainMeta(d).label
+                            )}
+                            ctaLabel={ctaLabel}
+                            ctaUrl={ctaUrl}
+                            featured={initiative.data.featured}
+                        />
+                    );
+                })
+            }
+        </div>
+    </div>
+</BaseLayout>

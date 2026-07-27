@@ -1,32 +1,31 @@
-### Task 4.1 - Create collection folders and minimum seed content
+### Task 4.2 - Create listing pages for all seven collections
 
 Context:
 
-- CODE_REPORT confirms these schemas exist but directories/content are missing.
-- Without content, routes and discovery pages remain empty.
+- Planning docs and code-report alignment: these collections are invisible without routes.
 
 Read first:
 
-- src/content/config.ts
-- planning/CONTENT-GUIDELINES.md
-- scripts/scaffold-content.mjs
+- src/pages/apps/index.astro
+- src/components/CollectionHero.astro
+- src/components/ContentCardFull.astro
 
 Files to change:
 
-- src/content/channels/\*.mdx (new)
-- src/content/products/\*.mdx (new)
-- src/content/blogs/\*.mdx (new)
-- src/content/projects/\*.mdx (new)
-- src/content/communities/\*.mdx (new)
-- src/content/podcasts/\*.mdx (new)
-- src/content/initiatives/\*.mdx (new)
+- src/pages/channels/index.astro (new)
+- src/pages/products/index.astro (new)
+- src/pages/blogs/index.astro (new)
+- src/pages/projects/index.astro (new)
+- src/pages/communities/index.astro (new)
+- src/pages/podcasts/index.astro (new)
+- src/pages/initiatives/index.astro (new)
 
 Implementation steps:
 
-1. Add at least 2 non-draft entries per collection.
-2. Fill required frontmatter exactly as schema expects.
-3. Keep body concise (150-400 words) and action-oriented.
-4. Ensure links are valid and real.
+1. Reuse listing page pattern from apps.
+2. Filter draft entries.
+3. Sort featured first, then date/name depending on schema.
+4. Render ContentCardFull with CTA hint label and URL from ctaUtils.
 
 Validation:
 
@@ -35,4 +34,4 @@ Validation:
 
 Done criteria:
 
-- All seven collections have real, non-draft content entries passing schema checks.
+- Each new collection has a working index page with cards and CTAs.
