@@ -19,9 +19,18 @@ export interface Props {
     article?: boolean;
     publishedTime?: string;
     tags?: string[];
+    structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
-const { title, description, image, article = false, publishedTime, tags } = Astro.props;
+const {
+    title,
+    description,
+    image,
+    article = false,
+    publishedTime,
+    tags,
+    structuredData,
+} = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const [
@@ -145,6 +154,7 @@ const currentPath = Astro.url.pathname;
             article={article}
             publishedTime={publishedTime}
             tags={tags}
+            structuredData={structuredData}
         />
 
         <!-- Load theme script -->

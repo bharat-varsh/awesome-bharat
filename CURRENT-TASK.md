@@ -1,46 +1,32 @@
-### Task 5.2 - Introduce domain opportunities content model and section shell
+### Task 6.1 - Structured SEO and per-collection feeds
 
 Context:
 
-- planning/CONTENT-ARCHITECTURE.md and ROADMAP Phase 4 define opportunities as differentiator.
-- Implement shell first, then fill content iteratively.
+- CODE_REPORT flags SEO inconsistencies and feed scope mismatch.
+- Planning Phase 5 calls for stronger discovery metadata.
 
 Read first:
 
-- planning/CONTENT-ARCHITECTURE.md (Opportunities section)
-- planning/CONTENT-GUIDELINES.md (Opportunities writing)
-- src/content/config.ts
+- src/components/SEO.astro
+- src/pages/rss.xml.ts
+- src/pages/domains/[domain]/rss.xml.ts
 
 Files to change:
 
-- src/content/config.ts (new domains collection schema if absent)
-- src/content/domains/\*.mdx (new)
-- src/components (new opportunities section component)
-- src/pages/domains/[domain].astro
+- src/components/SEO.astro
+- src/pages/_rss_.ts
 
 Implementation steps:
 
-1. Add or finalize schema for domain opportunities data blocks.
-2. Render section conditionally only when data exists.
-3. Start with one domain pilot entry and verify rendering.
+1. Add structured data blocks for major entity types (SoftwareApplication, Person, Organization as applicable).
+2. Add per-collection feed routes.
+3. Keep canonical URLs and OG fields consistent.
 
 Validation:
 
-- npm run check
 - npm run build
+- validate generated xml files and page head metadata
 
 Done criteria:
 
-- At least one domain page shows an Opportunities section with real structured data.
-
-### AGENTS.md update after completing the task
-
-Update AGENTS.md with these exact changes:
-
-1. Add a new section describing Opportunities data flow:
-    - schema location,
-    - content folder,
-    - render component,
-    - domain page integration point.
-2. Add one short rule in Agent Context:
-    - For domain work, verify both grouped content results and opportunities block rendering.
+- Feeds and metadata represent real page coverage accurately.

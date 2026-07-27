@@ -50,6 +50,14 @@ const primaryCTALabel = getPrimaryCTALabel('companies', { website: company.data.
     title={`${company.data.name} | Awesome Bharat`}
     description={company.data.description ?? `${company.data.name} - Featured on Awesome Bharat`}
     image={company.data.logo}
+    structuredData={{
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: company.data.name,
+        description: company.data.description,
+        url: company.data.website,
+        foundingDate: company.data.founded?.toString(),
+    }}
 >
     <div class="max-w-4xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
         <article data-pagefind-body>

@@ -51,6 +51,13 @@ const primaryCTALabel = getPrimaryCTALabel('persons', { website: person.data.web
     title={`${person.data.name} | Awesome Bharat`}
     description={person.data.bio ?? `${person.data.name} - Featured on Awesome Bharat`}
     image={person.data.avatar}
+    structuredData={{
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: person.data.name,
+        description: person.data.bio,
+        url: person.data.website,
+    }}
 >
     <div class="max-w-4xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
         <article data-pagefind-body>
