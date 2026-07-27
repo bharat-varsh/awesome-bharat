@@ -74,8 +74,9 @@ const socials = [
                                         rel="noopener noreferrer"
                                         class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                                         aria-label={social.ariaLabel}
-                                        set:html={social.svg}
-                                    />
+                                    >
+                                        <span aria-hidden="true" set:html={social.svg} />
+                                    </a>
                                 </li>
                             ))
                         }

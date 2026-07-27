@@ -22,21 +22,20 @@ const { screenshots, title = 'Screenshots' } = Astro.props;
             <div class="relative group">
                 <div
                     id="screenshots-scroll"
-                    class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
+                    role="region"
+                    aria-label={`${title} — use arrow keys to scroll`}
+                    tabindex="0"
+                    class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 dark:focus-visible:outline-primary-400 rounded-lg"
                 >
-                    {screenshots.map((screenshot) => (
-                        <div
-                            class="flex-shrink-0 snap-center overflow-hidden screenshot-loader"
-                            style="height: 0;"
-                        >
+                    {screenshots.map((screenshot, i) => (
+                        <div class="flex-shrink-0 snap-center overflow-hidden">
                             <div class="rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-200 border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
                                 <img
                                     src={screenshot.url}
-                                    alt="App screenshot"
+                                    alt={`${title} screenshot ${i + 1} of ${screenshots.length}`}
                                     loading="lazy"
                                     class="h-64 sm:h-80 md:h-96 w-auto object-contain"
-                                    onload="this.closest('.screenshot-loader').style.height = 'auto'"
-                                    onerror="this.closest('.screenshot-loader').remove()"
+                                    onerror="this.style.display='none'"
                                     style="aspect-ratio: auto;"
                                 />
                             </div>
@@ -53,7 +52,13 @@ const { screenshots, title = 'Screenshots' } = Astro.props;
                     )}
                     aria-label="Scroll left"
                 >
-                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                        class="size-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
@@ -72,7 +77,13 @@ const { screenshots, title = 'Screenshots' } = Astro.props;
                     )}
                     aria-label="Scroll right"
                 >
-                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                        class="size-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
@@ -83,8 +94,11 @@ const { screenshots, title = 'Screenshots' } = Astro.props;
                 </button>
             </div>
 
-            <div class="md:hidden mt-2 text-center text-xs text-gray-500 dark:text-gray-400">
-                Swipe to see more
+            <div
+                class="md:hidden mt-2 text-center text-xs text-gray-500 dark:text-gray-400"
+                aria-live="polite"
+            >
+                Swipe or use arrow keys to see more
             </div>
         </div>
     )
@@ -97,6 +111,17 @@ const { screenshots, title = 'Screenshots' } = Astro.props;
 
     if (scrollContainer && leftButton && rightButton) {
         const scrollAmount = 320; // Scroll by approximately one screenshot + gap
+
+        // Add keyboard scrolling
+        scrollContainer.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                scrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            }
+        });
 
         leftButton.addEventListener('click', () => {
             scrollContainer.scrollBy({

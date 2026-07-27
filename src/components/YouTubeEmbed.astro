@@ -23,7 +23,10 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                     <div class="relative group">
                         <div
                             id="shorts-scroll"
-                            class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
+                            role="region"
+                            aria-label="YouTube Shorts — use arrow keys to scroll"
+                            tabindex="0"
+                            class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 dark:focus-visible:outline-primary-400 rounded-lg"
                         >
                             {youtubeShortsIds.map((id) => (
                                 <div class="flex-shrink-0 snap-center overflow-hidden shorts-loader">
@@ -32,7 +35,7 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                                             <iframe
                                                 class="w-full h-full rounded-lg"
                                                 src={`https://www.youtube.com/embed/${id}`}
-                                                title="YouTube Short"
+                                                title={`YouTube Short ${youtubeShortsIds.indexOf(id) + 1} of ${youtubeShortsIds.length}`}
                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                 allowfullscreen
                                             />
@@ -56,6 +59,7 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
+                                aria-hidden="true"
                             >
                                 <path
                                     stroke-linecap="round"
@@ -80,6 +84,7 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
+                                aria-hidden="true"
                             >
                                 <path
                                     stroke-linecap="round"
@@ -106,7 +111,10 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                     <div class="relative group">
                         <div
                             id="long-form-scroll"
-                            class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
+                            role="region"
+                            aria-label="YouTube Videos — use arrow keys to scroll"
+                            tabindex="0"
+                            class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 dark:focus-visible:outline-primary-400 rounded-lg"
                         >
                             {youtubeVideoIds.map((id) => (
                                 <div class="flex-shrink-0 snap-center overflow-hidden long-form-loader">
@@ -115,7 +123,7 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                                             <iframe
                                                 class="w-full h-full rounded-lg"
                                                 src={`https://www.youtube.com/embed/${id}`}
-                                                title="YouTube Video"
+                                                title={`YouTube Video ${youtubeVideoIds.indexOf(id) + 1} of ${youtubeVideoIds.length}`}
                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                 allowfullscreen
                                             />
@@ -139,6 +147,7 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
+                                aria-hidden="true"
                             >
                                 <path
                                     stroke-linecap="round"
@@ -163,6 +172,7 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
+                                aria-hidden="true"
                             >
                                 <path
                                     stroke-linecap="round"
@@ -192,6 +202,17 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
     if (shortsScrollContainer && shortsLeftButton && shortsRightButton) {
         const scrollAmount = 320; // Scroll by approximately one screenshot + gap
 
+        // Add keyboard scrolling
+        shortsScrollContainer.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                shortsScrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                shortsScrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            }
+        });
+
         shortsLeftButton.addEventListener('click', () => {
             shortsScrollContainer.scrollBy({
                 left: -scrollAmount,
@@ -213,6 +234,17 @@ const { youtubeVideoIds = [], youtubeShortsIds = [] } = Astro.props;
 
     if (longFormScrollContainer && longFormLeftButton && longFormRightButton) {
         const scrollAmount = 320; // Scroll by approximately one screenshot + gap
+
+        // Add keyboard scrolling
+        longFormScrollContainer.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                longFormScrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                longFormScrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            }
+        });
 
         longFormLeftButton.addEventListener('click', () => {
             longFormScrollContainer.scrollBy({

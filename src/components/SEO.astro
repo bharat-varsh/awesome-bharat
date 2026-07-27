@@ -55,8 +55,7 @@ const twitterHandle = '@awesomebharat';
 
 const imageUrl = new URL(image, Astro.site).toString();
 
-const structuredDataJson =
-    structuredData && JSON.stringify(structuredData, null, 2);
+const structuredDataJson = structuredData && JSON.stringify(structuredData, null, 2);
 ---
 
 <!-- Primary Meta Tags -->
@@ -90,6 +89,8 @@ const structuredDataJson =
 <meta name="googlebot" content="index, follow" />
 
 <!-- JSON-LD Structured Data -->
-{structuredDataJson && (
-    <script type="application/ld+json" is:inline set:html={structuredDataJson} />
-)}
+{
+    structuredDataJson && (
+        <script type="application/ld+json" is:inline set:html={structuredDataJson} />
+    )
+}

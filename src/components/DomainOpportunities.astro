@@ -81,9 +81,9 @@ if (!hasData) return;
                     </h3>
                     <div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5">
                         {data.achievements.map((item: Achieve) => (
-                            <article class="group relative overflow-hidden rounded-xl border border-amber-200/60 bg-gradient-to-br from-amber-50/80 to-white p-5 ring-1 ring-amber-300/20 transition-all hover:shadow-lg hover:shadow-amber-200/30 dark:border-amber-800/40 dark:from-amber-950/20 dark:to-neutral-900 dark:ring-amber-700/20 dark:hover:shadow-amber-900/20">
+                            <article class="group relative overflow-hidden rounded-xl border border-amber-200/60 bg-gradient-to-br from-amber-50/80 to-white p-5 ring-1 ring-amber-300/20 transition-all hover:shadow-lg hover:shadow-amber-200/30 dark:border-amber-700/50 dark:from-amber-950/30 dark:to-neutral-900 dark:ring-amber-700/30 dark:hover:shadow-amber-900/30">
                                 {item.badge && (
-                                    <span class="mb-3 inline-block rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800 dark:bg-amber-900/60 dark:text-amber-300">
+                                    <span class="mb-3 inline-block rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800 dark:bg-amber-800/70 dark:text-amber-200">
                                         {item.badge}
                                     </span>
                                 )}
@@ -100,7 +100,7 @@ if (!hasData) return;
                                             href={item.source}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            class="inline-flex items-center gap-1 font-medium text-primary-600 underline-offset-2 hover:underline dark:text-primary-400"
+                                            class="inline-flex items-center gap-1 font-medium text-primary-600 underline-offset-2 hover:underline dark:text-primary-300"
                                         >
                                             Source
                                             <svg
@@ -108,6 +108,7 @@ if (!hasData) return;
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24"
+                                                aria-hidden="true"
                                             >
                                                 <path
                                                     stroke-linecap="round"
@@ -198,7 +199,7 @@ if (!hasData) return;
                     </h3>
                     <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5">
                         {data.actions.map((act: Act) => (
-                            <div class="rounded-xl border border-emerald-200/60 bg-gradient-to-br from-emerald-50/80 to-white p-5 ring-1 ring-emerald-300/20 transition-all hover:shadow-lg hover:shadow-emerald-200/30 dark:border-emerald-800/40 dark:from-emerald-950/20 dark:to-neutral-900 dark:ring-emerald-700/20 dark:hover:shadow-emerald-900/20">
+                            <div class="rounded-xl border border-emerald-200/60 bg-gradient-to-br from-emerald-50/80 to-white p-5 ring-1 ring-emerald-300/20 transition-all hover:shadow-lg hover:shadow-emerald-200/30 dark:border-emerald-700/50 dark:from-emerald-950/30 dark:to-neutral-900 dark:ring-emerald-700/30 dark:hover:shadow-emerald-900/30">
                                 <div class="mb-3 flex items-center gap-2">
                                     <span class="text-xl" aria-hidden="true">
                                         {getActionIcon(act.type)}
@@ -217,7 +218,7 @@ if (!hasData) return;
                                         href={act.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600"
+                                        class="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500"
                                     >
                                         Get Started
                                         <svg
@@ -225,6 +226,7 @@ if (!hasData) return;
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
+                                            aria-hidden="true"
                                         >
                                             <path
                                                 stroke-linecap="round"
@@ -275,7 +277,7 @@ if (!hasData) return;
                                             href={ms.sourceUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
+                                            class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary-600 hover:underline dark:text-primary-300"
                                         >
                                             Read more →
                                         </a>

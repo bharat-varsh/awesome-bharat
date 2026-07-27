@@ -30,9 +30,7 @@ function resolveEntryDate(entry: ScannedEntry): Date {
 }
 
 export async function GET(context: APIContext) {
-    const allEntries = await Promise.all(
-        SCANNED_COLLECTIONS.map((name) => getCollection(name))
-    );
+    const allEntries = await Promise.all(SCANNED_COLLECTIONS.map((name) => getCollection(name)));
 
     const items: RSSItem[] = [];
     for (const [idx, entries] of allEntries.entries()) {
@@ -54,7 +52,8 @@ export async function GET(context: APIContext) {
 
     return rss({
         title: 'Awesome Bharat',
-        description: 'A curated collection of remarkable things made by Indians — apps, people, companies, channels, products, blogs, projects, communities, podcasts, and initiatives.',
+        description:
+            'A curated collection of remarkable things made by Indians — apps, people, companies, channels, products, blogs, projects, communities, podcasts, and initiatives.',
         site: context.site?.toString() || 'https://awesomebharat.com',
         items,
         customData: '<language>en-in</language>',
