@@ -17,6 +17,7 @@
         "postbuild": "npx pagefind --site docs",
         "pack": "npx repomix --config repomix.config.json",
         "scaffold": "node scripts/scaffold-content.mjs",
+        "validate": "node scripts/validate-entry.mjs",
         "graphify": "python -m graphify . --code-only",
         "graphify:update": "python -m graphify update .",
         "test:e2e": "playwright test",

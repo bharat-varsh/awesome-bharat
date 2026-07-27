@@ -454,6 +454,111 @@ npm run test:e2e:ui       # Playwright UI mode
 
 Specs in `e2e/` cover homepage, apps listing/detail, domains, and narrow viewport. Config: `playwright.config.ts`. After UI/layout work, run e2e before considering the task done.
 
+## Quality Gates
+
+Before considering any task complete, verify these gates:
+
+### Code Gate
+
+- `npm run check` — astro check + ESLint (fast validation, no build)
+- `npm run build` — full production build (validates all MDX against Zod schemas)
+- `npm run test:e2e` — Playwright UI smoke tests (run after layout/component changes)
+- No `console.log` or `debugger` in committed code
+- TypeScript strict mode — no `any` where avoidable
+
+### Content Gate
+
+- `node scripts/validate-entry.mjs <path>` — frontmatter completeness & quality check
+- All schema-required fields present (see `src/content/config.ts`)
+- At least one `domains` set — controls surfacing on domain pages
+- Author/member slugs reference existing entries (create person/company first)
+- Logo/avatar registered in `src/utils/imageRegistry.ts`
+- No TODO placeholders, example.com URLs, or unverified claims
+- Body length 150–400 words with closing CTA
+- Cross-collection hrefs use `getEntryHref()` from `routeUtils.ts`
+
+### SEO Gate
+
+- Detail pages have unique `<title>` and `<meta name="description">` via `SEO.astro`
+- Entries indexable unless `draft: true`
+- RSS feeds (`src/pages/rss/[collection].xml.ts`) cover all non-draft entries
+- Sitemap (`@astrojs/sitemap`) included and configured for all public routes
+- `canonical` URL matches the production site URL
+
+### Accessibility Gate
+
+- All images have `alt` text
+- Interactive elements have visible focus styles
+- Skip-to-content link present (see `BaseLayout.astro`)
+- Color contrast meets WCAG AA (check dark mode separately)
+- Keyboard navigation: all CTAs, menus, scroll containers reachable via Tab/Arrow keys
+- ARIA labels on icon-only buttons (theme toggle, sidebar trigger)
+- Decorative SVGs marked `aria-hidden="true"`
+
+---
+
+## Contributor Workflow
+
+For contributors adding new content, the workflow is:
+
+1. **Scaffold**: `npm run scaffold -- <type> <slug> [--title "Name"] [--logo]` generates a draft MDX with template frontmatter
+2. **Fill**: Complete all required fields per section in [CONTRIBUTING.md](CONTRIBUTING.md#per-collection-required--recommended-fields)
+3. **Validate**: `node scripts/validate-entry.mjs <path>` checks completeness
+4. **Verify**: `npm run check && npm run build`
+
+For agent-assisted content creation, use `skills/add-content-entry` skill which automates the research → fill → verify flow.
+
+Full contributor guide: [CONTRIBUTING.md](CONTRIBUTING.md)
+
+---
+
+## Maintenance Checklist
+
+When working on the codebase, keep these invariants in check:
+
+### Route Mapping
+
+All cross-collection hrefs use `getEntryHref(collection, slug)` from `src/utils/routeUtils.ts`.
+The `ROUTE_PREFIX` map there is the single source of truth for URL path overrides (e.g., `persons → people`).
+**Do not** hardcode path patterns like `/people/{slug}` directly.
+
+### CTA Mapping
+
+`src/utils/ctaUtils.ts` is the single source of truth for CTA label and URL resolution.
+**Must stay in sync** with `src/content/config.ts` schemas:
+
+| Collection | Schema CTA field       | CTA label           |
+| ---------- | ---------------------- | ------------------- |
+| apps       | `storeLinks`           | Download            |
+| persons    | `website` / `socials`  | Follow / Visit      |
+| companies  | `website`              | Visit               |
+| channels   | `channelUrl`           | Subscribe           |
+| products   | `buyUrl` / `website`   | Buy                 |
+| blogs      | `url`                  | Read                |
+| projects   | `repositoryUrl`        | Contribute          |
+| communities| `joinUrl`              | Join                |
+| podcasts   | `platforms[0]`         | Listen              |
+| initiatives| `howToHelp[0].url`     | Get Involved        |
+
+When adding a new collection: add its entry to `getCTALinks`, `getPrimaryCTALabel`, and `getPrimaryCTAUrl`.
+
+### Feeds & SEO
+
+- `src/pages/rss/[collection].xml.ts` — one feed per collection; must include only non-draft entries
+- `src/pages/rss.xml.ts` — combined feed; reflect collections that are ready for public surfacing
+- `src/pages/domains/[domain]/rss.xml.ts` — domain-filtered feeds
+- Add new collections to sitemap in `astro.config.mjs`
+- Update `SCANNED_COLLECTIONS` in `src/utils/collectionsToScan.ts` for cross-cutting pages
+- `src/utils/domainMeta.ts` must have an entry for every `domainEnum` value in `config.ts`
+
+### Validation Script
+
+`scripts/validate-entry.mjs` should be updated whenever:
+- A new collection is added (add to `COLLECTIONS`, `SCHEMA_REQUIRED`, `RECOMMENDED`)
+- Zod schemas change (update field requirements to match)
+
+---
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
