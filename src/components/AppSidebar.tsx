@@ -4,6 +4,13 @@ import {
     AppWindow,
     Users,
     Building2,
+    Radio,
+    ShoppingBag,
+    Newspaper,
+    GitFork,
+    MessageCircle,
+    Mic,
+    HeartHandshake,
 } from 'lucide-react';
 
 import {
@@ -24,7 +31,7 @@ import {
 export type NavItem = {
     name: string;
     href: string;
-    icon: 'home' | 'domains' | 'apps' | 'persons' | 'companies';
+    icon: 'home' | 'domains' | 'apps' | 'persons' | 'companies' | 'channels' | 'products' | 'blogs' | 'projects' | 'communities' | 'podcasts' | 'initiatives';
     count?: number | null;
 };
 
@@ -34,6 +41,13 @@ const iconMap = {
     apps: AppWindow,
     persons: Users,
     companies: Building2,
+    channels: Radio,
+    products: ShoppingBag,
+    blogs: Newspaper,
+    projects: GitFork,
+    communities: MessageCircle,
+    podcasts: Mic,
+    initiatives: HeartHandshake,
 } as const;
 
 function isActive(currentPath: string, href: string) {

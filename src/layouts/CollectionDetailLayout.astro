@@ -1,0 +1,452 @@
+---
+/**
+ * Shared layout for detail pages across all non-app collections.
+ * Apps use the more specialized ContentLayout.astro with download/store specific features.
+ *
+ * Provides:
+ *  - BaseLayout shell with SEO
+ *  - Header card with image/logo, title, domains, tags, primary CTA button
+ *  - Description block
+ *  - MDX content slot
+ *  - Right sidebar slot for related content
+ */
+
+import BaseLayout from './BaseLayout.astro';
+import RightSidebar from '@/components/RightSidebar.astro';
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import type { CTAData } from '@/utils/ctaUtils.ts';
+import { resolveLogo } from '@/utils/imageResolvers.ts';
+import { getEntryHref } from '@/utils/routeUtils.ts';
+import { getPrimaryCTALabel, getPrimaryCTAUrl, getCTALinks } from '@/utils/ctaUtils.ts';
+import { getDomainMeta } from '@/utils/domainMeta.ts';
+import { badgeVariants } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import googlePlayBadge from '@/assets/images/badges/google-play-badge.png';
+import appStoreBadge from '@/assets/images/badges/app-store-badge.png';
+import fdroidBadge from '@/assets/images/badges/fdroid-badge.png';
+import githubBadge from '@/assets/images/badges/github-badge.png';
+
+export interface Props {
+    slug: string;
+    collection: string;
+    title: string;
+    description: string;
+    image?: string;
+    date?: Date;
+    tags?: string[];
+    domains?: string[];
+    ctaData: CTAData;
+    authors?: Array<CollectionEntry<'persons'>>;
+    structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
+}
+
+const {
+    slug,
+    collection,
+    title,
+    description,
+    image,
+    date,
+    tags,
+    domains,
+    ctaData,
+    authors = [],
+} = Astro.props;
+const resolvedImage = resolveLogo(slug, image);
+
+// Compute CTA groups and primary button
+const ctaGroups = getCTALinks(collection, ctaData);
+const primaryCTALabel = getPrimaryCTALabel(collection, ctaData);
+const primaryCTAUrl = getPrimaryCTAUrl(collection, ctaData);
+const totalLinks = ctaGroups.reduce((total, group) => total + group.links.length, 0);
+
+// Resolve author links
+const primaryAuthor = authors.length > 0 ? authors[0] : null;
+const authorLink = primaryAuthor
+    ? getEntryHref(primaryAuthor.collection, primaryAuthor.slug)
+    : null;
+
+// External links for the footer section
+const externalLinkItems =
+    'externalLinks' in ctaData && Array.isArray(ctaData.externalLinks)
+        ? (ctaData.externalLinks as Array<{ label: string; url: string }>)
+        : [];
+---
+
+<BaseLayout
+    title={`${title} | Awesome Bharat`}
+    description={description}
+    image={image}
+    article={true}
+    publishedTime={date?.toISOString()}
+    tags={tags}
+    structuredData={Astro.props.structuredData}
+>
+    <div class="flex flex-col lg:flex-row gap-0 justify-center items-start">
+        <article class="w-full max-w-3xl px-5 sm:px-8 py-8" data-pagefind-body>
+            <header class="mb-12">
+                <!-- Header card -->
+                <div
+                    class="rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-card bg-white dark:bg-neutral-900 p-5 sm:p-7"
+                >
+                    <div class="flex flex-col md:flex-row gap-6 items-start">
+                        <!-- Image/Logo -->
+                        {
+                            resolvedImage && (
+                                <div class="flex-shrink-0 mx-auto md:mx-0">
+                                    <div class="w-20 h-20 sm:w-24 sm:h-24 overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800 p-1">
+                                        <Image
+                                            class="w-full h-full object-contain"
+                                            src={resolvedImage}
+                                            alt={title}
+                                            loading="eager"
+                                            format="webp"
+                                            width={96}
+                                            height={96}
+                                        />
+                                    </div>
+                                </div>
+                            )
+                        }
+
+                        <!-- Info -->
+                        <div class="flex-1 min-w-0">
+                            <h1
+                                class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight leading-tight line-clamp-2 text-gray-900 dark:text-gray-100"
+                            >
+                                {title}
+                            </h1>
+
+                            <!-- Author -->
+                            {
+                                primaryAuthor && (
+                                    <div class="mt-1 text-sm sm:text-base text-gray-600 dark:text-gray-400">
+                                        <span class="text-gray-500 dark:text-gray-500">by </span>
+                                        <a
+                                            href={authorLink}
+                                            class="text-primary-600 dark:text-primary-400 hover:underline font-medium"
+                                        >
+                                            {primaryAuthor.data.name}
+                                        </a>
+                                    </div>
+                                )
+                            }
+
+                            <!-- Domain chips -->
+                            {
+                                domains != null && domains.length > 0 && (
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        {domains.map((domain: string) => {
+                                            const dm = getDomainMeta(domain);
+                                            return (
+                                                <a
+                                                    href={`/domains/${domain}`}
+                                                    class={cn(
+                                                        badgeVariants({ variant: 'secondary' }),
+                                                        'h-auto gap-1 px-3 py-1 text-xs sm:text-sm'
+                                                    )}
+                                                >
+                                                    <span aria-hidden="true">{dm.icon}</span>
+                                                    {dm.label}
+                                                </a>
+                                            );
+                                        })}
+                                    </div>
+                                )
+                            }
+
+                            <!-- Tags -->
+                            {
+                                tags && tags.length > 0 && (
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        {tags.slice(0, 8).map((tag) => (
+                                            <a
+                                                href={`/tags/${tag}`}
+                                                class={cn(badgeVariants({ variant: 'outline' }))}
+                                            >
+                                                #{tag}
+                                            </a>
+                                        ))}
+                                        {tags.length > 8 && (
+                                            <span class="py-1 text-xs text-muted-foreground">
+                                                +{tags.length - 8} more
+                                            </span>
+                                        )}
+                                    </div>
+                                )
+                            }
+                        </div>
+
+                        <!-- Primary CTA -->
+                        <div
+                            class="flex-shrink-0 flex items-start justify-center md:justify-start w-full md:w-auto"
+                        >
+                            {
+                                primaryCTALabel && primaryCTAUrl && (
+                                    <div class="relative w-full md:w-auto">
+                                        <a
+                                            href={primaryCTAUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="inline-flex items-center justify-center px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold rounded-xl transition-colors w-full sm:w-auto bg-primary-600 hover:bg-primary-700 text-white dark:bg-primary-500 dark:hover:bg-primary-400 shadow-card hover:shadow-card-hover"
+                                            data-cta-dropdown
+                                        >
+                                            {primaryCTALabel}
+                                            {totalLinks > 1 ? (
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    class="w-4 h-4 ml-2"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M19 9l-7 7-7-7"
+                                                    />
+                                                </svg>
+                                            ) : (
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    class="w-4 h-4 ml-2"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </a>
+                                        {totalLinks > 1 && (
+                                            <div
+                                                class="absolute left-0 right-0 sm:left-auto sm:right-0 z-50 mt-2 w-64 p-3 bg-white dark:bg-neutral-900 rounded-xl shadow-xl border border-neutral-200 dark:border-neutral-700 hidden cta-dropdown"
+                                                data-cta-menu
+                                            >
+                                                <div class="flex flex-col gap-3">
+                                                    {ctaGroups.map((group) => (
+                                                        <div>
+                                                            <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                                                                {group.label}
+                                                            </div>
+                                                            <div class="flex flex-col gap-1">
+                                                                {group.links.map((link) => {
+                                                                    const isPlayStore =
+                                                                        link.label
+                                                                            .toLowerCase()
+                                                                            .includes(
+                                                                                'play store'
+                                                                            ) ||
+                                                                        link.url.includes(
+                                                                            'play.google.com'
+                                                                        );
+                                                                    const isAppStore =
+                                                                        link.label
+                                                                            .toLowerCase()
+                                                                            .includes(
+                                                                                'app store'
+                                                                            ) ||
+                                                                        link.url.includes(
+                                                                            'apps.apple.com'
+                                                                        );
+                                                                    const isFdroidStore =
+                                                                        link.label
+                                                                            .toLowerCase()
+                                                                            .includes('fdroid') ||
+                                                                        link.url.includes(
+                                                                            'f-droid.org'
+                                                                        );
+                                                                    const isGithub =
+                                                                        link.label
+                                                                            .toLowerCase()
+                                                                            .includes('github') ||
+                                                                        link.url.includes(
+                                                                            'github.com'
+                                                                        );
+                                                                    return (
+                                                                        <a
+                                                                            href={link.url}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                                        >
+                                                                            {isPlayStore ? (
+                                                                                <Image
+                                                                                    src={
+                                                                                        googlePlayBadge
+                                                                                    }
+                                                                                    alt={link.label}
+                                                                                    class="h-8 w-auto"
+                                                                                    format="webp"
+                                                                                    loading="lazy"
+                                                                                />
+                                                                            ) : isFdroidStore ? (
+                                                                                <Image
+                                                                                    src={
+                                                                                        fdroidBadge
+                                                                                    }
+                                                                                    alt={link.label}
+                                                                                    class="h-8 w-auto"
+                                                                                    format="webp"
+                                                                                    loading="lazy"
+                                                                                />
+                                                                            ) : isAppStore ? (
+                                                                                <Image
+                                                                                    src={
+                                                                                        appStoreBadge
+                                                                                    }
+                                                                                    alt={link.label}
+                                                                                    class="h-8 w-auto"
+                                                                                    format="webp"
+                                                                                    loading="lazy"
+                                                                                />
+                                                                            ) : isGithub ? (
+                                                                                <Image
+                                                                                    src={
+                                                                                        githubBadge
+                                                                                    }
+                                                                                    alt={link.label}
+                                                                                    class="h-8 w-auto"
+                                                                                    format="webp"
+                                                                                    loading="lazy"
+                                                                                />
+                                                                            ) : (
+                                                                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                                                    {link.label}
+                                                                                </span>
+                                                                            )}
+                                                                        </a>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )
+                            }
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Description -->
+            <div class="mt-10 mb-6">
+                <p
+                    class="text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed max-w-none"
+                >
+                    {description}
+                </p>
+            </div>
+
+            <!-- Collection-specific metadata slot -->
+            <slot name="metadata" />
+
+            <!-- MDX Content -->
+            <div class="prose prose-lg dark:prose-dark max-w-none mb-2">
+                <slot />
+            </div>
+
+            <!-- External resources -->
+            {
+                externalLinkItems.length > 0 && (
+                    <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+                        <div class="mb-6">
+                            <h3 class="text-xl font-semibold mb-3">External Resources</h3>
+                            <ul class="space-y-2">
+                                {externalLinkItems.map((link: { label: string; url: string }) => (
+                                    <li>
+                                        <a
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="text-primary-600 dark:text-primary-400 hover:underline"
+                                        >
+                                            {link.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </footer>
+                )
+            }
+        </article>
+
+        <RightSidebar>
+            <slot name="right-sidebar" />
+        </RightSidebar>
+    </div>
+
+    <script>
+        // CTA Dropdown functionality with full keyboard support
+        function initCTADropdowns() {
+            const triggers = document.querySelectorAll<HTMLAnchorElement>('[data-cta-dropdown]');
+
+            triggers.forEach((trigger) => {
+                // Set initial aria-expanded
+                if (!trigger.hasAttribute('aria-expanded')) {
+                    const menu = trigger.nextElementSibling as HTMLElement | null;
+                    const isHidden = menu?.classList.contains('hidden') ?? true;
+                    trigger.setAttribute('aria-expanded', String(!isHidden));
+                }
+
+                trigger.addEventListener('click', (e) => {
+                    const menu = trigger.nextElementSibling as HTMLElement | null;
+                    if (menu && menu.classList.contains('cta-dropdown')) {
+                        e.preventDefault();
+                        const isNowOpen = !menu.classList.contains('hidden');
+                        menu.classList.toggle('hidden');
+                        trigger.setAttribute('aria-expanded', String(isNowOpen));
+                    }
+                });
+
+                // Allow Enter/Space on the trigger
+                trigger.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        trigger.click();
+                    }
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                const target = e.target as HTMLElement;
+                if (!target.closest('[data-cta-dropdown]') && !target.closest('.cta-dropdown')) {
+                    document.querySelectorAll<HTMLElement>('.cta-dropdown').forEach((menu) => {
+                        menu.classList.add('hidden');
+                        const trigger = menu.previousElementSibling as HTMLElement | null;
+                        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+                    });
+                }
+            });
+
+            // Escape key closes all dropdowns
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll<HTMLElement>('.cta-dropdown').forEach((menu) => {
+                        if (!menu.classList.contains('hidden')) {
+                            menu.classList.add('hidden');
+                            const trigger = menu.previousElementSibling as HTMLElement | null;
+                            if (trigger) trigger.setAttribute('aria-expanded', 'false');
+                            // Return focus to the trigger
+                            (trigger as HTMLElement | null)?.focus();
+                        }
+                    });
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initCTADropdowns);
+    </script>
+</BaseLayout>

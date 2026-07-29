@@ -33,7 +33,13 @@ const { title, viewAllHref, id } = Astro.props;
             )}
             data-scroll-container={id}
         >
-            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+                class="size-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
                 <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -44,7 +50,10 @@ const { title, viewAllHref, id } = Astro.props;
 
         <div
             id={id}
-            class="flex gap-4 overflow-x-auto scroll-smooth pb-2 snap-x snap-mandatory px-1 md:px-12 scrollbar-hide"
+            role="region"
+            aria-label={`${title} — use arrow keys to scroll`}
+            tabindex="0"
+            class="flex gap-4 overflow-x-auto scroll-smooth pb-2 snap-x snap-mandatory px-1 md:px-12 scrollbar-hide focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 dark:focus-visible:outline-primary-400 rounded-lg"
         >
             <slot />
         </div>
@@ -58,7 +67,13 @@ const { title, viewAllHref, id } = Astro.props;
             )}
             data-scroll-container={id}
         >
-            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+                class="size-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
                 <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -68,3 +83,26 @@ const { title, viewAllHref, id } = Astro.props;
         </button>
     </div>
 </section>
+
+<script is:inline>
+    // Keyboard scroll for CardRow containers — scoped via a unique data attribute
+    (function () {
+        const scriptEl = document.currentScript;
+        if (!scriptEl) return;
+        const section = scriptEl.closest('section');
+        if (!section) return;
+        const container = section.querySelector('[role="region"]');
+        if (!container) return;
+        container.addEventListener('keydown', function (e) {
+            if (!(e instanceof KeyboardEvent)) return;
+            const scrollAmount = 160;
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            }
+        });
+    })();
+</script>

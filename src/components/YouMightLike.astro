@@ -1,15 +1,13 @@
 ---
 import RelatedItem from './RelatedItem.astro';
-import type { CollectionEntry } from 'astro:content';
-
-type CollectionType = 'apps' | 'persons' | 'companies';
+import type { AnyCollectionEntry } from '@/utils/relatedContent.ts';
 
 interface Props {
     items: Array<{
-        item: CollectionEntry<CollectionType>;
-        resolved?: Record<string, CollectionEntry<'persons'>>;
+        item: AnyCollectionEntry;
+        resolved?: Record<string, AnyCollectionEntry>;
     }>;
-    collectionName: CollectionType;
+    collectionName: string;
     title?: string;
     maxItems?: number;
 }

@@ -13,6 +13,7 @@ import { Badge, badgeVariants } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { resolveLogo } from '../utils/imageResolvers.ts';
 import { formatCategoryName } from '../utils/textUtils.ts';
+import { getEntryHref } from '../utils/routeUtils.ts';
 import { getCTALinks, getPrimaryCTALabel, getPrimaryCTAUrl } from '../utils/ctaUtils.ts';
 import { getDomainMeta } from '../utils/domainMeta.ts';
 import googlePlayBadge from '../assets/images/badges/google-play-badge.png';
@@ -44,6 +45,7 @@ export interface Props {
     socials?: { label: string; url: string }[];
     website?: string;
     authors?: Array<CollectionEntry<'persons'>>;
+    structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
 const {
@@ -75,7 +77,9 @@ const resolvedImage = resolveLogo(slug, image);
 
 // Get first author for display
 const primaryAuthor = authors.length > 0 ? authors[0] : null;
-const authorLink = primaryAuthor ? `/${primaryAuthor.collection}/${primaryAuthor.slug}` : null;
+const authorLink = primaryAuthor
+    ? getEntryHref(primaryAuthor.collection, primaryAuthor.slug)
+    : null;
 
 // Compute CTA groups and primary button
 const ctaGroups = getCTALinks(collection, { type, source, storeLinks, repositoryLinks, website });
@@ -102,6 +106,7 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
     article={true}
     publishedTime={date.toISOString()}
     tags={tags}
+    structuredData={Astro.props.structuredData}
 >
     <div class="flex flex-col lg:flex-row gap-0 justify-center items-start">
         <article class="w-full max-w-3xl px-5 sm:px-8 py-8" data-pagefind-body>
@@ -403,25 +408,25 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
                         <div class="flex flex-wrap gap-2">
                             <Badge variant="outline" className="h-auto gap-1.5 px-3 py-1">
                                 <span
-                                    class={`size-1.5 rounded-full ${paid ? 'bg-neutral-400' : 'bg-emerald-500'}`}
+                                    class={`size-1.5 rounded-full ${paid ? 'bg-neutral-400 dark:bg-neutral-500' : 'bg-emerald-500'}`}
                                 ></span>
                                 {paid ? 'Paid' : 'Free'}
                             </Badge>
                             <Badge variant="outline" className="h-auto gap-1.5 px-3 py-1">
                                 <span
-                                    class={`size-1.5 rounded-full ${ads ? 'bg-neutral-400' : 'bg-emerald-500'}`}
+                                    class={`size-1.5 rounded-full ${ads ? 'bg-neutral-400 dark:bg-neutral-500' : 'bg-emerald-500'}`}
                                 ></span>
                                 {ads ? 'Has Ads' : 'No Ads'}
                             </Badge>
                             <Badge variant="outline" className="h-auto gap-1.5 px-3 py-1">
                                 <span
-                                    class={`size-1.5 rounded-full ${source === 'open-source' ? 'bg-emerald-500' : 'bg-neutral-400'}`}
+                                    class={`size-1.5 rounded-full ${source === 'open-source' ? 'bg-emerald-500' : 'bg-neutral-400 dark:bg-neutral-500'}`}
                                 ></span>
                                 {source === 'open-source' ? 'Open Source' : 'Closed Source'}
                             </Badge>
                             <Badge variant="outline" className="h-auto gap-1.5 px-3 py-1">
                                 <span
-                                    class={`size-1.5 rounded-full ${offline ? 'bg-emerald-500' : 'bg-neutral-400'}`}
+                                    class={`size-1.5 rounded-full ${offline ? 'bg-emerald-500' : 'bg-neutral-400 dark:bg-neutral-500'}`}
                                 ></span>
                                 {offline ? 'Works Offline' : 'Needs Internet'}
                             </Badge>
@@ -501,16 +506,33 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
     </div>
 
     <script>
-        // CTA Dropdown functionality
-        document.addEventListener('DOMContentLoaded', () => {
+        // CTA Dropdown functionality with full keyboard support
+        function initCTADropdowns() {
             const triggers = document.querySelectorAll<HTMLAnchorElement>('[data-cta-dropdown]');
 
             triggers.forEach((trigger) => {
+                // Set initial aria-expanded
+                if (!trigger.hasAttribute('aria-expanded')) {
+                    const menu = trigger.nextElementSibling as HTMLElement | null;
+                    const isHidden = menu?.classList.contains('hidden') ?? true;
+                    trigger.setAttribute('aria-expanded', String(!isHidden));
+                }
+
                 trigger.addEventListener('click', (e) => {
                     const menu = trigger.nextElementSibling as HTMLElement | null;
                     if (menu && menu.classList.contains('cta-dropdown')) {
                         e.preventDefault();
+                        const isNowOpen = !menu.classList.contains('hidden');
                         menu.classList.toggle('hidden');
+                        trigger.setAttribute('aria-expanded', String(isNowOpen));
+                    }
+                });
+
+                // Allow Enter/Space on the trigger
+                trigger.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        trigger.click();
                     }
                 });
             });
@@ -521,9 +543,28 @@ const primaryCTAUrl = getPrimaryCTAUrl(collection, {
                 if (!target.closest('[data-cta-dropdown]') && !target.closest('.cta-dropdown')) {
                     document.querySelectorAll<HTMLElement>('.cta-dropdown').forEach((menu) => {
                         menu.classList.add('hidden');
+                        const trigger = menu.previousElementSibling as HTMLElement | null;
+                        if (trigger) trigger.setAttribute('aria-expanded', 'false');
                     });
                 }
             });
-        });
+
+            // Escape key closes all dropdowns
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll<HTMLElement>('.cta-dropdown').forEach((menu) => {
+                        if (!menu.classList.contains('hidden')) {
+                            menu.classList.add('hidden');
+                            const trigger = menu.previousElementSibling as HTMLElement | null;
+                            if (trigger) trigger.setAttribute('aria-expanded', 'false');
+                            // Return focus to the trigger
+                            (trigger as HTMLElement | null)?.focus();
+                        }
+                    });
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initCTADropdowns);
     </script>
 </BaseLayout>

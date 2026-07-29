@@ -1,0 +1,96 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import type { Author } from '@/content/config.ts';
+import CollectionDetailLayout from '@/layouts/CollectionDetailLayout.astro';
+import YouMightLike from '@/components/YouMightLike.astro';
+import { getRelatedContentSimple } from '@/utils/relatedContent.ts';
+import { Badge } from '@/components/ui/badge';
+
+export const getStaticPaths = (async () => {
+    const channels = (await getCollection('channels')) as Array<CollectionEntry<'channels'>>;
+    const publishedChannels = channels.filter((channel) => !channel.data.draft);
+
+    return publishedChannels.map((channel) => ({
+        params: { slug: channel.slug },
+        props: { channel, allChannels: publishedChannels },
+    }));
+}) satisfies GetStaticPaths;
+
+const { channel, allChannels } = Astro.props as {
+    channel: CollectionEntry<'channels'>;
+    allChannels: Array<CollectionEntry<'channels'>>;
+};
+const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+const resolvedAuthors = (channel.data.authors ?? [])
+    .map((author: Author) => persons.find((person) => person.slug === author.slug))
+    .filter(
+        (author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> =>
+            Boolean(author)
+    );
+
+const { Content } = await channel.render();
+
+const relatedChannels = getRelatedContentSimple(channel, allChannels, 'channels', 8);
+const relatedChannelsEnriched = relatedChannels.map((item) => ({
+    item,
+    resolved: undefined,
+}));
+---
+
+<CollectionDetailLayout
+    slug={channel.slug}
+    collection="channels"
+    title={channel.data.name}
+    description={channel.data.description}
+    image={channel.data.logo}
+    tags={channel.data.tags}
+    domains={channel.data.domains}
+    ctaData={{
+        channelUrl: channel.data.channelUrl,
+    }}
+    authors={resolvedAuthors}
+>
+    <!-- Collection-specific metadata -->
+    <div slot="metadata">
+        <div class="flex flex-wrap gap-4 mb-6">
+            {
+                channel.data.subscriberRange && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Subscribers:</span>
+                        <span>{channel.data.subscriberRange}</span>
+                    </div>
+                )
+            }
+            {
+                channel.data.language && channel.data.language.length > 0 && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Language:</span>
+                        <span>{channel.data.language.join(', ')}</span>
+                    </div>
+                )
+            }
+            {
+                channel.data.topics && channel.data.topics.length > 0 && (
+                    <div class="flex flex-wrap gap-2">
+                        {channel.data.topics.map((topic: string) => (
+                            <Badge variant="secondary">{topic}</Badge>
+                        ))}
+                    </div>
+                )
+            }
+        </div>
+    </div>
+
+    <Content />
+
+    <div slot="right-sidebar">
+        <YouMightLike
+            items={relatedChannelsEnriched}
+            collectionName="channels"
+            title="You might also like"
+            maxItems={8}
+        />
+    </div>
+</CollectionDetailLayout>

@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContentCardFull from '@/components/ContentCardFull.astro';
+import CollectionHero from '@/components/CollectionHero.astro';
+import { resolveLogo } from '@/utils/imageResolvers.ts';
+import { getDomainMeta } from '@/utils/domainMeta.ts';
+
+const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+const visiblePersons = persons.filter((person) => !person.data.draft);
+---
+
+<BaseLayout
+    title="People | Awesome Bharat"
+    description="Inspiring people from India making a global impact"
+>
+    <div class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+        <div class="mb-10">
+            <CollectionHero
+                title="People"
+                description="Inspiring people from India making a global impact"
+                countLabel={`${visiblePersons.length} people`}
+                icon="👤"
+                eyebrow="Collection"
+            />
+        </div>
+
+        <div
+            class="animate-fade-in grid
+        grid-cols-[repeat(auto-fit,minmax(280px,1fr))]
+        gap-6"
+        >
+            {
+                visiblePersons.map((person) => (
+                    <ContentCardFull
+                        title={person.data.name}
+                        description={person.data.bio}
+                        slug={person.slug}
+                        collection="people"
+                        logoSrc={
+                            person.data.avatar
+                                ? resolveLogo(person.slug, person.data.avatar)
+                                : undefined
+                        }
+                        domains={(person.data.domains ?? []).map(
+                            (d: string) => getDomainMeta(d).label
+                        )}
+                        ctaLabel="View Profile"
+                        ctaUrl={person.data.website ?? null}
+                        featured={person.data.featured}
+                    />
+                ))
+            }
+        </div>
+    </div>
+</BaseLayout>

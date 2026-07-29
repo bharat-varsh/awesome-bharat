@@ -37,6 +37,17 @@ The site exists to break the notion that India has nothing noteworthy, to bring 
 | Podcast          | Listen         | `platforms[0]`                  |
 | Initiative       | Get Involved   | `howToHelp[0].url` or `website` |
 
+### Routing Convention
+
+Collection keys may differ from their public URL path prefix:
+
+| Collection key | Public route           |
+| -------------- | ---------------------- |
+| `persons`      | `/people/{slug}`       |
+| all others     | `/{collection}/{slug}` |
+
+**All cross-collection hrefs must go through `getEntryHref(collection, slug)`** from `src/utils/routeUtils.ts`. Do not hardcode the path pattern directly — always use the utility to guarantee consistent routing.
+
 ---
 
 ## Tech Stack
@@ -57,49 +68,94 @@ src/
 │   ├── apps/          # App entries (MDX)
 │   ├── persons/       # Person profiles (MDX)
 │   ├── companies/     # Company profiles (MDX)
+│   ├── channels/      # YouTube channel entries (MDX)
+│   ├── products/      # Product entries (MDX)
+│   ├── blogs/         # Blog entries (MDX)
+│   ├── projects/      # Open-source project entries (MDX)
+│   ├── communities/   # Community entries (MDX)
+│   ├── podcasts/      # Podcast entries (MDX)
+│   ├── initiatives/   # Social initiative entries (MDX)
 │   └── config.ts      # Content collection schemas (Zod)
 ├── components/        # Astro components
-│   ├── ContentCard.astro      # Compact card for scroll rows
-│   ├── ContentCardFull.astro  # Rich card for listing grids
-│   ├── ContentLayout.astro    # Detail page layout
-│   ├── CollectionHero.astro   # Hero banner for listing pages
-│   ├── Engage.astro           # Contribute / community / web links
-│   ├── Header.astro
+│   ├── ContentCard.astro        # Compact card for scroll rows
+│   ├── ContentCardFull.astro    # Rich card for listing grids
+│   ├── ContentLayout.astro      # Detail page layout
+│   ├── CollectionHero.astro     # Hero banner for listing pages
+│   ├── CollectionDetailLayout.astro  # Shared detail layout for all non-app collections
+│   ├── Engage.astro             # Contribute / community / web links
 │   ├── Footer.astro
-│   ├── LeftSidebar.astro      # Navigation sidebar
-│   ├── MobileNav.astro        # Mobile navigation drawer
-│   ├── RightSidebar.astro     # Related content sidebar
-│   ├── SidebarNav.astro       # Nav links with collection counts
-│   ├── StoreBadges.astro      # Store download badges
-│   ├── YouMightLike.astro     # Related items grid
-│   ├── RelatedItem.astro      # Single related item card
+│   ├── AppSidebar.tsx            # shadcn sidebar with nav items
+│   ├── AppSidebarLayout.tsx      # Sidebar + header shell
+│   ├── RightSidebar.astro       # Related content sidebar
+│   ├── StoreBadges.astro        # Store download badges
+│   ├── YouMightLike.astro       # Related items grid
+│   ├── RelatedItem.astro        # Single related item card
 │   ├── Screenshots.astro
 │   ├── SEO.astro
-│   ├── YouTubeEmbed.astro
-│   └── ThemeToggle.astro
-│   └── ThemeToggle.astro
+│   ├── Search.astro             # Pagefind search component
+│   ├── ThemeToggle.tsx           # Dark/light mode toggle
+│   └── YouTubeEmbed.astro
 ├── layouts/
-│   ├── BaseLayout.astro       # Shell: header + left sidebar + main slot
-│   └── ContentLayout.astro    # Detail page: article + right sidebar
+│   ├── BaseLayout.astro         # Shell: sidebar + header + main slot
+│   └── ContentLayout.astro      # App detail: article + right sidebar
 ├── pages/
-│   ├── index.astro            # Homepage
+│   ├── index.astro                # Homepage
 │   ├── apps/
-│   │   ├── index.astro        # Apps listing
-│   │   └── [slug].astro       # App detail
+│   │   ├── index.astro            # Apps listing
+│   │   └── [slug].astro           # App detail
+│   ├── people/
+│   │   ├── index.astro            # People listing
+│   │   └── [slug].astro           # Person detail
+│   ├── companies/
+│   │   ├── index.astro            # Companies listing
+│   │   └── [slug].astro           # Company detail
+│   ├── channels/
+│   │   ├── index.astro            # Channels listing
+│   │   └── [slug].astro           # Channel detail
+│   ├── products/
+│   │   ├── index.astro            # Products listing
+│   │   └── [slug].astro           # Product detail
+│   ├── blogs/
+│   │   ├── index.astro            # Blogs listing
+│   │   └── [slug].astro           # Blog detail
+│   ├── projects/
+│   │   ├── index.astro            # Projects listing
+│   │   └── [slug].astro           # Project detail
+│   ├── communities/
+│   │   ├── index.astro            # Communities listing
+│   │   └── [slug].astro           # Community detail
+│   ├── podcasts/
+│   │   ├── index.astro            # Podcasts listing
+│   │   └── [slug].astro           # Podcast detail
+│   ├── initiatives/
+│   │   ├── index.astro            # Initiatives listing
+│   │   └── [slug].astro           # Initiative detail
+│   ├── domains/
+│   │   ├── index.astro            # All domains overview
+│   │   └── [domain].astro         # Domain-filtered entries
 │   ├── categories/
-│   │   └── [category].astro   # Category landing pages
+│   │   └── [category].astro       # Category landing pages
 │   ├── tags/
-│   │   └── [tag].astro        # Tag landing pages
+│   │   └── [tag].astro            # Tag landing pages
 │   └── rss.xml.ts
 ├── styles/
 │   └── global.css
+├── hooks/
+│   └── use-mobile.ts            # Mobile breakpoint detection
+├── lib/
+│   └── utils.ts                 # cn() utility
+├── scripts/
+│   └── particles.ts             # Atmospheric background particles
 └── utils/
-    ├── ctaUtils.ts            # CTA label/URL resolution per content type
+    ├── ctaUtils.ts               # CTA label/URL resolution per content type
     ├── dateUtils.ts
-    ├── imageRegistry.ts       # Maps slug/filename → ImageMetadata
-    ├── imageResolvers.ts      # resolveLogo(), resolvePageImages()
-    ├── relatedContent.ts      # Tag-based related content scoring
-    └── textUtils.ts           # formatCategoryName()
+    ├── imageRegistry.ts          # Maps slug/filename → ImageMetadata
+    ├── imageResolvers.ts         # resolveLogo(), resolvePageImages()
+    ├── relatedContent.ts         # Tag-based related content scoring
+    ├── routeUtils.ts             # getEntryHref() — cross-collection href resolver
+    ├── textUtils.ts              # formatCategoryName()
+    ├── domainMeta.ts             # Domain metadata (icons, labels)
+    └── collectionsToScan.ts      # Cross-cutting collection list & helpers
 ```
 
 ---
@@ -136,6 +192,59 @@ src/
 - `members` — Array of `{ slug, role }` (links to persons)
 - `socials`, `logo`, `draft`
 
+### Channels (`src/content/channels/`)
+
+- `name`, `description`, `channelUrl` — YouTube channel URL
+- `topics` — Content focus areas
+- `language` — Array of languages
+- `domains`, `tags`, `authors`
+- `logo`, `draft`, `featured`
+
+### Products (`src/content/products/`)
+
+- `name`, `description`, `category`
+- `buyUrl`, `website`
+- `paid`, `priceRange`, `madeIn`
+- `authors`, `tags`, `domains`
+- `logo`, `screenshots`, `draft`, `featured`
+
+### Blogs (`src/content/blogs/`)
+
+- `name`, `description`, `url`, `rssUrl`
+- `topics`, `language`, `frequency`
+- `authors`, `tags`, `domains`
+- `logo`, `draft`, `featured`
+
+### Projects (`src/content/projects/`)
+
+- `name`, `description`, `repositoryUrl`
+- `language`, `license`, `starsRange`
+- `website`, `authors`, `tags`, `domains`
+- `logo`, `draft`, `featured`
+
+### Communities (`src/content/communities/`)
+
+- `name`, `description`, `platform`, `joinUrl`
+- `topics`, `memberRange`
+- `authors`, `tags`, `domains`
+- `logo`, `draft`, `featured`
+
+### Podcasts (`src/content/podcasts/`)
+
+- `name`, `description`, `website`
+- `platforms` — Array of `{ label, url }`
+- `topics`, `language`, `frequency`, `episodeCount`
+- `authors`, `tags`, `domains`
+- `logo`, `draft`, `featured`
+
+### Initiatives (`src/content/initiatives/`)
+
+- `name`, `description`, `mission`, `impact`
+- `howToHelp` — Array of `{ action, description, url }`
+- `website`, `socials`, `founded`, `location`
+- `authors`, `tags`, `domains`
+- `logo`, `draft`, `featured`
+
 ---
 
 ## Key Commands
@@ -148,9 +257,25 @@ npm run preview      # Preview production build
 npm run lint         # ESLint
 npm run format       # Prettier
 npm run scaffold     # New MDX draft: scaffold -- <type> <slug> [--title] [--logo]
+npm run scaffold -- channel my-channel --title "My Channel"
+npm run scaffold -- product my-product --title "My Product"
+npm run scaffold -- blog my-blog --title "My Blog"
+npm run scaffold -- project my-project --title "My Project"
+npm run scaffold -- community my-community --title "My Community"
+npm run scaffold -- podcast my-podcast --title "My Podcast"
+npm run scaffold -- initiative my-initiative --title "My Initiative"
 npm run graphify     # Rebuild knowledge graph (AST, no API key)
 npm run test:e2e     # Playwright UI smoke tests
 ```
+
+### Search (Pagefind)
+
+Search uses [Pagefind](https://pagefind.app/), a static search library. The search index is generated during `postbuild` via `npx pagefind --site docs`.
+
+- **Production**: After `npm run build`, the pagefind index lives in `docs/pagefind/`. The `Search.astro` component loads pagefind's custom elements and works normally.
+- **Dev mode**: In `npm run dev`, no pagefind index exists. The search component shows a clear helper message: _"Search is available after npm run build (generates pagefind search index)"_ — no silent failures.
+
+No additional build step is needed; `postbuild` handles index generation automatically.
 
 ---
 
@@ -193,14 +318,6 @@ In `tailwind.config.mjs`, the `secondary` palette runs from `50` (darkest) to `9
 
 `ContentLayout.astro` renders the store badges block twice (before screenshots and after the prose slot). Extract to a `StoreBadges.astro` component.
 
-### Inline onclick Scroll Handlers
-
-The homepage carousel uses `onclick="this.nextElementSibling.scrollBy(...)"`. Fragile DOM traversal — should be proper `<script>` event listeners.
-
-### `aspectRatio` Prop Deprecated
-
-Several `<Image>` usages pass `aspectRatio="1/1"` — removed in Astro 3, silently ignored.
-
 ### Related Content Only Matches Tags
 
 `relatedContent.ts` only scores on `tags`. Apps would benefit from also matching `categories` and `authors`.
@@ -224,13 +341,13 @@ Production build outputs to `./docs` for GitHub Pages. Configured with `site: 'h
 
 ### When to use what
 
-| Task type | Before coding | While coding | Before declaring done |
-| --------- | ------------- | ------------ | --------------------- |
-| **Content (new entry)** | `skills/add-content-entry`; optionally `npm run scaffold` to generate draft | — | `npm run check` |
-| **UI / layout change** | `skills/ui-layout-change`; `npm run graphify update` if graph is stale | `npm run dev` for visual check | `npm run test:e2e && npm run build` |
-| **Schema change** | `skills/schema-change` | `npm run dev` | `npm run build` (validates all MDX against Zod) |
-| **Architecture question** | `python -m graphify query "..."` (if `graphify-out/graph.json` exists) | — | — |
-| **Cold-start handoff** | `npm run pack` to produce `repomix-output.md` | — | — |
+| Task type                 | Before coding                                                               | While coding                   | Before declaring done                           |
+| ------------------------- | --------------------------------------------------------------------------- | ------------------------------ | ----------------------------------------------- |
+| **Content (new entry)**   | `skills/add-content-entry`; optionally `npm run scaffold` to generate draft | —                              | `npm run check`                                 |
+| **UI / layout change**    | `skills/ui-layout-change`; `npm run graphify update` if graph is stale      | `npm run dev` for visual check | `npm run test:e2e && npm run build`             |
+| **Schema change**         | `skills/schema-change`                                                      | `npm run dev`                  | `npm run build` (validates all MDX against Zod) |
+| **Architecture question** | `python -m graphify query "..."` (if `graphify-out/graph.json` exists)      | —                              | —                                               |
+| **Cold-start handoff**    | `npm run pack` to produce `repomix-output.md`                               | —                              | —                                               |
 
 ### Task cards
 
@@ -240,11 +357,11 @@ Use `planning/current_task.md` as the session task card (goal, files-in-scope, d
 
 Load the matching skill under `skills/` for repetitive workflows (short checklists; full docs stay in `planning/`):
 
-| Skill | When |
-| ----- | ---- |
-| `skills/add-content-entry` | New MDX entries (any collection) |
-| `skills/ui-layout-change` | Components, layouts, Tailwind, nav |
-| `skills/schema-change` | Changes to `src/content/config.ts` |
+| Skill                      | When                               |
+| -------------------------- | ---------------------------------- |
+| `skills/add-content-entry` | New MDX entries (any collection)   |
+| `skills/ui-layout-change`  | Components, layouts, Tailwind, nav |
+| `skills/schema-change`     | Changes to `src/content/config.ts` |
 
 ### Cold-start pack (Repomix)
 
@@ -288,6 +405,46 @@ npm run scaffold -- person jane-doe --title "Jane Doe" --logo
 
 Creates draft MDX under `src/content/{collection}/` with schema-shaped frontmatter + body TODOs. `--logo` stubs `imageRegistry.ts`. Then fill content and follow `skills/add-content-entry`.
 
+## Opportunities Data Flow
+
+Domain Opportunities are editorial data blocks that appear on domain landing pages (`/domains/[domain]/`). They provide context on where India stands in each domain and how visitors can get involved.
+
+### Schema
+
+Defined in `src/content/config.ts` under the `domains` collection:
+
+| Field          | Type            | Description                                     |
+| -------------- | --------------- | ----------------------------------------------- |
+| `title`        | `string`        | Human-readable domain name                      |
+| `emoji`        | `string`        | Emoji icon                                      |
+| `description`  | `string`        | Editorial overview                              |
+| `achievements` | `Achievement[]` | Notable Indian wins (badge, title, description) |
+| `comparisons`  | `Comparison[]`  | India vs World data (metric, values, gap)       |
+| `actions`      | `Action[]`      | Actionable CTAs (volunteer, donate, promote…)   |
+| `milestones`   | `Milestone[]`   | Recent news items with source attribution       |
+| `draft`        | `boolean`       | Hides from rendering when `true`                |
+
+### Content folder
+
+`src/content/domains/{domainKey}.mdx` — each filename must match a `domainEnum` value (e.g. `space.mdx`, `artificialIntelligence.mdx`).
+
+### Render component
+
+`src/components/DomainOpportunities.astro` — conditionally renders four sub-sections:
+
+1. 🏆 Achievements (gamification-inspired cards)
+2. 📊 India vs The World (bar visualization)
+3. 🚀 How You Can Help (action cards with CTAs)
+4. 📰 Recent Milestones (news-style items)
+
+### Domain page integration
+
+`src/pages/domains/[domain].astro` loads the matching domain entry via `getEntryBySlug('domains', domain)` and renders `<DomainOpportunities>` above the grouped content results. The section is hidden entirely when no domain entry exists.
+
+### Agent rule
+
+For domain work, verify both grouped content results and opportunities block rendering.
+
 ### UI smoke tests (Playwright)
 
 ```bash
@@ -297,6 +454,111 @@ npm run test:e2e:ui       # Playwright UI mode
 
 Specs in `e2e/` cover homepage, apps listing/detail, domains, and narrow viewport. Config: `playwright.config.ts`. After UI/layout work, run e2e before considering the task done.
 
+## Quality Gates
+
+Before considering any task complete, verify these gates:
+
+### Code Gate
+
+- `npm run check` — astro check + ESLint (fast validation, no build)
+- `npm run build` — full production build (validates all MDX against Zod schemas)
+- `npm run test:e2e` — Playwright UI smoke tests (run after layout/component changes)
+- No `console.log` or `debugger` in committed code
+- TypeScript strict mode — no `any` where avoidable
+
+### Content Gate
+
+- `node scripts/validate-entry.mjs <path>` — frontmatter completeness & quality check
+- All schema-required fields present (see `src/content/config.ts`)
+- At least one `domains` set — controls surfacing on domain pages
+- Author/member slugs reference existing entries (create person/company first)
+- Logo/avatar registered in `src/utils/imageRegistry.ts`
+- No TODO placeholders, example.com URLs, or unverified claims
+- Body length 150–400 words with closing CTA
+- Cross-collection hrefs use `getEntryHref()` from `routeUtils.ts`
+
+### SEO Gate
+
+- Detail pages have unique `<title>` and `<meta name="description">` via `SEO.astro`
+- Entries indexable unless `draft: true`
+- RSS feeds (`src/pages/rss/[collection].xml.ts`) cover all non-draft entries
+- Sitemap (`@astrojs/sitemap`) included and configured for all public routes
+- `canonical` URL matches the production site URL
+
+### Accessibility Gate
+
+- All images have `alt` text
+- Interactive elements have visible focus styles
+- Skip-to-content link present (see `BaseLayout.astro`)
+- Color contrast meets WCAG AA (check dark mode separately)
+- Keyboard navigation: all CTAs, menus, scroll containers reachable via Tab/Arrow keys
+- ARIA labels on icon-only buttons (theme toggle, sidebar trigger)
+- Decorative SVGs marked `aria-hidden="true"`
+
+---
+
+## Contributor Workflow
+
+For contributors adding new content, the workflow is:
+
+1. **Scaffold**: `npm run scaffold -- <type> <slug> [--title "Name"] [--logo]` generates a draft MDX with template frontmatter
+2. **Fill**: Complete all required fields per section in [CONTRIBUTING.md](CONTRIBUTING.md#per-collection-required--recommended-fields)
+3. **Validate**: `node scripts/validate-entry.mjs <path>` checks completeness
+4. **Verify**: `npm run check && npm run build`
+
+For agent-assisted content creation, use `skills/add-content-entry` skill which automates the research → fill → verify flow.
+
+Full contributor guide: [CONTRIBUTING.md](CONTRIBUTING.md)
+
+---
+
+## Maintenance Checklist
+
+When working on the codebase, keep these invariants in check:
+
+### Route Mapping
+
+All cross-collection hrefs use `getEntryHref(collection, slug)` from `src/utils/routeUtils.ts`.
+The `ROUTE_PREFIX` map there is the single source of truth for URL path overrides (e.g., `persons → people`).
+**Do not** hardcode path patterns like `/people/{slug}` directly.
+
+### CTA Mapping
+
+`src/utils/ctaUtils.ts` is the single source of truth for CTA label and URL resolution.
+**Must stay in sync** with `src/content/config.ts` schemas:
+
+| Collection | Schema CTA field       | CTA label           |
+| ---------- | ---------------------- | ------------------- |
+| apps       | `storeLinks`           | Download            |
+| persons    | `website` / `socials`  | Follow / Visit      |
+| companies  | `website`              | Visit               |
+| channels   | `channelUrl`           | Subscribe           |
+| products   | `buyUrl` / `website`   | Buy                 |
+| blogs      | `url`                  | Read                |
+| projects   | `repositoryUrl`        | Contribute          |
+| communities| `joinUrl`              | Join                |
+| podcasts   | `platforms[0]`         | Listen              |
+| initiatives| `howToHelp[0].url`     | Get Involved        |
+
+When adding a new collection: add its entry to `getCTALinks`, `getPrimaryCTALabel`, and `getPrimaryCTAUrl`.
+
+### Feeds & SEO
+
+- `src/pages/rss/[collection].xml.ts` — one feed per collection; must include only non-draft entries
+- `src/pages/rss.xml.ts` — combined feed; reflect collections that are ready for public surfacing
+- `src/pages/domains/[domain]/rss.xml.ts` — domain-filtered feeds
+- Add new collections to sitemap in `astro.config.mjs`
+- Update `SCANNED_COLLECTIONS` in `src/utils/collectionsToScan.ts` for cross-cutting pages
+- `src/utils/domainMeta.ts` must have an entry for every `domainEnum` value in `config.ts`
+
+### Validation Script
+
+`scripts/validate-entry.mjs` should be updated whenever:
+- A new collection is added (add to `COLLECTIONS`, `SCHEMA_REQUIRED`, `RECOMMENDED`)
+- Zod schemas change (update field requirements to match)
+
+---
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
@@ -304,6 +566,7 @@ This project has a knowledge graph at graphify-out/ with god nodes, community st
 When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
 
 Rules:
+
 - For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
 - Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.

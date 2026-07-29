@@ -73,6 +73,21 @@ const authorName = resolvedAuthors?.[0]?.name || 'this author';
     socials={app.data.socials}
     website={app.data.website}
     authors={resolvedAuthors}
+    structuredData={{
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: app.data.title,
+        description: app.data.description,
+        applicationCategory: app.data.categories[0],
+        operatingSystem: app.data.devices
+            .map((d: string) => d.charAt(0).toUpperCase() + d.slice(1))
+            .join(', '),
+        offers: {
+            '@type': 'Offer',
+            price: app.data.paid ? undefined : '0',
+            priceCurrency: 'INR',
+        },
+    }}
 >
     <Content />
 

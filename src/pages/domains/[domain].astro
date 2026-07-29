@@ -1,9 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CollectionHero from '@/components/CollectionHero.astro';
 import ContentCardFull from '@/components/ContentCardFull.astro';
+import DomainOpportunities from '@/components/DomainOpportunities.astro';
 import { getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
 import { resolveLogo } from '@/utils/imageResolvers.ts';
 import { getDomainMeta } from '@/utils/domainMeta.ts';
@@ -13,6 +14,7 @@ import {
     getEntryTitle,
     getEntryDescription,
     getEntryImage,
+    getCollectionUrlPath,
     type ScannedCollection,
     type ScannedEntry,
 } from '@/utils/collectionsToScan.ts';
@@ -68,6 +70,9 @@ export const getStaticPaths = (async () => {
 const { domain, groups } = Astro.props as DomainPageProps;
 const meta = getDomainMeta(domain);
 
+// Load domain opportunities data (silently — may not exist for all domains).
+const domainEntry = await getEntry('domains', domain);
+
 // Only render groups that actually have matches.
 const visibleGroups = groups.filter((g) => g.items.length > 0);
 const totalItems = visibleGroups.reduce((sum, g) => sum + g.items.length, 0);
@@ -90,6 +95,16 @@ const pills = visibleGroups.map((g) => ({
             icon={meta.icon}
             pills={pills}
         />
+
+        <!-- Domain Opportunities Section (only when data exists) -->
+        {
+            domainEntry && !domainEntry.data.draft && (
+                <>
+                    <DomainOpportunities entry={domainEntry} />
+                    <hr class="my-12 border-neutral-200 dark:border-neutral-800" />
+                </>
+            )
+        }
 
         <div class="mt-10 space-y-12">
             {
@@ -116,7 +131,7 @@ const pills = visibleGroups.map((g) => ({
                                         title={getEntryTitle(item)}
                                         description={getEntryDescription(item)}
                                         slug={item.slug}
-                                        collection={item.collection}
+                                        collection={getCollectionUrlPath(item.collection)}
                                         logoSrc={
                                             getEntryImage(item)
                                                 ? resolveLogo(item.slug, getEntryImage(item))

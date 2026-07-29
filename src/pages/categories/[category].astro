@@ -9,16 +9,21 @@ import { getPrimaryCTAUrl } from '@/utils/ctaUtils.ts';
 import { resolveLogo } from '@/utils/imageResolvers.ts';
 import { getDomainMeta } from '@/utils/domainMeta.ts';
 import { formatCategoryName } from '@/utils/textUtils.ts';
-
-type CategorizedApp = CollectionEntry<'apps'>;
-type CategorizedPerson = CollectionEntry<'persons'>;
-type CategorizedCompany = CollectionEntry<'companies'>;
+import {
+    SCANNED_COLLECTIONS,
+    COLLECTION_GROUP_META,
+    getEntryTitle,
+    getEntryDescription,
+    getEntryImage,
+    getCollectionUrlPath,
+    type ScannedCollection,
+    type ScannedEntry,
+} from '@/utils/collectionsToScan.ts';
 
 interface CategoryPageProps {
     category: string;
-    apps: CategorizedApp[];
-    persons: CategorizedPerson[];
-    companies: CategorizedCompany[];
+    // one array of entries per scanned collection, in SCANNED_COLLECTIONS order
+    groups: Array<{ collection: ScannedCollection; items: ScannedEntry[] }>;
 }
 
 // Category emoji mapping
@@ -61,15 +66,10 @@ const categoryEmojis: Record<string, string> = {
 };
 
 export const getStaticPaths = (async () => {
+    // Categories are app-specific, so we derive static paths from apps' categories.
     const publishedApps = (await getCollection('apps')).filter(
         (item: CollectionEntry<'apps'>) => !item.data.draft
-    ) as CategorizedApp[];
-    const publishedPersons = (await getCollection('persons')).filter(
-        (item: CollectionEntry<'persons'>) => !item.data.draft
-    ) as CategorizedPerson[];
-    const publishedCompanies = (await getCollection('companies')).filter(
-        (item: CollectionEntry<'companies'>) => !item.data.draft
-    ) as CategorizedCompany[];
+    );
 
     // Collect all unique categories from apps
     const categories = new Set<string>();
@@ -79,71 +79,59 @@ export const getStaticPaths = (async () => {
         }
     }
 
+    // Load every scanned collection, drop drafts.
+    const loaded = await Promise.all(
+        SCANNED_COLLECTIONS.map(async (name) => {
+            const entries = (await getCollection(name)) as ScannedEntry[];
+            return {
+                collection: name as ScannedCollection,
+                entries: entries.filter((e) => !e.data.draft),
+            };
+        })
+    );
+
+    const sortFeaturedFirst = <T extends { data: { featured?: boolean } }>(items: T[]) =>
+        [...items].sort(
+            (a, b) => Number(Boolean(b.data.featured)) - Number(Boolean(a.data.featured))
+        );
+
     return [...categories].map((category) => {
         const hasCategory = (cats: string[] = []) => cats.includes(category);
+        // For non-app collections, match category by tags
+        const hasCategoryTag = (tags: string[] = []) =>
+            tags.some((t: string) => t.toLowerCase() === category.toLowerCase());
 
         return {
             params: { category },
             props: {
                 category,
-                apps: publishedApps.filter((item) => hasCategory(item.data.categories)),
-                persons: publishedPersons,
-                companies: publishedCompanies,
+                groups: loaded.map(({ collection, entries }) => ({
+                    collection,
+                    items: sortFeaturedFirst(
+                        collection === 'apps'
+                            ? entries.filter((item) => hasCategory(item.data.categories ?? []))
+                            : entries.filter((item) => hasCategoryTag(item.data.tags ?? []))
+                    ),
+                })),
             },
         };
     });
 }) satisfies GetStaticPaths;
 
-const { category, apps, persons, companies } = Astro.props as CategoryPageProps;
+const { category, groups } = Astro.props as CategoryPageProps;
 const categoryTitle = formatCategoryName(category);
 const categoryEmoji = categoryEmojis[category] || '📂';
 
-// Count items in each collection that have this category
-const appsInCategory = apps.length;
-const personsInCategory = persons.filter((p: CategorizedPerson) =>
-    (p.data.tags ?? []).some((t: string) => t.toLowerCase() === category.toLowerCase())
-).length;
-const companiesInCategory = companies.filter((c: CategorizedCompany) =>
-    (c.data.tags ?? []).some((t: string) => t.toLowerCase() === category.toLowerCase())
-).length;
-
-const totalItems = appsInCategory + personsInCategory + companiesInCategory;
+// Only render groups that actually have matches.
+const visibleGroups = groups.filter((g) => g.items.length > 0);
+const totalItems = visibleGroups.reduce((sum, g) => sum + g.items.length, 0);
 const countLabel = `${totalItems} ${totalItems === 1 ? 'item' : 'items'}`;
 const description = `Indian-made apps, people, and companies in ${categoryTitle.toLowerCase()} — tools, resources, and inspiration for your ${categoryTitle.toLowerCase()} journey.`;
 
-const groups = [
-    {
-        id: 'apps',
-        title: 'Apps',
-        items: apps,
-        count: appsInCategory,
-    },
-    {
-        id: 'people',
-        title: 'People',
-        items: persons.filter((p: CategorizedPerson) =>
-            (p.data.tags ?? []).some((t: string) => t.toLowerCase() === category.toLowerCase())
-        ),
-        count: personsInCategory,
-    },
-    {
-        id: 'companies',
-        title: 'Companies',
-        items: companies.filter((c: CategorizedCompany) =>
-            (c.data.tags ?? []).some((t: string) => t.toLowerCase() === category.toLowerCase())
-        ),
-        count: companiesInCategory,
-    },
-].filter((group) => group.count > 0);
-
-const getItemTitle = (item: CategorizedApp | CategorizedPerson | CategorizedCompany) =>
-    'title' in item.data ? item.data.title : item.data.name;
-
-const getItemDescription = (item: CategorizedApp | CategorizedPerson | CategorizedCompany) =>
-    'description' in item.data ? item.data.description : item.data.bio;
-
-const getItemImage = (item: CategorizedApp | CategorizedPerson | CategorizedCompany) =>
-    'logo' in item.data ? item.data.logo : item.data.avatar;
+const pills = visibleGroups.map((g) => ({
+    label: `${COLLECTION_GROUP_META[g.collection].title} (${g.items.length})`,
+    href: `#${COLLECTION_GROUP_META[g.collection].id}`,
+}));
 ---
 
 <BaseLayout title={`${categoryTitle} | Awesome Bharat`} description={description} tags={[category]}>
@@ -154,56 +142,57 @@ const getItemImage = (item: CategorizedApp | CategorizedPerson | CategorizedComp
             description={description}
             countLabel={countLabel}
             icon={categoryEmoji}
-            pills={groups.map((group) => ({
-                label: `${group.title} (${group.count})`,
-                href: `#${group.id}`,
-            }))}
+            pills={pills}
         />
 
         <div class="mt-10 space-y-12">
             {
-                groups.map((group) => (
-                    <section id={group.id} class="scroll-mt-24">
-                        <div class="mb-4 flex items-end justify-between gap-4">
-                            <div>
-                                <h2 class="font-serif text-2xl font-extrabold text-neutral-900 dark:text-neutral-100">
-                                    {group.title}
-                                </h2>
-                                <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                                    {group.count} {group.count === 1 ? 'match' : 'matches'} for{' '}
-                                    {categoryTitle}
-                                </p>
+                visibleGroups.map((group) => {
+                    const groupMeta = COLLECTION_GROUP_META[group.collection];
+                    return (
+                        <section id={groupMeta.id} class="scroll-mt-24">
+                            <div class="mb-4 flex items-end justify-between gap-4">
+                                <div>
+                                    <h2 class="font-serif text-2xl font-extrabold text-neutral-900 dark:text-neutral-100">
+                                        {groupMeta.title}
+                                    </h2>
+                                    <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                                        {group.items.length}{' '}
+                                        {group.items.length === 1 ? 'match' : 'matches'} for{' '}
+                                        {categoryTitle}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="flex gap-4 overflow-x-auto pb-4">
-                            {group.items.map((item) => (
-                                <ContentCardFull
-                                    title={getItemTitle(item)}
-                                    description={getItemDescription(item)}
-                                    slug={item.slug}
-                                    collection={item.collection}
-                                    logoSrc={
-                                        getItemImage(item)
-                                            ? resolveLogo(item.slug, getItemImage(item))
-                                            : undefined
-                                    }
-                                    domains={(item.data.domains ?? []).map(
-                                        (d: string) => getDomainMeta(d).label
-                                    )}
-                                    categories={
-                                        item.collection === 'apps'
-                                            ? item.data.categories
-                                            : undefined
-                                    }
-                                    ctaLabel="View More"
-                                    ctaUrl={getPrimaryCTAUrl(item.collection, item.data)}
-                                    featured={item.data.featured}
-                                />
-                            ))}
-                        </div>
-                    </section>
-                ))
+                            <div class="flex gap-4 overflow-x-auto pb-4">
+                                {group.items.map((item) => (
+                                    <ContentCardFull
+                                        title={getEntryTitle(item)}
+                                        description={getEntryDescription(item)}
+                                        slug={item.slug}
+                                        collection={getCollectionUrlPath(item.collection)}
+                                        logoSrc={
+                                            getEntryImage(item)
+                                                ? resolveLogo(item.slug, getEntryImage(item))
+                                                : undefined
+                                        }
+                                        domains={(item.data.domains ?? []).map(
+                                            (d: string) => getDomainMeta(d).label
+                                        )}
+                                        categories={
+                                            item.collection === 'apps'
+                                                ? item.data.categories
+                                                : undefined
+                                        }
+                                        ctaLabel="View More"
+                                        ctaUrl={getPrimaryCTAUrl(item.collection, item.data)}
+                                        featured={item.data.featured}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+                    );
+                })
             }
         </div>
     </div>

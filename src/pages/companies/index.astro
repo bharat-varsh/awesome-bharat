@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContentCardFull from '@/components/ContentCardFull.astro';
+import CollectionHero from '@/components/CollectionHero.astro';
+import { resolveLogo } from '@/utils/imageResolvers.ts';
+import { getDomainMeta } from '@/utils/domainMeta.ts';
+
+const companies = (await getCollection('companies')) as Array<CollectionEntry<'companies'>>;
+const visibleCompanies = companies.filter((company) => !company.data.draft);
+---
+
+<BaseLayout
+    title="Companies | Awesome Bharat"
+    description="Innovative companies from India leading global markets"
+>
+    <div class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+        <div class="mb-10">
+            <CollectionHero
+                title="Companies"
+                description="Innovative companies from India leading global markets"
+                countLabel={`${visibleCompanies.length} companies`}
+                icon="🏢"
+                eyebrow="Collection"
+            />
+        </div>
+
+        <div
+            class="animate-fade-in grid
+        grid-cols-[repeat(auto-fit,minmax(280px,1fr))]
+        gap-6"
+        >
+            {
+                visibleCompanies.map((company) => (
+                    <ContentCardFull
+                        title={company.data.name}
+                        description={company.data.description}
+                        slug={company.slug}
+                        collection="companies"
+                        logoSrc={
+                            company.data.logo
+                                ? resolveLogo(company.slug, company.data.logo)
+                                : undefined
+                        }
+                        domains={(company.data.domains ?? []).map(
+                            (d: string) => getDomainMeta(d).label
+                        )}
+                        ctaLabel="Visit Website"
+                        ctaUrl={company.data.website ?? null}
+                        featured={company.data.featured}
+                    />
+                ))
+            }
+        </div>
+    </div>
+</BaseLayout>

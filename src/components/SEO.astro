@@ -1,5 +1,31 @@
 ---
-/** Handles meta tags, OpenGraph and Twitter cards */
+/**
+ * Handles meta tags, OpenGraph, Twitter cards, and JSON-LD structured data.
+ *
+ * The `structuredData` prop accepts any valid JSON-LD object (or array of objects).
+ * Pass the full schema.org structure for the page entity type:
+ *
+ * @example
+ * // SoftwareApplication
+ * structuredData={{
+ *   "@context": "https://schema.org",
+ *   "@type": "SoftwareApplication",
+ *   name: title,
+ *   description,
+ *   applicationCategory: categories?.[0],
+ *   operatingSystem: "Android, iOS",
+ * }}
+ *
+ * @example
+ * // Person
+ * structuredData={{
+ *   "@context": "https://schema.org",
+ *   "@type": "Person",
+ *   name,
+ *   description: bio,
+ *   url: website,
+ * }}
+ */
 
 export interface Props {
     title: string;
@@ -9,22 +35,27 @@ export interface Props {
     article?: boolean;
     publishedTime?: string;
     tags?: string[];
+    /** Optional JSON-LD structured data object(s) for schema.org markup. */
+    structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
 const {
     title,
     description,
     canonical,
-    image = '/og-image.jpg',
+    image = '/og-image.svg',
     article = false,
     publishedTime,
     tags,
+    structuredData,
 } = Astro.props;
 
 const siteName = 'Awesome Bharat';
-const twitterHandle = '@';
+const twitterHandle = '@awesomebharat';
 
 const imageUrl = new URL(image, Astro.site).toString();
+
+const structuredDataJson = structuredData && JSON.stringify(structuredData, null, 2);
 ---
 
 <!-- Primary Meta Tags -->
@@ -56,3 +87,10 @@ const imageUrl = new URL(image, Astro.site).toString();
 <!-- Additonal SEO -->
 <meta name="robots" content="index, follow" />
 <meta name="googlebot" content="index, follow" />
+
+<!-- JSON-LD Structured Data -->
+{
+    structuredDataJson && (
+        <script type="application/ld+json" is:inline set:html={structuredDataJson} />
+    )
+}

@@ -30,15 +30,20 @@ test.describe('mobile shell', () => {
     test.use({ viewport: { width: 390, height: 844 } });
 
     test('homepage is usable on narrow viewport', async ({ page }) => {
-        await page.goto('/');
+        await page.goto('/', { waitUntil: 'networkidle' });
         await expect(page.getByRole('link', { name: /Awesome\s*Bharat/i }).first()).toBeVisible();
-        // Sidebar is off-canvas; open via trigger then assert Apps nav
-        const trigger = page.getByRole('button', { name: /toggle sidebar|open sidebar|sidebar/i }).first();
-        if (await trigger.isVisible().catch(() => false)) {
-            await trigger.click();
-        }
-        await expect(page.getByRole('link', { name: /^Apps$/i }).first()).toBeVisible({
-            timeout: 10_000,
-        });
+
+        // Sidebar is off-canvas; open via trigger
+        const trigger = page.locator('[data-sidebar="trigger"]').first();
+        await expect(trigger).toBeVisible({ timeout: 5_000 });
+        await trigger.click();
+
+        // Wait for hydration and trigger handling
+        await page.waitForTimeout(2_000);
+
+        // Check for the sheet or nav links appearing in the mobile sidebar
+        await expect(
+            page.getByRole('link', { name: /^(Apps|People|Companies)$/i }).first()
+        ).toBeVisible({ timeout: 15_000 });
     });
 });

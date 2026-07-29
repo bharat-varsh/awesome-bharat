@@ -4,6 +4,7 @@ import type { ImageMetadata } from 'astro';
 import { Badge } from '@/components/ui/badge';
 import { resolveLogo } from '@/utils/imageResolvers.ts';
 import { formatCategoryName } from '@/utils/textUtils.ts';
+import { getEntryHref } from '@/utils/routeUtils.ts';
 
 export interface Props {
     title: string;
@@ -38,7 +39,7 @@ const showCategoryBadge = !!primaryCategory && !showDomainBadge; // Only show on
 ---
 
 <a
-    href={`/${collection}/${slug}`}
+    href={getEntryHref(collection, slug)}
     class={`ab-card group block min-w-[280px] p-4 ${featured ? 'ab-card--featured' : ''}`}
 >
     <div class="flex gap-4">

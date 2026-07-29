@@ -1,0 +1,161 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import type { Author, Link } from '@/content/config.ts';
+import CollectionDetailLayout from '@/layouts/CollectionDetailLayout.astro';
+import YouMightLike from '@/components/YouMightLike.astro';
+import { getRelatedContentSimple } from '@/utils/relatedContent.ts';
+
+export const getStaticPaths = (async () => {
+    const initiatives = (await getCollection('initiatives')) as Array<
+        CollectionEntry<'initiatives'>
+    >;
+    const publishedInitiatives = initiatives.filter((initiative) => !initiative.data.draft);
+
+    return publishedInitiatives.map((initiative) => ({
+        params: { slug: initiative.slug },
+        props: { initiative, allInitiatives: publishedInitiatives },
+    }));
+}) satisfies GetStaticPaths;
+
+const { initiative, allInitiatives } = Astro.props as {
+    initiative: CollectionEntry<'initiatives'>;
+    allInitiatives: Array<CollectionEntry<'initiatives'>>;
+};
+const persons = (await getCollection('persons')) as Array<CollectionEntry<'persons'>>;
+const resolvedAuthors = (initiative.data.authors ?? [])
+    .map((author: Author) => persons.find((person) => person.slug === author.slug))
+    .filter(
+        (author: CollectionEntry<'persons'> | undefined): author is CollectionEntry<'persons'> =>
+            Boolean(author)
+    );
+
+const { Content } = await initiative.render();
+
+const relatedInitiatives = getRelatedContentSimple(initiative, allInitiatives, 'initiatives', 8);
+const relatedInitiativesEnriched = relatedInitiatives.map((item) => ({
+    item,
+    resolved: undefined,
+}));
+---
+
+<CollectionDetailLayout
+    slug={initiative.slug}
+    collection="initiatives"
+    title={initiative.data.name}
+    description={initiative.data.description}
+    image={initiative.data.logo}
+    tags={initiative.data.tags}
+    domains={initiative.data.domains}
+    ctaData={{
+        howToHelp: initiative.data.howToHelp,
+        website: initiative.data.website,
+    }}
+    authors={resolvedAuthors}
+>
+    <!-- Collection-specific metadata -->
+    <div slot="metadata">
+        <div class="flex flex-wrap gap-4 mb-6">
+            {
+                initiative.data.founded && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Founded:</span>
+                        <span>{initiative.data.founded}</span>
+                    </div>
+                )
+            }
+            {
+                initiative.data.location && (
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm">
+                        <span class="font-semibold">Location:</span>
+                        <span>{initiative.data.location}</span>
+                    </div>
+                )
+            }
+        </div>
+
+        <!-- Mission -->
+        {
+            initiative.data.mission && (
+                <div class="mb-6 p-4 rounded-xl bg-primary-50 dark:bg-primary-950 border border-primary-200 dark:border-primary-800">
+                    <h3 class="text-sm font-semibold text-primary-700 dark:text-primary-300 uppercase tracking-wider mb-2">
+                        Mission
+                    </h3>
+                    <p class="text-base text-primary-800 dark:text-primary-200 leading-relaxed italic">
+                        {initiative.data.mission}
+                    </p>
+                </div>
+            )
+        }
+
+        <!-- How to Help -->
+        {
+            initiative.data.howToHelp && initiative.data.howToHelp.length > 0 && (
+                <div class="mb-6">
+                    <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                        How You Can Help
+                    </h3>
+                    <div class="grid gap-3">
+                        {initiative.data.howToHelp.map(
+                            (help: { action: string; description?: string; url?: string }) => (
+                                <div class="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+                                    <div class="font-semibold mb-1">{help.action}</div>
+                                    {help.description && (
+                                        <p class="text-sm text-neutral-600 dark:text-neutral-400">
+                                            {help.description}
+                                        </p>
+                                    )}
+                                    {help.url && (
+                                        <a
+                                            href={help.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline"
+                                        >
+                                            Learn more →
+                                        </a>
+                                    )}
+                                </div>
+                            )
+                        )}
+                    </div>
+                </div>
+            )
+        }
+
+        <!-- Social Links -->
+        {
+            initiative.data.socials && initiative.data.socials.length > 0 && (
+                <div class="mb-6">
+                    <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                        Connect
+                    </h3>
+                    <div class="flex flex-wrap gap-3">
+                        {initiative.data.socials.map((social: Link) => (
+                            <a
+                                href={social.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors text-sm font-medium"
+                            >
+                                {social.label}
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )
+        }
+    </div>
+
+    <Content />
+
+    <div slot="right-sidebar">
+        <YouMightLike
+            items={relatedInitiativesEnriched}
+            collectionName="initiatives"
+            title="You might also like"
+            maxItems={8}
+        />
+    </div>
+</CollectionDetailLayout>
