@@ -527,18 +527,18 @@ The `ROUTE_PREFIX` map there is the single source of truth for URL path override
 `src/utils/ctaUtils.ts` is the single source of truth for CTA label and URL resolution.
 **Must stay in sync** with `src/content/config.ts` schemas:
 
-| Collection | Schema CTA field       | CTA label           |
-| ---------- | ---------------------- | ------------------- |
-| apps       | `storeLinks`           | Download            |
-| persons    | `website` / `socials`  | Follow / Visit      |
-| companies  | `website`              | Visit               |
-| channels   | `channelUrl`           | Subscribe           |
-| products   | `buyUrl` / `website`   | Buy                 |
-| blogs      | `url`                  | Read                |
-| projects   | `repositoryUrl`        | Contribute          |
-| communities| `joinUrl`              | Join                |
-| podcasts   | `platforms[0]`         | Listen              |
-| initiatives| `howToHelp[0].url`     | Get Involved        |
+| Collection  | Schema CTA field      | CTA label      |
+| ----------- | --------------------- | -------------- |
+| apps        | `storeLinks`          | Download       |
+| persons     | `website` / `socials` | Follow / Visit |
+| companies   | `website`             | Visit          |
+| channels    | `channelUrl`          | Subscribe      |
+| products    | `buyUrl` / `website`  | Buy            |
+| blogs       | `url`                 | Read           |
+| projects    | `repositoryUrl`       | Contribute     |
+| communities | `joinUrl`             | Join           |
+| podcasts    | `platforms[0]`        | Listen         |
+| initiatives | `howToHelp[0].url`    | Get Involved   |
 
 When adding a new collection: add its entry to `getCTALinks`, `getPrimaryCTALabel`, and `getPrimaryCTAUrl`.
 
@@ -554,6 +554,7 @@ When adding a new collection: add its entry to `getCTALinks`, `getPrimaryCTALabe
 ### Validation Script
 
 `scripts/validate-entry.mjs` should be updated whenever:
+
 - A new collection is added (add to `COLLECTIONS`, `SCHEMA_REQUIRED`, `RECOMMENDED`)
 - Zod schemas change (update field requirements to match)
 
