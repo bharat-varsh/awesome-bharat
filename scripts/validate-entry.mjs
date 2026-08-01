@@ -26,57 +26,91 @@ const IMAGES_DIR = join(ROOT, 'src', 'assets', 'images');
 // ─── Collection registry ──────────────────────────────────────────────────────
 
 const COLLECTIONS = [
-    'apps', 'persons', 'companies', 'channels', 'products',
-    'blogs', 'projects', 'communities', 'podcasts', 'initiatives',
+    'apps',
+    'persons',
+    'companies',
+    'channels',
+    'products',
+    'blogs',
+    'projects',
+    'communities',
+    'podcasts',
+    'initiatives',
 ];
 
 const AUTHORS_COLLECTIONS = [
-    'apps', 'channels', 'products', 'blogs', 'projects',
-    'communities', 'podcasts', 'initiatives',
+    'apps',
+    'channels',
+    'products',
+    'blogs',
+    'projects',
+    'communities',
+    'podcasts',
+    'initiatives',
 ];
 
 // ═══ FIELD REQUIREMENTS ═══════════════════════════════════════════════════════
 
 const SCHEMA_REQUIRED = {
-    apps:        ['title', 'description', 'authors', 'type', 'devices', 'source', 'paid', 'ads', 'offline', 'categories', 'tags'],
-    persons:     ['name'],
-    companies:   ['name'],
-    channels:    ['name', 'description', 'channelUrl', 'topics', 'tags'],
-    products:    ['name', 'description', 'tags'],
-    blogs:       ['name', 'description', 'url', 'topics', 'tags'],
-    projects:    ['name', 'description', 'repositoryUrl', 'language', 'tags'],
+    apps: [
+        'title',
+        'description',
+        'authors',
+        'type',
+        'devices',
+        'source',
+        'paid',
+        'ads',
+        'offline',
+        'categories',
+        'tags',
+    ],
+    persons: ['name'],
+    companies: ['name'],
+    channels: ['name', 'description', 'channelUrl', 'topics', 'tags'],
+    products: ['name', 'description', 'tags'],
+    blogs: ['name', 'description', 'url', 'topics', 'tags'],
+    projects: ['name', 'description', 'repositoryUrl', 'language', 'tags'],
     communities: ['name', 'description', 'platform', 'joinUrl', 'tags'],
-    podcasts:    ['name', 'description', 'platforms', 'topics', 'tags'],
+    podcasts: ['name', 'description', 'platforms', 'topics', 'tags'],
     initiatives: ['name', 'description', 'tags'],
 };
 
 const EDITORIAL_REQUIRED = {
-    apps:        ['domains'],
-    persons:     ['bio', 'tags', 'domains'],
-    companies:   ['description', 'tags', 'domains'],
-    channels:    ['domains', 'language'],
-    products:    ['domains', 'madeIn'],
-    blogs:       ['domains', 'language'],
-    projects:    ['domains'],
+    apps: ['domains'],
+    persons: ['bio', 'tags', 'domains'],
+    companies: ['description', 'tags', 'domains'],
+    channels: ['domains', 'language'],
+    products: ['domains', 'madeIn'],
+    blogs: ['domains', 'language'],
+    projects: ['domains'],
     communities: ['domains'],
-    podcasts:    ['domains', 'language'],
+    podcasts: ['domains', 'language'],
     initiatives: ['domains'],
 };
 
 const RECOMMENDED = {
-    apps:        ['website', 'logo', 'date'],
-    persons:     ['socials', 'website'],
-    companies:   ['website', 'logo', 'location', 'founded'],
-    channels:    ['subscriberRange', 'logo', 'authors'],
-    products:    ['website', 'buyUrl', 'priceRange', 'logo', 'authors'],
-    blogs:       ['rssUrl', 'frequency', 'logo', 'authors'],
-    projects:    ['license', 'starsRange', 'website', 'logo', 'authors'],
+    apps: ['website', 'logo', 'date'],
+    persons: ['socials', 'website'],
+    companies: ['website', 'logo', 'location', 'founded'],
+    channels: ['subscriberRange', 'logo', 'authors'],
+    products: ['website', 'buyUrl', 'priceRange', 'logo', 'authors'],
+    blogs: ['rssUrl', 'frequency', 'logo', 'authors'],
+    projects: ['license', 'starsRange', 'website', 'logo', 'authors'],
     communities: ['memberRange', 'logo', 'authors'],
-    podcasts:    ['frequency', 'episodeCount', 'logo', 'website', 'authors'],
+    podcasts: ['frequency', 'episodeCount', 'logo', 'website', 'authors'],
     initiatives: ['website', 'howToHelp', 'mission', 'founded', 'location', 'socials'],
 };
 
-const URL_FIELDS = new Set(['website', 'url', 'channelUrl', 'repositoryUrl', 'joinUrl', 'buyUrl', 'rssUrl']);
+const URL_FIELDS = new Set([
+    'website',
+    'url',
+    'channelUrl',
+    'repositoryUrl',
+    'joinUrl',
+    'buyUrl',
+    'rssUrl',
+]);
 
 // ─── Slug cache ───────────────────────────────────────────────────────────────
 
@@ -85,10 +119,13 @@ const _slugCache = {};
 function cachedSlugs(dir) {
     if (!_slugCache[dir]) {
         const d = join(CONTENT_DIR, dir);
-        if (!existsSync(d)) { _slugCache[dir] = new Set(); }
-        else {
+        if (!existsSync(d)) {
+            _slugCache[dir] = new Set();
+        } else {
             _slugCache[dir] = new Set(
-                readdirSync(d).filter(f => f.endsWith('.mdx')).map(f => f.replace(/\.mdx$/, ''))
+                readdirSync(d)
+                    .filter((f) => f.endsWith('.mdx'))
+                    .map((f) => f.replace(/\.mdx$/, ''))
             );
         }
     }
@@ -159,8 +196,11 @@ function parseFrontmatter(raw) {
                 current = { parent: current, container: obj, key: null, indent: nestedIndent - 1 };
             } else {
                 if (rawVal.startsWith('{') && rawVal.endsWith('}')) {
-                    try { current.container.push(JSON.parse(rawVal)); }
-                    catch { current.container.push(rawVal); }
+                    try {
+                        current.container.push(JSON.parse(rawVal));
+                    } catch {
+                        current.container.push(rawVal);
+                    }
                 } else {
                     current.container.push(parseScalar(rawVal));
                 }
@@ -182,7 +222,10 @@ function parseFrontmatter(raw) {
             while (j < lines.length) {
                 const nxt = lines[j];
                 const nxtContent = nxt.trim();
-                if (!nxtContent) { j++; continue; }
+                if (!nxtContent) {
+                    j++;
+                    continue;
+                }
                 const ni = nxt.length - nxt.trimStart().length;
                 if (ni <= indent && !nxt.trimStart().startsWith('#')) break;
                 blockLines.push(nxtContent);
@@ -204,7 +247,12 @@ function parseFrontmatter(raw) {
             }
             if (nextContent && nextContent.startsWith('- ')) {
                 current.container[key] = [];
-                current = { parent: current, container: current.container[key], key: null, indent: indent + 1 };
+                current = {
+                    parent: current,
+                    container: current.container[key],
+                    key: null,
+                    indent: indent + 1,
+                };
             } else {
                 const obj = {};
                 current.container[key] = obj;
@@ -229,13 +277,19 @@ function parseScalar(val) {
     if (/^\d+\.\d+$/.test(v)) return parseFloat(v);
 
     if (/^\[.*\]$/.test(v)) {
-        try { return JSON.parse(v.replace(/'/g, '"')); }
-        catch { return v; }
+        try {
+            return JSON.parse(v.replace(/'/g, '"'));
+        } catch {
+            return v;
+        }
     }
 
     if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
-        try { return JSON.parse(v); }
-        catch { /* fall through */ }
+        try {
+            return JSON.parse(v);
+        } catch {
+            /* fall through */
+        }
     }
 
     return v;
@@ -256,7 +310,9 @@ function findEntries(arg) {
     if (existsSync(asFull)) {
         if (asFull.endsWith('.mdx')) return [asFull];
         if (statSync(asFull).isDirectory()) {
-            return readdirSync(asFull).filter(f => f.endsWith('.mdx')).map(f => join(asFull, f));
+            return readdirSync(asFull)
+                .filter((f) => f.endsWith('.mdx'))
+                .map((f) => join(asFull, f));
         }
     }
 
@@ -264,7 +320,9 @@ function findEntries(arg) {
     if (existsSync(cr)) {
         if (cr.endsWith('.mdx')) return [cr];
         if (statSync(cr).isDirectory()) {
-            return readdirSync(cr).filter(f => f.endsWith('.mdx')).map(f => join(cr, f));
+            return readdirSync(cr)
+                .filter((f) => f.endsWith('.mdx'))
+                .map((f) => join(cr, f));
         }
     }
 
@@ -279,14 +337,16 @@ function findEntries(arg) {
 function findCollectionFiles(collection) {
     const dir = join(CONTENT_DIR, collection);
     if (!existsSync(dir)) return [];
-    return readdirSync(dir).filter(f => f.endsWith('.mdx')).map(f => join(dir, f));
+    return readdirSync(dir)
+        .filter((f) => f.endsWith('.mdx'))
+        .map((f) => join(dir, f));
 }
 
 function hasTODO(val) {
     if (typeof val === 'string') return /TODO/i.test(val);
-    if (Array.isArray(val)) return val.some(v => typeof v === 'string' && /TODO/i.test(v));
+    if (Array.isArray(val)) return val.some((v) => typeof v === 'string' && /TODO/i.test(v));
     if (typeof val === 'object' && val !== null) {
-        return Object.values(val).some(v => typeof v === 'string' && /TODO/i.test(v));
+        return Object.values(val).some((v) => typeof v === 'string' && /TODO/i.test(v));
     }
     return false;
 }
@@ -328,7 +388,7 @@ function validateEntry(filePath) {
     info.push(`📝 ${String(entryName)}${isDraft ? '  🔶 DRAFT' : ''}`);
 
     // ── 1. Schema-required fields ──
-    for (const field of (SCHEMA_REQUIRED[collection] || [])) {
+    for (const field of SCHEMA_REQUIRED[collection] || []) {
         const val = fm[field];
         if (!isNonEmpty(val)) {
             errors.push(`Missing required field: \`${field}\``);
@@ -345,17 +405,19 @@ function validateEntry(filePath) {
     }
 
     // ── 2. Editorial-required fields ──
-    for (const field of (EDITORIAL_REQUIRED[collection] || [])) {
+    for (const field of EDITORIAL_REQUIRED[collection] || []) {
         const val = fm[field];
         if (!isNonEmpty(val)) {
-            warnings.push(`Editorial requirement: \`${field}\` missing — entry won't surface on related pages`);
+            warnings.push(
+                `Editorial requirement: \`${field}\` missing — entry won't surface on related pages`
+            );
         } else if (hasTODO(val)) {
             warnings.push(`\`${field}\` contains TODO placeholder`);
         }
     }
 
     // ── 3. Recommended fields ──
-    for (const field of (RECOMMENDED[collection] || [])) {
+    for (const field of RECOMMENDED[collection] || []) {
         const val = fm[field];
         if (!isNonEmpty(val)) {
             warnings.push(`Recommended: \`${field}\` (useful for discovery)`);
@@ -369,7 +431,9 @@ function validateEntry(filePath) {
         for (const author of fm.authors) {
             const slug = typeof author === 'object' && author ? author.slug : null;
             if (slug && !existingPersons.has(slug) && !existingCompanies.has(slug)) {
-                warnings.push(`Author slug "${slug}" — no matching entry in persons/ or companies/`);
+                warnings.push(
+                    `Author slug "${slug}" — no matching entry in persons/ or companies/`
+                );
             }
         }
     }
@@ -392,10 +456,12 @@ function validateEntry(filePath) {
             warnings.push(`\`${logoField}\` set to "${logoVal}" — placeholder`);
         } else {
             const imgExts = ['.png', '.webp', '.jpg', '.jpeg', '.svg', '.gif'];
-            const found = imgExts.some(ext => existsSync(join(IMAGES_DIR, `${logoVal}${ext}`)));
+            const found = imgExts.some((ext) => existsSync(join(IMAGES_DIR, `${logoVal}${ext}`)));
             if (!found) {
-                const tried = imgExts.map(e => `${logoVal}${e}`).join(', ');
-                warnings.push(`\`${logoField}="${logoVal}"\` — no matching file in src/assets/images/ (tried: ${tried})`);
+                const tried = imgExts.map((e) => `${logoVal}${e}`).join(', ');
+                warnings.push(
+                    `\`${logoField}="${logoVal}"\` — no matching file in src/assets/images/ (tried: ${tried})`
+                );
             }
         }
     }
@@ -405,15 +471,20 @@ function validateEntry(filePath) {
     if (body) {
         if (/TODO/i.test(body)) {
             const msg = 'Body contains TODO placeholders';
-            if (isDraft) warnings.push(msg); else errors.push(msg);
+            if (isDraft) warnings.push(msg);
+            else errors.push(msg);
         }
         if (body.length < 100) {
             warnings.push(`Body very short (${body.length} chars) — aim for 150–400 words`);
         } else if (body.length < 300) {
-            warnings.push(`Body could use more content (${body.length} chars) — typical entries 800–2500 chars`);
+            warnings.push(
+                `Body could use more content (${body.length} chars) — typical entries 800–2500 chars`
+            );
         }
         if (/example\.com/i.test(body) || /github\.com\/TODO/i.test(body)) {
-            errors.push('Body/frontmatter contains example/TODO URLs (example.com or github.com/TODO)');
+            errors.push(
+                'Body/frontmatter contains example/TODO URLs (example.com or github.com/TODO)'
+            );
         }
         if (collection !== 'persons' && !body.includes('**Ready to')) {
             warnings.push('Body missing closing CTA ("**Ready to ...?**" pattern)');
@@ -424,21 +495,21 @@ function validateEntry(filePath) {
 
     // ── 7. CTA readiness ──
     const ctaChecks = {
-        apps:        () => (fm.storeLinks?.length || 0) > 0 || (fm.repositoryLinks?.length || 0) > 0,
-        persons:     () => !!fm.website || (fm.socials?.length || 0) > 0,
-        companies:   () => !!fm.website,
-        channels:    () => !!fm.channelUrl,
-        products:    () => !!fm.buyUrl || !!fm.website,
-        blogs:       () => !!fm.url,
-        projects:    () => !!fm.repositoryUrl,
+        apps: () => (fm.storeLinks?.length || 0) > 0 || (fm.repositoryLinks?.length || 0) > 0,
+        persons: () => !!fm.website || (fm.socials?.length || 0) > 0,
+        companies: () => !!fm.website,
+        channels: () => !!fm.channelUrl,
+        products: () => !!fm.buyUrl || !!fm.website,
+        blogs: () => !!fm.url,
+        projects: () => !!fm.repositoryUrl,
         communities: () => !!fm.joinUrl,
-        podcasts:    () => (fm.platforms?.length || 0) > 0,
+        podcasts: () => (fm.platforms?.length || 0) > 0,
         initiatives: () => (fm.howToHelp?.length || 0) > 0 || !!fm.website,
     };
 
     if (ctaChecks[collection] && !isDraft) {
         if (!ctaChecks[collection]()) {
-            warnings.push('No CTA links — visitors won\'t know where to go');
+            warnings.push("No CTA links — visitors won't know where to go");
         }
     }
 
@@ -463,7 +534,8 @@ function report(results) {
         if (result.errors.length || result.warnings.length) console.log('');
         for (const err of result.errors) console.log(`     ❌  ${err}`);
         for (const warn of result.warnings) console.log(`     ⚠️   ${warn}`);
-        if (!result.errors.length && !result.warnings.length) console.log('     ✨ All checks passed');
+        if (!result.errors.length && !result.warnings.length)
+            console.log('     ✨ All checks passed');
     }
 
     const count = Object.keys(results).length;

@@ -66,187 +66,189 @@ npm run build
 
 ### Types (→ collection folder)
 
-| Type         | Collection folder | Route prefix     | Primary CTA | Schema key               |
-| ------------ | ----------------- | ---------------- | ----------- | ------------------------ |
-| App          | `apps/`           | `/apps/`         | Download    | `storeLinks`             |
-| Person       | `persons/`        | `/people/`       | Follow      | `website` / `socials`    |
-| Company      | `companies/`      | `/companies/`    | Visit       | `website`                |
-| Channel      | `channels/`       | `/channels/`     | Subscribe   | `channelUrl`             |
-| Product      | `products/`       | `/products/`     | Buy         | `buyUrl` / `website`     |
-| Blog         | `blogs/`          | `/blogs/`        | Read        | `url`                    |
-| Open-source  | `projects/`       | `/projects/`     | Contribute  | `repositoryUrl`          |
-| Community    | `communities/`    | `/communities/`  | Join        | `joinUrl`                |
-| Podcast      | `podcasts/`       | `/podcasts/`     | Listen      | `platforms[0]`           |
-| Initiative   | `initiatives/`    | `/initiatives/`  | Get Involved| `howToHelp[0].url`       |
+| Type        | Collection folder | Route prefix    | Primary CTA  | Schema key            |
+| ----------- | ----------------- | --------------- | ------------ | --------------------- |
+| App         | `apps/`           | `/apps/`        | Download     | `storeLinks`          |
+| Person      | `persons/`        | `/people/`      | Follow       | `website` / `socials` |
+| Company     | `companies/`      | `/companies/`   | Visit        | `website`             |
+| Channel     | `channels/`       | `/channels/`    | Subscribe    | `channelUrl`          |
+| Product     | `products/`       | `/products/`    | Buy          | `buyUrl` / `website`  |
+| Blog        | `blogs/`          | `/blogs/`       | Read         | `url`                 |
+| Open-source | `projects/`       | `/projects/`    | Contribute   | `repositoryUrl`       |
+| Community   | `communities/`    | `/communities/` | Join         | `joinUrl`             |
+| Podcast     | `podcasts/`       | `/podcasts/`    | Listen       | `platforms[0]`        |
+| Initiative  | `initiatives/`    | `/initiatives/` | Get Involved | `howToHelp[0].url`    |
 
 ### Per-collection Required & Recommended Fields
 
 #### ✅ = Schema-required (entry won't build without these)
+
 #### 📋 = Editorial requirement (entry won't surface properly without these)
+
 #### 💡 = Recommended (improves discovery)
 
 <details>
 <summary><strong>Apps</strong> <code>src/content/apps/</code></summary>
 
-| Field         | Level | Notes                                      |
-| ------------- | ----- | ------------------------------------------ |
-| `title`       | ✅    |                                            |
-| `description` | ✅    | 1–2 sentence teaser                        |
+| Field         | Level | Notes                                                       |
+| ------------- | ----- | ----------------------------------------------------------- |
+| `title`       | ✅    |                                                             |
+| `description` | ✅    | 1–2 sentence teaser                                         |
 | `authors`     | ✅    | Array of `{slug, type}` — create person/company entry first |
-| `type`        | ✅    | `app` or `plugin`                         |
-| `devices`     | ✅    | At least one: auto, desktop, mobile, tv, watch |
-| `source`      | ✅    | `open-source` or `closed-source`          |
-| `paid`        | ✅    | Boolean                                    |
-| `ads`         | ✅    | Boolean                                    |
-| `offline`     | ✅    | Boolean                                    |
-| `categories`  | ✅    | At least one Google Play-style category    |
-| `tags`        | ✅    | At least one free-form tag                 |
-| `domains`     | 📋    | At least one — controls domain page surfacing |
-| `website`     | 💡    |                                            |
-| `logo`        | 💡    | Register in `imageRegistry.ts`             |
-| `storeLinks`  | 💡    | Primary CTA source — without it, no Download CTA |
+| `type`        | ✅    | `app` or `plugin`                                           |
+| `devices`     | ✅    | At least one: auto, desktop, mobile, tv, watch              |
+| `source`      | ✅    | `open-source` or `closed-source`                            |
+| `paid`        | ✅    | Boolean                                                     |
+| `ads`         | ✅    | Boolean                                                     |
+| `offline`     | ✅    | Boolean                                                     |
+| `categories`  | ✅    | At least one Google Play-style category                     |
+| `tags`        | ✅    | At least one free-form tag                                  |
+| `domains`     | 📋    | At least one — controls domain page surfacing               |
+| `website`     | 💡    |                                                             |
+| `logo`        | 💡    | Register in `imageRegistry.ts`                              |
+| `storeLinks`  | 💡    | Primary CTA source — without it, no Download CTA            |
 
 </details>
 
 <details>
 <summary><strong>Persons</strong> <code>src/content/persons/</code></summary>
 
-| Field    | Level | Notes                                      |
-| -------- | ----- | ------------------------------------------ |
-| `name`   | ✅    |                                            |
-| `bio`    | 📋    | Brief profile (shown on listing cards)     |
-| `tags`   | 📋    | Controls visibility on tag pages           |
-| `domains`| 📋    | Controls visibility on domain pages        |
-| `socials`| 💡    | Primary CTA source when no website         |
-| `website`| 💡    |                                            |
-| `avatar` | 💡    | Register in `imageRegistry.ts`             |
+| Field     | Level | Notes                                  |
+| --------- | ----- | -------------------------------------- |
+| `name`    | ✅    |                                        |
+| `bio`     | 📋    | Brief profile (shown on listing cards) |
+| `tags`    | 📋    | Controls visibility on tag pages       |
+| `domains` | 📋    | Controls visibility on domain pages    |
+| `socials` | 💡    | Primary CTA source when no website     |
+| `website` | 💡    |                                        |
+| `avatar`  | 💡    | Register in `imageRegistry.ts`         |
 
 </details>
 
 <details>
 <summary><strong>Companies</strong> <code>src/content/companies/</code></summary>
 
-| Field         | Level | Notes                                      |
-| ------------- | ----- | ------------------------------------------ |
-| `name`        | ✅    |                                            |
-| `description` | 📋    | Shows on listing cards                     |
-| `tags`        | 📋    | Controls visibility on tag pages           |
-| `domains`     | 📋    | Controls visibility on domain pages        |
-| `website`     | 💡    | Primary CTA source                         |
-| `logo`        | 💡    | Register in `imageRegistry.ts`             |
-| `location`    | 💡    |                                            |
-| `founded`     | 💡    | Year                                       |
+| Field         | Level | Notes                               |
+| ------------- | ----- | ----------------------------------- |
+| `name`        | ✅    |                                     |
+| `description` | 📋    | Shows on listing cards              |
+| `tags`        | 📋    | Controls visibility on tag pages    |
+| `domains`     | 📋    | Controls visibility on domain pages |
+| `website`     | 💡    | Primary CTA source                  |
+| `logo`        | 💡    | Register in `imageRegistry.ts`      |
+| `location`    | 💡    |                                     |
+| `founded`     | 💡    | Year                                |
 
 </details>
 
 <details>
 <summary><strong>Channels</strong> <code>src/content/channels/</code></summary>
 
-| Field          | Level | Notes                                      |
-| -------------- | ----- | ------------------------------------------ |
-| `name`         | ✅    |                                            |
-| `description`  | ✅    |                                            |
-| `channelUrl`   | ✅    | YouTube channel URL — also Primary CTA     |
-| `topics`       | ✅    | At least one                               |
-| `tags`         | ✅    | At least one                               |
-| `domains`      | 📋    | At least one                               |
-| `language`     | 📋    | At least one                               |
-| `subscriberRange` | 💡 |                                         |
-| `logo`         | 💡    |                                            |
-| `authors`      | 💡    | Links to persons                           |
+| Field             | Level | Notes                                  |
+| ----------------- | ----- | -------------------------------------- |
+| `name`            | ✅    |                                        |
+| `description`     | ✅    |                                        |
+| `channelUrl`      | ✅    | YouTube channel URL — also Primary CTA |
+| `topics`          | ✅    | At least one                           |
+| `tags`            | ✅    | At least one                           |
+| `domains`         | 📋    | At least one                           |
+| `language`        | 📋    | At least one                           |
+| `subscriberRange` | 💡    |                                        |
+| `logo`            | 💡    |                                        |
+| `authors`         | 💡    | Links to persons                       |
 
 </details>
 
 <details>
 <summary><strong>Products</strong> <code>src/content/products/</code></summary>
 
-| Field         | Level | Notes                                      |
-| ------------- | ----- | ------------------------------------------ |
-| `name`        | ✅    |                                            |
-| `description` | ✅    |                                            |
-| `tags`        | ✅    |                                            |
-| `domains`     | 📋    | At least one                               |
-| `madeIn`      | 📋    | Defaults to `India`                        |
-| `website`     | 💡    |                                            |
-| `buyUrl`      | 💡    | Primary CTA source                         |
-| `priceRange`  | 💡    |                                            |
-| `logo`        | 💡    |                                            |
-| `authors`     | 💡    | Links to persons/companies                 |
+| Field         | Level | Notes                      |
+| ------------- | ----- | -------------------------- |
+| `name`        | ✅    |                            |
+| `description` | ✅    |                            |
+| `tags`        | ✅    |                            |
+| `domains`     | 📋    | At least one               |
+| `madeIn`      | 📋    | Defaults to `India`        |
+| `website`     | 💡    |                            |
+| `buyUrl`      | 💡    | Primary CTA source         |
+| `priceRange`  | 💡    |                            |
+| `logo`        | 💡    |                            |
+| `authors`     | 💡    | Links to persons/companies |
 
 </details>
 
 <details>
 <summary><strong>Blogs</strong> <code>src/content/blogs/</code></summary>
 
-| Field         | Level | Notes                                      |
-| ------------- | ----- | ------------------------------------------ |
-| `name`        | ✅    |                                            |
-| `description` | ✅    |                                            |
-| `url`         | ✅    | Primary CTA source                         |
-| `topics`      | ✅    | At least one                               |
-| `tags`        | ✅    | At least one                               |
-| `domains`     | 📋    | At least one                               |
-| `language`    | 📋    | At least one                               |
-| `rssUrl`      | 💡    | Enables RSS feed subscription              |
+| Field         | Level | Notes                                       |
+| ------------- | ----- | ------------------------------------------- |
+| `name`        | ✅    |                                             |
+| `description` | ✅    |                                             |
+| `url`         | ✅    | Primary CTA source                          |
+| `topics`      | ✅    | At least one                                |
+| `tags`        | ✅    | At least one                                |
+| `domains`     | 📋    | At least one                                |
+| `language`    | 📋    | At least one                                |
+| `rssUrl`      | 💡    | Enables RSS feed subscription               |
 | `frequency`   | 💡    | daily, weekly, biweekly, monthly, irregular |
-| `logo`        | 💡    |                                            |
-| `authors`     | 💡    | Links to persons                           |
+| `logo`        | 💡    |                                             |
+| `authors`     | 💡    | Links to persons                            |
 
 </details>
 
 <details>
 <summary><strong>Projects</strong> <code>src/content/projects/</code></summary>
 
-| Field             | Level | Notes                                      |
-| ----------------- | ----- | ------------------------------------------ |
-| `name`            | ✅    |                                            |
-| `description`     | ✅    |                                            |
-| `repositoryUrl`   | ✅    | Primary CTA source                         |
-| `language`        | ✅    | Programming language(s)                    |
-| `tags`            | ✅    | At least one                               |
-| `domains`         | 📋    | At least one                               |
-| `license`         | 💡    |                                            |
-| `starsRange`      | 💡    | <100, 100-1K, 1K-10K, 10K+                |
-| `website`         | 💡    |                                            |
-| `logo`            | 💡    |                                            |
-| `authors`         | 💡    | Links to persons                           |
+| Field           | Level | Notes                      |
+| --------------- | ----- | -------------------------- |
+| `name`          | ✅    |                            |
+| `description`   | ✅    |                            |
+| `repositoryUrl` | ✅    | Primary CTA source         |
+| `language`      | ✅    | Programming language(s)    |
+| `tags`          | ✅    | At least one               |
+| `domains`       | 📋    | At least one               |
+| `license`       | 💡    |                            |
+| `starsRange`    | 💡    | <100, 100-1K, 1K-10K, 10K+ |
+| `website`       | 💡    |                            |
+| `logo`          | 💡    |                            |
+| `authors`       | 💡    | Links to persons           |
 
 </details>
 
 <details>
 <summary><strong>Communities</strong> <code>src/content/communities/</code></summary>
 
-| Field          | Level | Notes                                      |
-| -------------- | ----- | ------------------------------------------ |
-| `name`         | ✅    |                                            |
-| `description`  | ✅    |                                            |
-| `platform`     | ✅    | discord, telegram, slack, reddit, forum, other |
-| `joinUrl`      | ✅    | Primary CTA source                         |
-| `tags`         | ✅    | At least one                               |
-| `domains`      | 📋    | At least one                               |
-| `memberRange`  | 💡    | <100, 100-1K, 1K-10K, 10K-100K, 100K+    |
-| `logo`         | 💡    |                                            |
-| `authors`      | 💡    | Links to persons                           |
+| Field         | Level | Notes                                          |
+| ------------- | ----- | ---------------------------------------------- |
+| `name`        | ✅    |                                                |
+| `description` | ✅    |                                                |
+| `platform`    | ✅    | discord, telegram, slack, reddit, forum, other |
+| `joinUrl`     | ✅    | Primary CTA source                             |
+| `tags`        | ✅    | At least one                                   |
+| `domains`     | 📋    | At least one                                   |
+| `memberRange` | 💡    | <100, 100-1K, 1K-10K, 10K-100K, 100K+          |
+| `logo`        | 💡    |                                                |
+| `authors`     | 💡    | Links to persons                               |
 
 </details>
 
 <details>
 <summary><strong>Podcasts</strong> <code>src/content/podcasts/</code></summary>
 
-| Field           | Level | Notes                                      |
-| --------------- | ----- | ------------------------------------------ |
-| `name`          | ✅    |                                            |
-| `description`   | ✅    |                                            |
-| `platforms`     | ✅    | Array of `{label, url}` — also CTA source  |
-| `topics`        | ✅    | At least one                               |
-| `tags`          | ✅    | At least one                               |
-| `domains`       | 📋    | At least one                               |
-| `language`      | 📋    | At least one                               |
-| `frequency`     | 💡    | daily, weekly, biweekly, monthly, irregular |
-| `episodeCount`  | 💡    |                                            |
-| `logo`          | 💡    |                                            |
-| `website`       | 💡    |                                            |
-| `authors`       | 💡    | Links to persons                           |
+| Field          | Level | Notes                                       |
+| -------------- | ----- | ------------------------------------------- |
+| `name`         | ✅    |                                             |
+| `description`  | ✅    |                                             |
+| `platforms`    | ✅    | Array of `{label, url}` — also CTA source   |
+| `topics`       | ✅    | At least one                                |
+| `tags`         | ✅    | At least one                                |
+| `domains`      | 📋    | At least one                                |
+| `language`     | 📋    | At least one                                |
+| `frequency`    | 💡    | daily, weekly, biweekly, monthly, irregular |
+| `episodeCount` | 💡    |                                             |
+| `logo`         | 💡    |                                             |
+| `website`      | 💡    |                                             |
+| `authors`      | 💡    | Links to persons                            |
 
 </details>
 
@@ -306,6 +308,7 @@ npm run build
 ```
 
 The validation script (`scripts/validate-entry.mjs`) checks:
+
 - Required frontmatter fields (per schema)
 - Editorial requirements (domains, tags, language)
 - Author/member slug references (cross-collection validation)
@@ -316,15 +319,15 @@ The validation script (`scripts/validate-entry.mjs`) checks:
 
 ### Common Pitfalls
 
-| Pitfall | Fix |
-| ------- | --- |
-| Missing `domains` field | Add at least one domain — controls surfacing on domain pages |
-| Image path used directly with `<Image>` | Import from `imageRegistry.ts` instead |
-| Author slug doesn't exist | Create the person/company entry first |
-| `draft: true` in production | Set `draft: false` to make entry visible |
-| Example/TODO URLs in body | Replace all `example.com` and `github.com/TODO` with real URLs |
-| No CTA link | Add the correct CTA field for your entry type (see table above) |
-| `npm run check` fails | Run `astro check` to see exact schema validation errors |
+| Pitfall                                 | Fix                                                             |
+| --------------------------------------- | --------------------------------------------------------------- |
+| Missing `domains` field                 | Add at least one domain — controls surfacing on domain pages    |
+| Image path used directly with `<Image>` | Import from `imageRegistry.ts` instead                          |
+| Author slug doesn't exist               | Create the person/company entry first                           |
+| `draft: true` in production             | Set `draft: false` to make entry visible                        |
+| Example/TODO URLs in body               | Replace all `example.com` and `github.com/TODO` with real URLs  |
+| No CTA link                             | Add the correct CTA field for your entry type (see table above) |
+| `npm run check` fails                   | Run `astro check` to see exact schema validation errors         |
 
 ---
 
