@@ -13,9 +13,6 @@ pnpm-debug.log*
 # Astro
 .astro/
 
-# Build output
-docs/
-
 # Repomix cold-start packs
 repomix-output.md
 repomix-output.xml
