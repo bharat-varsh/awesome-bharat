@@ -5,7 +5,7 @@ import globals from 'globals';
 
 export default [
     {
-        ignores: ['docs/**', '.astro/**', 'node_modules/**'],
+        ignores: ['docs/**', '.astro/**', 'node_modules/**', 'public/pagefind/**'],
     },
     eslint.configs.recommended,
     ...tseslint.configs.recommended,

@@ -9,71 +9,10 @@
         show-images="true"
         show-sub-results="true"
         placeholder="Search..."></pagefind-searchbox>
-
-    <!-- Dev-mode fallback: visible when pagefind index is unavailable -->
-    <div
-        id="search-fallback"
-        class="flex items-center justify-center h-10 w-full rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 px-4 text-sm text-amber-700 dark:text-amber-400"
-    >
-        <svg
-            class="mr-2 h-4 w-4 shrink-0"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.3-4.3"></path>
-        </svg>
-        <span>
-            Search is available after
-            <code
-                class="font-mono text-xs bg-amber-200/60 dark:bg-amber-800/40 px-1.5 py-0.5 rounded"
-                >npm run build</code
-            >
-            (generates pagefind search index)
-        </span>
-    </div>
 </div>
 
 <link href="/pagefind/pagefind-component-ui.css" rel="stylesheet" />
 <script src="/pagefind/pagefind-component-ui.js" type="module" is:inline></script>
-
-<script is:inline>
-    // Detect whether pagefind index is available.
-    // In dev mode, the pagefind script/CSS return 404, so custom elements never register.
-    // In production (after npm run build), pagefind loads and registers the custom element.
-    (function () {
-        const fallback = document.getElementById('search-fallback');
-        const searchBox = document.querySelector('pagefind-searchbox');
-        const config = document.querySelector('pagefind-config');
-        if (!fallback || !searchBox) return;
-
-        // Poll until pagefind custom element is defined or timeout
-        const checkInterval = setInterval(function () {
-            if (customElements.get('pagefind-searchbox')) {
-                // Pagefind loaded successfully — hide fallback, reveal search
-                fallback.classList.add('hidden');
-                searchBox.removeAttribute('hidden');
-                if (config) config.removeAttribute('hidden');
-                clearInterval(checkInterval);
-            }
-        }, 200);
-
-        // Timeout after 3s — pagefind was never loaded (dev mode)
-        setTimeout(function () {
-            clearInterval(checkInterval);
-            // If pagefind still hasn't registered, hide the inert custom elements
-            if (!customElements.get('pagefind-searchbox')) {
-                searchBox.setAttribute('hidden', '');
-                if (config) config.setAttribute('hidden', '');
-            }
-        }, 3000);
-    })();
-</script>
 
 <style is:global>
     /* Styling the new Pagefind Component UI */
@@ -119,10 +58,5 @@
             left: 50% !important;
             transform: translateX(-50%) !important;
         }
-    }
-
-    /* Dev-mode fallback styling */
-    #search-fallback.hidden {
-        display: none;
     }
 </style>

@@ -273,7 +273,7 @@ npm run test:e2e     # Playwright UI smoke tests
 Search uses [Pagefind](https://pagefind.app/), a static search library. The search index is generated during `postbuild` via `npx pagefind --site docs`.
 
 - **Production**: After `npm run build`, the pagefind index lives in `docs/pagefind/`. The `Search.astro` component loads pagefind's custom elements and works normally.
-- **Dev mode**: In `npm run dev`, no pagefind index exists. The search component shows a clear helper message: _"Search is available after npm run build (generates pagefind search index)"_ — no silent failures.
+- **Dev mode**: `npm run dev` runs `predev` first (`scripts/pagefind-dev.mjs`), which regenerates the index from the last production build into `public/pagefind/`. Astro serves that folder, so the search box is fully clickable in dev. If no build exists yet, the script logs a warning and search stays unavailable until `npm run build` is run once.
 
 No additional build step is needed; `postbuild` handles index generation automatically.
 

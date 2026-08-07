@@ -4,6 +4,7 @@
     "description": "Static site for Awesome Bharat",
     "type": "module",
     "scripts": {
+        "predev": "node scripts/pagefind-dev.mjs",
         "dev": "astro dev",
         "build": "astro check && astro build --outDir ./docs",
         "preview": "astro preview --outDir ./docs",
