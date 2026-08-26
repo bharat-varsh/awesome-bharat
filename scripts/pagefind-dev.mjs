@@ -29,7 +29,9 @@ function log(message) {
 }
 
 if (!existsSync(join(DOCS_DIR, 'index.html'))) {
-    log('No production build found (docs/ is missing). Skipping — search will be unavailable until `npm run build` is run at least once.');
+    log(
+        'No production build found (docs/ is missing). Skipping — search will be unavailable until `npm run build` is run at least once.'
+    );
     process.exit(0);
 }
 
